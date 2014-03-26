@@ -1,0 +1,123 @@
+;; Object common/
+;; SEMANTICDB Tags save file
+(semanticdb-project-database-file "common/"
+  :tables (list 
+   (semanticdb-table "hi_vif.h"
+    :major-mode 'c-mode
+    :tags 
+        '( ("__HI_VIF_H__" variable (:constant-flag t) nil [504 516])
+            ("hi_typedef.h" include nil nil [758 781])
+            ("hi_vif_cmdtype_bind" type
+               (:typemodifiers ("extern" "\"C\"")
+                :type "struct"
+                :members 
+                  ( ("ac_ifname" variable
+                       (:dereference 1
+                        :type ("hi_char8" type (:type "class") nil nil))
+                        (reparse-symbol classsubparts) [1541 1565])
+                    ("ui_vlan" variable (:type ("hi_uint32" type (:type "class") nil nil)) (reparse-symbol classsubparts) [1570 1588])
+                    ("ui_portnum" variable (:type ("hi_uint32" type (:type "class") nil nil)) (reparse-symbol classsubparts) [1593 1614])
+                    ("ui_port" variable
+                       (:dereference 1
+                        :type ("hi_uint32" type (:type "class") nil nil))
+                        (reparse-symbol classsubparts) [1619 1665])
+                    ("ui_gemport" variable (:type ("hi_uint32" type (:type "class") nil nil)) (reparse-symbol classsubparts) [1670 1691])
+                    ("ui_tcont" variable (:type ("hi_uint32" type (:type "class") nil nil)) (reparse-symbol classsubparts) [1696 1715]))                  )
+                (reparse-symbol extern-c-contents) [1500 1740])
+            ("hi_vif_cmdtype_bind_s" type
+               (:typemodifiers ("extern" "\"C\"")
+                :type "typedef"
+                :superclasses "hi_vif_cmdtype_bind"
+                :typedef ("hi_vif_cmdtype_bind" type (:type "struct") nil nil))
+                (reparse-symbol extern-c-contents) [1500 1740])
+            ("hi_vif_cmdtype_add" type
+               (:typemodifiers ("extern" "\"C\"")
+                :type "struct"
+                :members 
+                  ( ("ac_ifname" variable
+                       (:dereference 1
+                        :type ("hi_char8" type (:type "class") nil nil))
+                        (reparse-symbol classsubparts) [1424 1448])
+                    ("auc_mac" variable
+                       (:dereference 1
+                        :type ("hi_uchar8" type (:type "class") nil nil))
+                        (reparse-symbol classsubparts) [1453 1474]))                  )
+                (reparse-symbol extern-c-contents) [1384 1498])
+            ("hi_vif_cmdtype_add_s" type
+               (:typemodifiers ("extern" "\"C\"")
+                :type "typedef"
+                :superclasses "hi_vif_cmdtype_add"
+                :typedef ("hi_vif_cmdtype_add" type (:type "struct") nil nil))
+                (reparse-symbol extern-c-contents) [1384 1498])
+            ("HI_KERNEL_VIF_MAP_MAX_PORT" variable
+               (:typemodifiers ("extern" "\"C\"")
+                :constant-flag t)
+                (reparse-symbol extern-c-contents) [1111 1137])
+            ("C" extern (:members 
+              ( ("HI_KERNEL_VIF_MAP_MAX_PORT" variable
+                   (:typemodifiers ("extern" "\"C\"")
+                    :constant-flag t)
+                    (reparse-symbol extern-c-contents) [1111 1137])
+                ("hi_vif_cmdtype_add_s" type
+                   (:typemodifiers ("extern" "\"C\"")
+                    :type "typedef"
+                    :superclasses "hi_vif_cmdtype_add"
+                    :typedef ("hi_vif_cmdtype_add" type (:type "struct") nil nil))
+                    (reparse-symbol extern-c-contents) [1384 1498])
+                ("hi_vif_cmdtype_add" type
+                   (:typemodifiers ("extern" "\"C\"")
+                    :type "struct"
+                    :members 
+                      ( ("ac_ifname" variable
+                           (:dereference 1
+                            :type ("hi_char8" type (:type "class") nil nil))
+                            (reparse-symbol classsubparts) [1424 1448])
+                        ("auc_mac" variable
+                           (:dereference 1
+                            :type ("hi_uchar8" type (:type "class") nil nil))
+                            (reparse-symbol classsubparts) [1453 1474]))                      )
+                    (reparse-symbol extern-c-contents) [1384 1498])
+                ("hi_vif_cmdtype_bind_s" type
+                   (:typemodifiers ("extern" "\"C\"")
+                    :type "typedef"
+                    :superclasses "hi_vif_cmdtype_bind"
+                    :typedef ("hi_vif_cmdtype_bind" type (:type "struct") nil nil))
+                    (reparse-symbol extern-c-contents) [1500 1740])
+                ("hi_vif_cmdtype_bind" type
+                   (:typemodifiers ("extern" "\"C\"")
+                    :type "struct"
+                    :members 
+                      ( ("ac_ifname" variable
+                           (:dereference 1
+                            :type ("hi_char8" type (:type "class") nil nil))
+                            (reparse-symbol classsubparts) [1541 1565])
+                        ("ui_vlan" variable (:type ("hi_uint32" type (:type "class") nil nil)) (reparse-symbol classsubparts) [1570 1588])
+                        ("ui_portnum" variable (:type ("hi_uint32" type (:type "class") nil nil)) (reparse-symbol classsubparts) [1593 1614])
+                        ("ui_port" variable
+                           (:dereference 1
+                            :type ("hi_uint32" type (:type "class") nil nil))
+                            (reparse-symbol classsubparts) [1619 1665])
+                        ("ui_gemport" variable (:type ("hi_uint32" type (:type "class") nil nil)) (reparse-symbol classsubparts) [1670 1691])
+                        ("ui_tcont" variable (:type ("hi_uint32" type (:type "class") nil nil)) (reparse-symbol classsubparts) [1696 1715]))                      )
+                    (reparse-symbol extern-c-contents) [1500 1740]))              ) nil [818 1778]))          
+    :file "hi_vif.h"
+    :pointmax 1838
+    :fsize 1837
+    :lastmodtime '(21298 30872)
+    :unmatched-syntax '((semantic-list 1418 . 1473) (symbol 1399 . 1417) (STRUCT 1392 . 1398) (semantic-list 1469 . 1471) (symbol 1462 . 1469) (symbol 1452 . 1461) (semantic-list 1469 . 1471) (symbol 1462 . 1469) (symbol 1452 . 1461) (TYPEDEF 1384 . 1391) (semantic-list 1469 . 1471) (symbol 1462 . 1469) (symbol 1452 . 1461) (semantic-list 1469 . 1471) (symbol 1462 . 1469) (symbol 1452 . 1461) (semantic-list 1418 . 1473) (symbol 1399 . 1417) (STRUCT 1392 . 1398) (semantic-list 1469 . 1471) (symbol 1462 . 1469) (symbol 1452 . 1461) (semantic-list 1469 . 1471) (symbol 1462 . 1469) (symbol 1452 . 1461) (TYPEDEF 1384 . 1391) (semantic-list 1469 . 1471) (symbol 1462 . 1469) (symbol 1452 . 1461) (semantic-list 1469 . 1471) (symbol 1462 . 1469) (symbol 1452 . 1461) (symbol 1399 . 1414) (STRUCT 1392 . 1398) (TYPEDEF 1384 . 1391) (symbol 1399 . 1414) (STRUCT 1392 . 1398) (TYPEDEF 1384 . 1391))
+    :lexical-table 
+        '(("HI_KERNEL_VIF_MAP_MAX_PORT" . ((semantic-list "(4)" 1139 . 1142)))
+          ("__HI_VIF_H__")
+          )
+
+    )
+   (semanticdb-table "hi_typedef.h"
+    :file "hi_typedef.h"
+    :fsize 1622
+    :lastmodtime '(21295 63474)
+    )
+   )
+  :file "!home!yubo!v2r2!hisilicon!include!common!semantic.cache"
+  :semantic-tag-version "2.0"
+  :semanticdb-version "2.0"
+  )

@@ -1,0 +1,851 @@
+;; Object vif_fhn/
+;; SEMANTICDB Tags save file
+(semanticdb-project-database-file "vif_fhn/"
+  :tables (list 
+   (semanticdb-table "hi_kernel_vif_dev.c"
+    :major-mode 'c-mode
+    :tags 
+        '( ("linux/netdevice.h" include (:system-flag t) nil [705 733])
+            ("linux/skbuff.h" include (:system-flag t) nil [734 759])
+            ("linux/if_ether.h" include (:system-flag t) nil [760 787])
+            ("linux/etherdevice.h" include (:system-flag t) nil [788 818])
+            ("linux/list.h" include (:system-flag t) nil [819 842])
+            ("net/arp.h" include (:system-flag t) nil [843 863])
+            ("hi_typedef.h" include nil nil [865 888])
+            ("hi_kernel_eth0.h" include nil nil [889 916])
+            ("hi_kernel_vif_com.h" include nil nil [918 948])
+            ("hi_kernel_vif_flow.h" include nil nil [949 980])
+            ("hi_kernel_vif_db.h" include nil nil [981 1010])
+            ("hi_kernel_vif_dev.h" include nil nil [1011 1041])
+            ("HI_KERNEL_VIF_HLEN" variable (:constant-flag t) nil [1291 1309])
+            ("HI_KERNEL_VIF_VLAN_VID_MASK" variable (:constant-flag t) nil [1363 1390])
+            ("HI_KERNEL_VIF_DEV_LOCK" variable (:constant-flag t) nil [1410 1432])
+            ("HI_KERNEL_VIF_DEV_UNLOCK" variable (:constant-flag t) nil [1491 1515])
+            ("HI_KERNEL_VIF_MAGIC" variable (:constant-flag t) nil [1575 1594])
+            ("HI_KERNEL_VIF_MTU_MAX" variable (:constant-flag t) nil [1628 1649])
+            ("hi_kernel_vif_vlanhdr_s" type
+               (:typedef ("hi_kernel_vif_vlanhdr" type (:type "struct") nil nil)
+                :superclasses "hi_kernel_vif_vlanhdr"
+                :type "typedef")
+                nil [1929 2143])
+            ("hi_kernel_vif_vlanhdr" type
+               (:members 
+                  ( ("auc_dmac" variable
+                       (:dereference 1
+                        :type ("hi_uchar8" type (:type "class") nil nil))
+                        (reparse-symbol classsubparts) [1972 2003])
+                    ("auc_smac" variable
+                       (:dereference 1
+                        :type ("hi_uchar8" type (:type "class") nil nil))
+                        (reparse-symbol classsubparts) [2008 2039])
+                    ("us_proto" variable (:type ("hi_ushort16" type (:type "class") nil nil)) (reparse-symbol classsubparts) [2044 2065])
+                    ("us_tci" variable (:type ("hi_ushort16" type (:type "class") nil nil)) (reparse-symbol classsubparts) [2070 2089])
+                    ("us_eproto" variable (:type ("hi_ushort16" type (:type "class") nil nil)) (reparse-symbol classsubparts) [2094 2116]))                  
+                :type "struct")
+                nil [1929 2143])
+            ("hi_kernel_vif_dev_db_s" type
+               (:typedef ("hi_kernel_vif_dev_db" type (:type "struct") nil nil)
+                :superclasses "hi_kernel_vif_dev_db"
+                :type "typedef")
+                nil [2145 2297])
+            ("hi_kernel_vif_dev_db" type
+               (:members 
+                  ( ("ui_num" variable (:type ("hi_uint32" type (:type "class") nil nil)) (reparse-symbol classsubparts) [2187 2211])
+                    ("st_lock" variable (:type ("spinlock_t" type (:type "class") nil nil)) (reparse-symbol classsubparts) [2216 2241])
+                    ("st_head" variable (:type ("list_head" type
+                         (:prototype t
+                          :type "struct")
+                          nil nil)) (reparse-symbol classsubparts) [2246 2271]))                  
+                :type "struct")
+                nil [2145 2297])
+            ("g_st_vif_dev_db" variable
+               (:typemodifiers ("static")
+                :type ("hi_kernel_vif_dev_db_s" type (:type "class") nil nil))
+                nil [2539 2585])
+            ("g_auc_vif_mac" variable
+               (:dereference 1
+                :typemodifiers ("static")
+                :constant-flag t
+                :type ("hi_uchar8" type (:type "class") nil nil))
+                nil [2586 2679])
+            ("__vif_dev_trans" function
+               (:arguments 
+                  ( ("pst_skb" variable
+                       (:pointer 1
+                        :type ("sk_buff" type
+                             (:prototype t
+                              :type "struct")
+                              nil nil))
+                        (reparse-symbol arg-sub-list) [3301 3325])
+                    ("pst_dev" variable
+                       (:pointer 1
+                        :type ("net_device" type
+                             (:prototype t
+                              :type "struct")
+                              nil nil))
+                        (reparse-symbol arg-sub-list) [3326 3353]))                  
+                :type ("hi_int32" type (:type "class") nil nil))
+                nil [3276 4142])
+            ("__vif_dev_h_create" function
+               (:typemodifiers ("static")
+                :arguments 
+                  ( ("pst_skb" variable
+                       (:pointer 1
+                        :type ("sk_buff" type
+                             (:prototype t
+                              :type "struct")
+                              nil nil))
+                        (reparse-symbol arg-sub-list) [4673 4700])
+                    ("pst_dev" variable
+                       (:pointer 1
+                        :type ("net_device" type
+                             (:prototype t
+                              :type "struct")
+                              nil nil))
+                        (reparse-symbol arg-sub-list) [4737 4764])
+                    ("us_type" variable (:type ("hi_ushort16" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [4791 4817])
+                    ("pv_daddr" variable
+                       (:pointer 1
+                        :constant-flag t
+                        :type ("hi_void" type (:type "class") nil nil))
+                        (reparse-symbol arg-sub-list) [4844 4872])
+                    ("pv_saddr" variable
+                       (:pointer 1
+                        :constant-flag t
+                        :type ("hi_void" type (:type "class") nil nil))
+                        (reparse-symbol arg-sub-list) [4899 4927])
+                    ("ui_len" variable (:type ("hi_uint32" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [4955 4980]))                  
+                :type ("hi_int32" type (:type "class") nil nil))
+                nil [4638 5723])
+            ("__vif_dev_h_parse" function
+               (:typemodifiers ("static")
+                :arguments 
+                  ( ("pst_skb" variable
+                       (:pointer 1
+                        :constant-flag t
+                        :type ("sk_buff" type
+                             (:prototype t
+                              :type "struct")
+                              nil nil))
+                        (reparse-symbol arg-sub-list) [6088 6118])
+                    ("puc_smac" variable
+                       (:pointer 1
+                        :type ("hi_uchar8" type (:type "class") nil nil))
+                        (reparse-symbol arg-sub-list) [6154 6174]))                  
+                :type ("hi_int32" type (:type "class") nil nil))
+                nil [6054 6345])
+            ("__vif_dev_h_rebuild" function
+               (:typemodifiers ("static")
+                :arguments 
+                  ( ("skb" variable
+                       (:pointer 1
+                        :type ("sk_buff" type
+                             (:prototype t
+                              :type "struct")
+                              nil nil))
+                        (reparse-symbol arg-sub-list) [6694 6714]))                  
+                :type ("hi_int32" type (:type "class") nil nil))
+                nil [6658 7117])
+            ("__vif_dev_h_cache" function
+               (:typemodifiers ("static")
+                :arguments 
+                  ( ("pst_neigh" variable
+                       (:pointer 1
+                        :constant-flag t
+                        :type ("neighbour" type
+                             (:prototype t
+                              :type "struct")
+                              nil nil))
+                        (reparse-symbol arg-sub-list) [7506 7540])
+                    ("pst_hh" variable
+                       (:pointer 1
+                        :type ("hh_cache" type
+                             (:prototype t
+                              :type "struct")
+                              nil nil))
+                        (reparse-symbol arg-sub-list) [7576 7600]))                  
+                :type ("hi_int32" type (:type "class") nil nil))
+                nil [7472 8259])
+            ("__vif_dev_h_cupdate" function
+               (:typemodifiers ("static")
+                :arguments 
+                  ( ("pst_hh" variable
+                       (:pointer 1
+                        :type ("hh_cache" type
+                             (:prototype t
+                              :type "struct")
+                              nil nil))
+                        (reparse-symbol arg-sub-list) [8600 8632])
+                    ("pst_dev" variable
+                       (:pointer 1
+                        :constant-flag t
+                        :type ("net_device" type
+                             (:prototype t
+                              :type "struct")
+                              nil nil))
+                        (reparse-symbol arg-sub-list) [8669 8702])
+                    ("puc_haddr" variable
+                       (:pointer 1
+                        :constant-flag t
+                        :type ("hi_uchar8" type (:type "class") nil nil))
+                        (reparse-symbol arg-sub-list) [8739 8774]))                  
+                :type ("hi_void" type (:type "class") nil nil))
+                nil [8564 8902])
+            ("g_st_vif_header_ops" variable
+               (:typemodifiers ("static")
+                :constant-flag t
+                :type ("header_ops" type
+                     (:prototype t
+                      :type "struct")
+                      nil nil))
+                nil [8904 9147])
+            ("__vif_dev_open" function
+               (:typemodifiers ("static")
+                :arguments 
+                  ( ("pst_dev" variable
+                       (:pointer 1
+                        :type ("net_device" type
+                             (:prototype t
+                              :type "struct")
+                              nil nil))
+                        (reparse-symbol arg-sub-list) [9499 9526]))                  
+                :type ("hi_int32" type (:type "class") nil nil))
+                nil [9468 9544])
+            ("__vif_dev_stop" function
+               (:typemodifiers ("static")
+                :arguments 
+                  ( ("pst_dev" variable
+                       (:pointer 1
+                        :type ("net_device" type
+                             (:prototype t
+                              :type "struct")
+                              nil nil))
+                        (reparse-symbol arg-sub-list) [9896 9923]))                  
+                :type ("hi_int32" type (:type "class") nil nil))
+                nil [9865 9941])
+            ("__vif_dev_newskb" function
+               (:pointer 1
+                :typemodifiers ("static")
+                :arguments 
+                  ( ("pst_skb" variable
+                       (:pointer 1
+                        :type ("sk_buff" type
+                             (:prototype t
+                              :type "struct")
+                              nil nil))
+                        (reparse-symbol arg-sub-list) [10280 10304]))                  
+                :type ("sk_buff" type
+                     (:prototype t
+                      :type "struct")
+                      nil nil))
+                nil [10240 10675])
+            ("__vif_dev_remark" function
+               (:typemodifiers ("static")
+                :arguments 
+                  ( ("ppst_skb" variable
+                       (:pointer 2
+                        :type ("sk_buff" type
+                             (:prototype t
+                              :type "struct")
+                              nil nil))
+                        (reparse-symbol arg-sub-list) [11068 11094])
+                    ("us_vlan" variable (:type ("hi_ushort16" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [11128 11148]))                  
+                :type ("hi_int32" type (:type "class") nil nil))
+                nil [11035 12141])
+            ("__vif_dev_xmit" function
+               (:typemodifiers ("static")
+                :arguments 
+                  ( ("pst_skb" variable
+                       (:pointer 1
+                        :type ("sk_buff" type
+                             (:prototype t
+                              :type "struct")
+                              nil nil))
+                        (reparse-symbol arg-sub-list) [12513 12537])
+                    ("pst_dev" variable
+                       (:pointer 1
+                        :type ("net_device" type
+                             (:prototype t
+                              :type "struct")
+                              nil nil))
+                        (reparse-symbol arg-sub-list) [12538 12565]))                  
+                :type ("hi_int32" type (:type "class") nil nil))
+                nil [12482 13189])
+            ("__vif_dev_set_mac" function
+               (:typemodifiers ("static")
+                :arguments 
+                  ( ("pst_dev" variable
+                       (:pointer 1
+                        :type ("net_device" type
+                             (:prototype t
+                              :type "struct")
+                              nil nil))
+                        (reparse-symbol arg-sub-list) [13570 13597])
+                    ("pv_addr" variable
+                       (:pointer 1
+                        :type ("hi_void" type (:type "class") nil nil))
+                        (reparse-symbol arg-sub-list) [13598 13615]))                  
+                :type ("hi_int32" type (:type "class") nil nil))
+                nil [13536 13891])
+            ("__vif_dev_change_mtu" function
+               (:typemodifiers ("static")
+                :arguments 
+                  ( ("pst_dev" variable
+                       (:pointer 1
+                        :type ("net_device" type
+                             (:prototype t
+                              :type "struct")
+                              nil nil))
+                        (reparse-symbol arg-sub-list) [14238 14265])
+                    ("ui_new_mtu" variable (:type ("hi_int32" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [14304 14324]))                  
+                :type ("hi_int32" type (:type "class") nil nil))
+                nil [14201 14516])
+            ("__vif_dev_stats" function
+               (:pointer 1
+                :typemodifiers ("static")
+                :arguments 
+                  ( ("pst_dev" variable
+                       (:pointer 1
+                        :type ("net_device" type
+                             (:prototype t
+                              :type "struct")
+                              nil nil))
+                        (reparse-symbol arg-sub-list) [14871 14898]))                  
+                :type ("net_device_stats" type
+                     (:prototype t
+                      :type "struct")
+                      nil nil))
+                nil [14823 14930])
+            ("g_st_vif_netdev_ops" variable
+               (:typemodifiers ("static")
+                :constant-flag t
+                :type ("net_device_ops" type
+                     (:prototype t
+                      :type "struct")
+                      nil nil))
+                nil [14932 15248])
+            ("__vif_dev_setup" function
+               (:typemodifiers ("static")
+                :arguments 
+                  ( ("pst_dev" variable
+                       (:pointer 1
+                        :type ("net_device" type
+                             (:prototype t
+                              :type "struct")
+                              nil nil))
+                        (reparse-symbol arg-sub-list) [15591 15618]))                  
+                :type ("hi_void" type (:type "class") nil nil))
+                nil [15558 15949])
+            ("__vif_dev_recv" function
+               (:typemodifiers ("static")
+                :arguments 
+                  ( ("pst_cb" variable
+                       (:pointer 1
+                        :type ("hi_kernel_eth0_cb_s" type (:type "class") nil nil))
+                        (reparse-symbol arg-sub-list) [16313 16341])
+                    ("pst_skb" variable
+                       (:pointer 1
+                        :type ("sk_buff" type
+                             (:prototype t
+                              :type "struct")
+                              nil nil))
+                        (reparse-symbol arg-sub-list) [16373 16402]))                  
+                :type ("hi_int32" type (:type "class") nil nil))
+                nil [16282 17135])
+            ("__vif_dev_db_add" function
+               (:typemodifiers ("static")
+                :arguments 
+                  ( ("pst_info" variable
+                       (:pointer 1
+                        :type ("hi_kernel_vif_info_s" type (:type "class") nil nil))
+                        (reparse-symbol arg-sub-list) [17486 17517]))                  
+                :type ("hi_int32" type (:type "class") nil nil))
+                nil [17453 17703])
+            ("__vif_dev_db_del" function
+               (:typemodifiers ("static")
+                :arguments 
+                  ( ("pst_info" variable
+                       (:pointer 1
+                        :type ("hi_kernel_vif_info_s" type (:type "class") nil nil))
+                        (reparse-symbol arg-sub-list) [18057 18088]))                  
+                :type ("hi_int32" type (:type "class") nil nil))
+                nil [18024 18243])
+            ("hi_kernel_vif_dev_add" function
+               (:arguments 
+                  ( ("pc_name" variable
+                       (:pointer 1
+                        :type ("hi_char8" type (:type "class") nil nil))
+                        (reparse-symbol arg-sub-list) [18883 18901])
+                    ("auc_mac" variable
+                       (:dereference 1
+                        :type ("hi_char8" type (:type "class") nil nil))
+                        (reparse-symbol arg-sub-list) [18902 18921]))                  
+                :type ("hi_int32" type (:type "class") nil nil))
+                nil [18852 19712])
+            ("hi_kernel_vif_dev_del" function
+               (:arguments 
+                  ( ("pc_name" variable
+                       (:pointer 1
+                        :type ("hi_char8" type (:type "class") nil nil))
+                        (reparse-symbol arg-sub-list) [20073 20091]))                  
+                :type ("hi_int32" type (:type "class") nil nil))
+                nil [20042 20767])
+            ("hi_kernel_vif_dev_bind" function
+               (:arguments 
+                  ( ("pc_name" variable
+                       (:pointer 1
+                        :type ("hi_char8" type (:type "class") nil nil))
+                        (reparse-symbol arg-sub-list) [21241 21259])
+                    ("us_vlan" variable (:type ("hi_ushort16" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [21260 21280])
+                    ("ui_portnum" variable (:type ("hi_uint32" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [21313 21334])
+                    ("aui_port" variable
+                       (:dereference 1
+                        :type ("hi_uint32" type (:type "class") nil nil))
+                        (reparse-symbol arg-sub-list) [21368 21389])
+                    ("ui_gemport" variable (:type ("hi_uint32" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [21422 21443])
+                    ("ui_tcont" variable (:type ("hi_uint32" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [21476 21495]))                  
+                :type ("hi_int32" type (:type "class") nil nil))
+                nil [21209 22772])
+            ("hi_kernel_vif_dev_unbind" function
+               (:arguments 
+                  ( ("pc_name" variable
+                       (:pointer 1
+                        :type ("hi_char8" type (:type "class") nil nil))
+                        (reparse-symbol arg-sub-list) [23153 23171]))                  
+                :type ("hi_int32" type (:type "class") nil nil))
+                nil [23119 23800])
+            ("hi_kernel_vif_dev_dump" function
+               (:arguments 
+                  ( ("" variable (:type ("hi_void" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [24137 24145]))                  
+                :type ("hi_int32" type (:type "class") nil nil))
+                nil [24105 24866])
+            ("hi_kernel_vif_dev_init" function
+               (:arguments 
+                  ( ("" variable (:type ("hi_void" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [25442 25450]))                  
+                :type ("hi_int32" type (:type "class") nil nil))
+                nil [25410 25654])
+            ("hi_kernel_vif_dev_exit" function
+               (:arguments 
+                  ( ("" variable (:type ("hi_void" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [25991 25999]))                  
+                :type ("hi_void" type (:type "class") nil nil))
+                nil [25958 26656]))          
+    :file "hi_kernel_vif_dev.c"
+    :pointmax 26615
+    :fsize 26657
+    :lastmodtime '(21298 30784)
+    :unmatched-syntax 'nil
+    :lexical-table 
+        '(("HI_KERNEL_VIF_MTU_MAX" . ((semantic-list "(2048 - HI_KERNEL_VIF_HLEN)" 1660 . 1687)))
+          ("HI_KERNEL_VIF_DEV_UNLOCK" (spp-arg-list nil 1515 . 1517) . ((semantic-list "(spin_unlock_bh(&g_st_vif_dev_db.st_lock))" 1523 . 1565)))
+          ("HI_KERNEL_VIF_MAGIC" . ((semantic-list "(0x90307891)" 1607 . 1619)))
+          ("HI_KERNEL_VIF_HLEN" . ((SIZEOF "sizeof" 1323 . 1329) (semantic-list "(hi_kernel_vif_vlanhdr_s)" 1329 . 1354)))
+          ("HI_KERNEL_VIF_DEV_LOCK" (spp-arg-list nil 1432 . 1434) . ((semantic-list "(spin_lock_bh(&g_st_vif_dev_db.st_lock))" 1442 . 1482)))
+          ("HI_KERNEL_VIF_VLAN_VID_MASK" . ((semantic-list "(0x0fff)" 1392 . 1400)))
+          )
+
+    )
+   (semanticdb-table "hi_kernel_vif_com.h"
+    :major-mode 'c-mode
+    :tags 
+        '( ("__HI_KERNEL_VIF_COM_H__" variable (:constant-flag t) nil [503 526])
+            ("hi_typedef.h" include nil nil [768 791])
+            ("hi_errdef.h" include nil nil [792 814])
+            ("hi_sysdef.h" include nil nil [815 837])
+            ("hi_comdef.h" include nil nil [838 860])
+            ("hi_logdef.h" include nil nil [861 883])
+            ("hi_kernel_log.h" include nil nil [884 910])
+            ("HI_KERNEL_VIF_DEBUG" variable
+               (:typemodifiers ("extern" "\"C\"")
+                :constant-flag t)
+                (reparse-symbol extern-c-contents) [1464 1483])
+            ("HI_KERNEL_VIF_TRACE" variable
+               (:typemodifiers ("extern" "\"C\"")
+                :constant-flag t)
+                (reparse-symbol extern-c-contents) [1240 1259])
+            ("C" extern (:members 
+              ( ("HI_KERNEL_VIF_TRACE" variable
+                   (:typemodifiers ("extern" "\"C\"")
+                    :constant-flag t)
+                    (reparse-symbol extern-c-contents) [1240 1259])
+                ("HI_KERNEL_VIF_DEBUG" variable
+                   (:typemodifiers ("extern" "\"C\"")
+                    :constant-flag t)
+                    (reparse-symbol extern-c-contents) [1464 1483]))              ) nil [947 1703]))          
+    :file "hi_kernel_vif_com.h"
+    :pointmax 1774
+    :fsize 1773
+    :lastmodtime '(21295 63464)
+    :unmatched-syntax 'nil
+    :lexical-table 
+        '(("__HI_KERNEL_VIF_COM_H__")
+          ("HI_KERNEL_VIF_DEBUG" (spp-arg-list ("fmt" "arg...") 1483 . 1495) . ((symbol "hi_kernel_print" 1534 . 1549) (semantic-list "(HI_SUBMODULE_KNETWORKS_VIF, HI_LOG_LEVEL_DBG_E,     \\
+                    (hi_uchar8*)\"[HI_KERNEL_VIF] \"fmt, ##arg)" 1549 . 1665)))
+          ("HI_KERNEL_VIF_TRACE" (spp-arg-list ("ui_ret" "ui_arg1" "ui_arg2" "ui_arg3" "ui_arg4") 1259 . 1303) . ((symbol "hi_kernel_systrace" 1310 . 1328) (semantic-list "(HI_SUBMODULE_KNETWORKS_VIF,                      \\
+                       ui_ret, ui_arg1, ui_arg2, ui_arg3, ui_arg4)" 1328 . 1446)))
+          )
+
+    )
+   (semanticdb-table "hi_kernel_vif_flow.h"
+    :file "hi_kernel_vif_flow.h"
+    :fsize 2057
+    :lastmodtime '(21295 63464)
+    )
+   (semanticdb-table "hi_kernel_vif_db.h"
+    :file "hi_kernel_vif_db.h"
+    :fsize 2485
+    :lastmodtime '(21295 63464)
+    )
+   (semanticdb-table "hi_kernel_vif_dev.h"
+    :major-mode 'c-mode
+    :tags 
+        '( ("__HI_KERNEL_VIF_DEV_H__" variable (:constant-flag t) nil [505 528])
+            ("linux/netdevice.h" include (:system-flag t) nil [770 798])
+            ("linux/list.h" include (:system-flag t) nil [799 822])
+            ("hi_typedef.h" include nil nil [824 847])
+            ("hi_vif.h" include nil nil [849 868])
+            ("hi_kernel_vif_dev_dump" function
+               (:typemodifiers ("extern" "\"C\"")
+                :type ("hi_int32" type (:type "class") nil nil)
+                :arguments 
+                  ( ("" variable (:type ("hi_void" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [4532 4540]))                  
+                :prototype-flag t)
+                (reparse-symbol extern-c-contents) [4500 4541])
+            ("hi_kernel_vif_dev_unbind" function
+               (:typemodifiers ("extern" "\"C\"")
+                :type ("hi_int32" type (:type "class") nil nil)
+                :arguments 
+                  ( ("pc_name" variable
+                       (:pointer 1
+                        :type ("hi_char8" type (:type "class") nil nil))
+                        (reparse-symbol arg-sub-list) [4176 4194]))                  
+                :prototype-flag t)
+                (reparse-symbol extern-c-contents) [4142 4195])
+            ("hi_kernel_vif_dev_bind" function
+               (:typemodifiers ("extern" "\"C\"")
+                :type ("hi_int32" type (:type "class") nil nil)
+                :arguments 
+                  ( ("pc_name" variable
+                       (:pointer 1
+                        :type ("hi_char8" type (:type "class") nil nil))
+                        (reparse-symbol arg-sub-list) [3541 3559])
+                    ("us_vlan" variable (:type ("hi_ushort16" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [3560 3580])
+                    ("ui_portnum" variable (:type ("hi_uint32" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [3613 3634])
+                    ("aui_port" variable
+                       (:dereference 1
+                        :type ("hi_uint32" type (:type "class") nil nil))
+                        (reparse-symbol arg-sub-list) [3667 3688])
+                    ("ui_gemport" variable (:type ("hi_uint32" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [3721 3742])
+                    ("ui_tcont" variable (:type ("hi_uint32" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [3775 3794]))                  
+                :prototype-flag t)
+                (reparse-symbol extern-c-contents) [3509 3795])
+            ("hi_kernel_vif_dev_del" function
+               (:typemodifiers ("extern" "\"C\"")
+                :type ("hi_int32" type (:type "class") nil nil)
+                :arguments 
+                  ( ("pc_name" variable
+                       (:pointer 1
+                        :type ("hi_char8" type (:type "class") nil nil))
+                        (reparse-symbol arg-sub-list) [3048 3066]))                  
+                :prototype-flag t)
+                (reparse-symbol extern-c-contents) [3017 3067])
+            ("hi_kernel_vif_dev_add" function
+               (:typemodifiers ("extern" "\"C\"")
+                :type ("hi_int32" type (:type "class") nil nil)
+                :arguments 
+                  ( ("pc_name" variable
+                       (:pointer 1
+                        :type ("hi_char8" type (:type "class") nil nil))
+                        (reparse-symbol arg-sub-list) [2648 2666])
+                    ("auc_mac" variable
+                       (:dereference 1
+                        :type ("hi_char8" type (:type "class") nil nil))
+                        (reparse-symbol arg-sub-list) [2667 2686]))                  
+                :prototype-flag t)
+                (reparse-symbol extern-c-contents) [2617 2687])
+            ("hi_kernel_vif_info" type
+               (:typemodifiers ("extern" "\"C\"")
+                :type "struct"
+                :members 
+                  ( ("ui_magic" variable (:type ("hi_uint32" type (:type "class") nil nil)) (reparse-symbol classsubparts) [1690 1709])
+                    ("st_list" variable (:type ("list_head" type
+                         (:prototype t
+                          :type "struct")
+                          nil nil)) (reparse-symbol classsubparts) [1714 1739])
+                    ("us_state" variable (:type ("hi_ushort16" type (:type "class") nil nil)) (reparse-symbol classsubparts) [1744 1765])
+                    ("us_vlan" variable (:type ("hi_ushort16" type (:type "class") nil nil)) (reparse-symbol classsubparts) [1770 1790])
+                    ("ui_portnum" variable (:type ("hi_uint32" type (:type "class") nil nil)) (reparse-symbol classsubparts) [1795 1818])
+                    ("aui_port" variable
+                       (:dereference 1
+                        :type ("hi_uint32" type (:type "class") nil nil))
+                        (reparse-symbol classsubparts) [1823 1872])
+                    ("ui_gemport" variable (:type ("hi_uint32" type (:type "class") nil nil)) (reparse-symbol classsubparts) [1877 1900])
+                    ("ui_tcont" variable (:type ("hi_uint32" type (:type "class") nil nil)) (reparse-symbol classsubparts) [1905 1926])
+                    ("us_sfcid" variable (:type ("hi_ushort16" type (:type "class") nil nil)) (reparse-symbol classsubparts) [1931 1952])
+                    ("pst_dev" variable
+                       (:pointer 1
+                        :type ("net_device" type
+                             (:prototype t
+                              :type "struct")
+                              nil nil))
+                        (reparse-symbol classsubparts) [1957 1984]))                  )
+                (reparse-symbol extern-c-contents) [1650 2008])
+            ("hi_kernel_vif_info_s" type
+               (:typemodifiers ("extern" "\"C\"")
+                :type "typedef"
+                :superclasses "hi_kernel_vif_info"
+                :typedef ("hi_kernel_vif_info" type (:type "struct") nil nil))
+                (reparse-symbol extern-c-contents) [1650 2008])
+            ("HI_KERNEL_VIF_STATE" type
+               (:typemodifiers ("extern" "\"C\"")
+                :type "enum"
+                :members 
+                  ( ("HI_KERNEL_VIF_DOWN_E" variable
+                       (:constant-flag t
+                        :default-value (1591 1592)
+                        :type "int")
+                        (reparse-symbol enumsubparts) [1568 1592])
+                    ("HI_KERNEL_VIF_UP_E" variable
+                       (:constant-flag t
+                        :default-value (1621 1622)
+                        :type "int")
+                        (reparse-symbol enumsubparts) [1598 1622]))                  )
+                (reparse-symbol extern-c-contents) [1529 1648])
+            ("HI_KERNEL_VIF_STATE_E" type
+               (:typemodifiers ("extern" "\"C\"")
+                :type "typedef"
+                :superclasses "HI_KERNEL_VIF_STATE"
+                :typedef ("HI_KERNEL_VIF_STATE" type (:type "enum") nil nil))
+                (reparse-symbol extern-c-contents) [1529 1648])
+            ("HI_KERNEL_VIF_INFO" variable
+               (:typemodifiers ("extern" "\"C\"")
+                :constant-flag t)
+                (reparse-symbol extern-c-contents) [1198 1216])
+            ("C" extern (:members 
+              ( ("HI_KERNEL_VIF_INFO" variable
+                   (:typemodifiers ("extern" "\"C\"")
+                    :constant-flag t)
+                    (reparse-symbol extern-c-contents) [1198 1216])
+                ("HI_KERNEL_VIF_STATE_E" type
+                   (:typemodifiers ("extern" "\"C\"")
+                    :type "typedef"
+                    :superclasses "HI_KERNEL_VIF_STATE"
+                    :typedef ("HI_KERNEL_VIF_STATE" type (:type "enum") nil nil))
+                    (reparse-symbol extern-c-contents) [1529 1648])
+                ("HI_KERNEL_VIF_STATE" type
+                   (:typemodifiers ("extern" "\"C\"")
+                    :type "enum"
+                    :members 
+                      ( ("HI_KERNEL_VIF_DOWN_E" variable
+                           (:constant-flag t
+                            :default-value (1591 1592)
+                            :type "int")
+                            (reparse-symbol enumsubparts) [1568 1592])
+                        ("HI_KERNEL_VIF_UP_E" variable
+                           (:constant-flag t
+                            :default-value (1621 1622)
+                            :type "int")
+                            (reparse-symbol enumsubparts) [1598 1622]))                      )
+                    (reparse-symbol extern-c-contents) [1529 1648])
+                ("hi_kernel_vif_info_s" type
+                   (:typemodifiers ("extern" "\"C\"")
+                    :type "typedef"
+                    :superclasses "hi_kernel_vif_info"
+                    :typedef ("hi_kernel_vif_info" type (:type "struct") nil nil))
+                    (reparse-symbol extern-c-contents) [1650 2008])
+                ("hi_kernel_vif_info" type
+                   (:typemodifiers ("extern" "\"C\"")
+                    :type "struct"
+                    :members 
+                      ( ("ui_magic" variable (:type ("hi_uint32" type (:type "class") nil nil)) (reparse-symbol classsubparts) [1690 1709])
+                        ("st_list" variable (:type ("list_head" type
+                             (:prototype t
+                              :type "struct")
+                              nil nil)) (reparse-symbol classsubparts) [1714 1739])
+                        ("us_state" variable (:type ("hi_ushort16" type (:type "class") nil nil)) (reparse-symbol classsubparts) [1744 1765])
+                        ("us_vlan" variable (:type ("hi_ushort16" type (:type "class") nil nil)) (reparse-symbol classsubparts) [1770 1790])
+                        ("ui_portnum" variable (:type ("hi_uint32" type (:type "class") nil nil)) (reparse-symbol classsubparts) [1795 1818])
+                        ("aui_port" variable
+                           (:dereference 1
+                            :type ("hi_uint32" type (:type "class") nil nil))
+                            (reparse-symbol classsubparts) [1823 1872])
+                        ("ui_gemport" variable (:type ("hi_uint32" type (:type "class") nil nil)) (reparse-symbol classsubparts) [1877 1900])
+                        ("ui_tcont" variable (:type ("hi_uint32" type (:type "class") nil nil)) (reparse-symbol classsubparts) [1905 1926])
+                        ("us_sfcid" variable (:type ("hi_ushort16" type (:type "class") nil nil)) (reparse-symbol classsubparts) [1931 1952])
+                        ("pst_dev" variable
+                           (:pointer 1
+                            :type ("net_device" type
+                                 (:prototype t
+                                  :type "struct")
+                                  nil nil))
+                            (reparse-symbol classsubparts) [1957 1984]))                      )
+                    (reparse-symbol extern-c-contents) [1650 2008])
+                ("hi_kernel_vif_dev_add" function
+                   (:typemodifiers ("extern" "\"C\"")
+                    :type ("hi_int32" type (:type "class") nil nil)
+                    :arguments 
+                      ( ("pc_name" variable
+                           (:pointer 1
+                            :type ("hi_char8" type (:type "class") nil nil))
+                            (reparse-symbol arg-sub-list) [2648 2666])
+                        ("auc_mac" variable
+                           (:dereference 1
+                            :type ("hi_char8" type (:type "class") nil nil))
+                            (reparse-symbol arg-sub-list) [2667 2686]))                      
+                    :prototype-flag t)
+                    (reparse-symbol extern-c-contents) [2617 2687])
+                ("hi_kernel_vif_dev_del" function
+                   (:typemodifiers ("extern" "\"C\"")
+                    :type ("hi_int32" type (:type "class") nil nil)
+                    :arguments 
+                      ( ("pc_name" variable
+                           (:pointer 1
+                            :type ("hi_char8" type (:type "class") nil nil))
+                            (reparse-symbol arg-sub-list) [3048 3066]))                      
+                    :prototype-flag t)
+                    (reparse-symbol extern-c-contents) [3017 3067])
+                ("hi_kernel_vif_dev_bind" function
+                   (:typemodifiers ("extern" "\"C\"")
+                    :type ("hi_int32" type (:type "class") nil nil)
+                    :arguments 
+                      ( ("pc_name" variable
+                           (:pointer 1
+                            :type ("hi_char8" type (:type "class") nil nil))
+                            (reparse-symbol arg-sub-list) [3541 3559])
+                        ("us_vlan" variable (:type ("hi_ushort16" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [3560 3580])
+                        ("ui_portnum" variable (:type ("hi_uint32" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [3613 3634])
+                        ("aui_port" variable
+                           (:dereference 1
+                            :type ("hi_uint32" type (:type "class") nil nil))
+                            (reparse-symbol arg-sub-list) [3667 3688])
+                        ("ui_gemport" variable (:type ("hi_uint32" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [3721 3742])
+                        ("ui_tcont" variable (:type ("hi_uint32" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [3775 3794]))                      
+                    :prototype-flag t)
+                    (reparse-symbol extern-c-contents) [3509 3795])
+                ("hi_kernel_vif_dev_unbind" function
+                   (:typemodifiers ("extern" "\"C\"")
+                    :type ("hi_int32" type (:type "class") nil nil)
+                    :arguments 
+                      ( ("pc_name" variable
+                           (:pointer 1
+                            :type ("hi_char8" type (:type "class") nil nil))
+                            (reparse-symbol arg-sub-list) [4176 4194]))                      
+                    :prototype-flag t)
+                    (reparse-symbol extern-c-contents) [4142 4195])
+                ("hi_kernel_vif_dev_dump" function
+                   (:typemodifiers ("extern" "\"C\"")
+                    :type ("hi_int32" type (:type "class") nil nil)
+                    :arguments 
+                      ( ("" variable (:type ("hi_void" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [4532 4540]))                      
+                    :prototype-flag t)
+                    (reparse-symbol extern-c-contents) [4500 4541]))              ) nil [905 4579]))          
+    :file "hi_kernel_vif_dev.h"
+    :pointmax 4650
+    :fsize 4649
+    :lastmodtime '(21298 30811)
+    :unmatched-syntax 'nil
+    :lexical-table 
+        '(("HI_KERNEL_VIF_INFO" (spp-arg-list ("pst_dev") 1216 . 1225) . 
+              ((semantic-list "(hi_kernel_vif_info_s*)" 1244 . 1267) (symbol "netdev_priv" 1267 . 1278) (semantic-list "(pst_dev)" 1278 . 1287)))
+          ("__HI_KERNEL_VIF_DEV_H__")
+          )
+
+    )
+   (semanticdb-table "hi_kernel_vif_cmd.c"
+    :major-mode 'c-mode
+    :tags 
+        '( ("hi_kspace.h" include nil nil [703 725])
+            ("hi_kernel_os.h" include nil nil [726 751])
+            ("hi_kernel_vif_com.h" include nil nil [753 783])
+            ("hi_kernel_vif_dev.h" include nil nil [784 814])
+            ("hi_vif.h" include nil nil [815 834])
+            ("hi_kernel_vif_cmd_add" function
+               (:arguments 
+                  ( ("pv_data" variable
+                       (:pointer 1
+                        :type ("hi_void" type (:type "class") nil nil))
+                        (reparse-symbol arg-sub-list) [1426 1445])
+                    ("ui_inlen" variable (:type ("hi_uint32" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [1446 1465])
+                    ("pui_outlen" variable
+                       (:pointer 1
+                        :type ("hi_uint32" type (:type "class") nil nil))
+                        (reparse-symbol arg-sub-list) [1498 1520]))                  
+                :type ("hi_int32" type (:type "class") nil nil))
+                nil [1395 1818])
+            ("hi_kernel_vif_cmd_del" function
+               (:arguments 
+                  ( ("pv_data" variable
+                       (:pointer 1
+                        :type ("hi_void" type (:type "class") nil nil))
+                        (reparse-symbol arg-sub-list) [2173 2192])
+                    ("ui_inlen" variable (:type ("hi_uint32" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [2193 2212])
+                    ("pui_outlen" variable
+                       (:pointer 1
+                        :type ("hi_uint32" type (:type "class") nil nil))
+                        (reparse-symbol arg-sub-list) [2245 2267]))                  
+                :type ("hi_int32" type (:type "class") nil nil))
+                nil [2142 2487])
+            ("hi_kernel_vif_cmd_bind" function
+               (:arguments 
+                  ( ("pv_data" variable
+                       (:pointer 1
+                        :type ("hi_void" type (:type "class") nil nil))
+                        (reparse-symbol arg-sub-list) [2842 2861])
+                    ("ui_inlen" variable (:type ("hi_uint32" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [2862 2881])
+                    ("pui_outlen" variable
+                       (:pointer 1
+                        :type ("hi_uint32" type (:type "class") nil nil))
+                        (reparse-symbol arg-sub-list) [2915 2937]))                  
+                :type ("hi_int32" type (:type "class") nil nil))
+                nil [2810 3502])
+            ("hi_kernel_vif_cmd_unbind" function
+               (:arguments 
+                  ( ("pv_data" variable
+                       (:pointer 1
+                        :type ("hi_void" type (:type "class") nil nil))
+                        (reparse-symbol arg-sub-list) [3862 3881])
+                    ("ui_inlen" variable (:type ("hi_uint32" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [3882 3901])
+                    ("pui_outlen" variable
+                       (:pointer 1
+                        :type ("hi_uint32" type (:type "class") nil nil))
+                        (reparse-symbol arg-sub-list) [3936 3958]))                  
+                :type ("hi_int32" type (:type "class") nil nil))
+                nil [3828 4177])
+            ("hi_kernel_vif_cmd_dump" function
+               (:arguments 
+                  ( ("pv_data" variable
+                       (:pointer 1
+                        :type ("hi_void" type (:type "class") nil nil))
+                        (reparse-symbol arg-sub-list) [4525 4544])
+                    ("ui_inlen" variable (:type ("hi_uint32" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [4545 4564])
+                    ("pui_outlen" variable
+                       (:pointer 1
+                        :type ("hi_uint32" type (:type "class") nil nil))
+                        (reparse-symbol arg-sub-list) [4597 4619]))                  
+                :type ("hi_int32" type (:type "class") nil nil))
+                nil [4493 4677])
+            ("g_st_vif_cmd" variable
+               (:dereference 1
+                :typemodifiers ("static")
+                :type ("hi_cmdtype_s" type (:type "class") nil nil))
+                nil [4679 4966])
+            ("hi_kernel_vif_cmd_init" function
+               (:arguments 
+                  ( ("" variable (:type ("hi_void" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [5547 5555]))                  
+                :type ("hi_int32" type (:type "class") nil nil))
+                nil [5515 5619])
+            ("hi_kernel_vif_cmd_exit" function
+               (:arguments 
+                  ( ("" variable (:type ("hi_void" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [5940 5948]))                  
+                :type ("hi_void" type (:type "class") nil nil))
+                nil [5908 6002]))          
+    :file "hi_kernel_vif_cmd.c"
+    :pointmax 5921
+    :fsize 6002
+    :lastmodtime '(21298 30931)
+    :unmatched-syntax 'nil
+    )
+   )
+  :file "!home!yubo!v2r2!hisilicon!source!app!vif_fhn!semantic.cache"
+  :semantic-tag-version "2.0"
+  :semanticdb-version "2.0"
+  )

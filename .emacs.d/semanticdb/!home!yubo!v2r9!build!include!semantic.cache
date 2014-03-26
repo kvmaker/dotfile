@@ -1,0 +1,44 @@
+;; Object include/
+;; SEMANTICDB Tags save file
+(semanticdb-project-database-file "include/"
+  :tables (list 
+   (semanticdb-table "hi_kspace.h"
+    :major-mode 'c-mode
+    :tags 
+        '( ("__HI_KSPACE_H__" variable (:constant-flag t) nil [417 432])
+            ("hi_kernel_basic.h" include (:typemodifiers ("extern" "\"C\"")) (reparse-symbol extern-c-contents) [730 758])
+            ("hi_netdef.h" include (:typemodifiers ("extern" "\"C\"")) (reparse-symbol extern-c-contents) [706 728])
+            ("hi_logdef.h" include (:typemodifiers ("extern" "\"C\"")) (reparse-symbol extern-c-contents) [683 705])
+            ("hi_errdef.h" include (:typemodifiers ("extern" "\"C\"")) (reparse-symbol extern-c-contents) [660 682])
+            ("hi_print.h" include (:typemodifiers ("extern" "\"C\"")) (reparse-symbol extern-c-contents) [638 659])
+            ("hi_list.h" include (:typemodifiers ("extern" "\"C\"")) (reparse-symbol extern-c-contents) [617 637])
+            ("hi_sysdef.h" include (:typemodifiers ("extern" "\"C\"")) (reparse-symbol extern-c-contents) [594 616])
+            ("hi_comdef.h" include (:typemodifiers ("extern" "\"C\"")) (reparse-symbol extern-c-contents) [571 593])
+            ("hi_typedef.h" include (:typemodifiers ("extern" "\"C\"")) (reparse-symbol extern-c-contents) [547 570])
+            ("hi_linux.h" include (:typemodifiers ("extern" "\"C\"")) (reparse-symbol extern-c-contents) [525 546])
+            ("C" extern (:members 
+              ( ("hi_linux.h" include (:typemodifiers ("extern" "\"C\"")) (reparse-symbol extern-c-contents) [525 546])
+                ("hi_typedef.h" include (:typemodifiers ("extern" "\"C\"")) (reparse-symbol extern-c-contents) [547 570])
+                ("hi_comdef.h" include (:typemodifiers ("extern" "\"C\"")) (reparse-symbol extern-c-contents) [571 593])
+                ("hi_sysdef.h" include (:typemodifiers ("extern" "\"C\"")) (reparse-symbol extern-c-contents) [594 616])
+                ("hi_list.h" include (:typemodifiers ("extern" "\"C\"")) (reparse-symbol extern-c-contents) [617 637])
+                ("hi_print.h" include (:typemodifiers ("extern" "\"C\"")) (reparse-symbol extern-c-contents) [638 659])
+                ("hi_errdef.h" include (:typemodifiers ("extern" "\"C\"")) (reparse-symbol extern-c-contents) [660 682])
+                ("hi_logdef.h" include (:typemodifiers ("extern" "\"C\"")) (reparse-symbol extern-c-contents) [683 705])
+                ("hi_netdef.h" include (:typemodifiers ("extern" "\"C\"")) (reparse-symbol extern-c-contents) [706 728])
+                ("hi_kernel_basic.h" include (:typemodifiers ("extern" "\"C\"")) (reparse-symbol extern-c-contents) [730 758]))              ) nil [469 796]))          
+    :file "hi_kspace.h"
+    :pointmax 861
+    :fsize 932
+    :lastmodtime '(21298 10844)
+    :unmatched-syntax 'nil
+    :lexical-table 
+        '(("__HI_KSPACE_H__")
+          )
+
+    )
+   )
+  :file "!home!yubo!v2r9!build!include!semantic.cache"
+  :semantic-tag-version "2.0"
+  :semanticdb-version "2.0"
+  )

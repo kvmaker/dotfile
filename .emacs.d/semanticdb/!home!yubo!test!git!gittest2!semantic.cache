@@ -1,0 +1,84 @@
+;; Object gittest2/
+;; SEMANTICDB Tags save file
+(semanticdb-project-database-file "gittest2/"
+  :tables (list 
+   (semanticdb-table "print.c"
+    :major-mode 'c-mode
+    :tags 
+        '( ("stdio.h" include (:system-flag t) nil [1 19])
+            ("print0" function
+               (:typemodifiers ("static")
+                :arguments 
+                  ( ("" variable (:type "void") (reparse-symbol arg-sub-list) [41 46]))                  
+                :type ("cvoid" type (:type "class") nil nil))
+                nil [21 187])
+            ("print1" function
+               (:typemodifiers ("static")
+                :arguments 
+                  ( ("" variable (:type "void") (reparse-symbol arg-sub-list) [208 213]))                  
+                :type "void")
+                nil [189 354])
+            ("print2" function
+               (:typemodifiers ("static")
+                :arguments 
+                  ( ("" variable (:type "void") (reparse-symbol arg-sub-list) [375 380]))                  
+                :type "void")
+                nil [356 521])
+            ("print3" function
+               (:typemodifiers ("static")
+                :arguments 
+                  ( ("" variable (:type "void") (reparse-symbol arg-sub-list) [542 547]))                  
+                :type "void")
+                nil [523 688])
+            ("print4" function
+               (:typemodifiers ("static")
+                :arguments 
+                  ( ("" variable (:type "void") (reparse-symbol arg-sub-list) [709 714]))                  
+                :type "void")
+                nil [690 855])
+            ("print5" function
+               (:typemodifiers ("static")
+                :arguments 
+                  ( ("" variable (:type "void") (reparse-symbol arg-sub-list) [876 881]))                  
+                :type "void")
+                nil [857 1017])
+            ("print6" function
+               (:typemodifiers ("static")
+                :arguments 
+                  ( ("" variable (:type "void") (reparse-symbol arg-sub-list) [1038 1043]))                  
+                :type "void")
+                nil [1019 1179])
+            ("print7" function
+               (:typemodifiers ("static")
+                :arguments 
+                  ( ("" variable (:type "void") (reparse-symbol arg-sub-list) [1200 1205]))                  
+                :type "void")
+                nil [1181 1341])
+            ("print8" function
+               (:typemodifiers ("static")
+                :arguments 
+                  ( ("" variable (:type "void") (reparse-symbol arg-sub-list) [1362 1367]))                  
+                :type "void")
+                nil [1343 1503])
+            ("print9" function
+               (:typemodifiers ("static")
+                :arguments 
+                  ( ("" variable (:type "void") (reparse-symbol arg-sub-list) [1524 1529]))                  
+                :type "void")
+                nil [1505 1665])
+            ("print" function
+               (:arguments 
+                  ( ("a" variable (:type "int") (reparse-symbol arg-sub-list) [1677 1683]))                  
+                :type "int")
+                nil [1667 2269]))          
+    :file "print.c"
+    :pointmax 2270
+    :fsize 2269
+    :lastmodtime '(21298 38506)
+    :unmatched-syntax 'nil
+    )
+   )
+  :file "!home!yubo!test!git!gittest2!semantic.cache"
+  :semantic-tag-version "2.0"
+  :semanticdb-version "2.0"
+  )

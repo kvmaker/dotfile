@@ -1,0 +1,84 @@
+;; Object asm-generic/
+;; SEMANTICDB Tags save file
+(semanticdb-project-database-file "asm-generic/"
+  :tables (list 
+   (semanticdb-table "types.h"
+    :major-mode 'c-mode
+    :tags 
+        '( ("_ASM_GENERIC_TYPES_H" variable (:constant-flag t) nil [38 58])
+            ("asm-generic/int-ll64.h" include (:system-flag t) nil [152 185])
+            ("umode_t" type
+               (:typedef ("unsigned short")
+                :superclasses "unsigned short"
+                :type "typedef")
+                nil [209 240]))          
+    :file "types.h"
+    :pointmax 303
+    :fsize 302
+    :lastmodtime '(20111 30903)
+    :unmatched-syntax 'nil
+    :lexical-table 
+        '(("_ASM_GENERIC_TYPES_H")
+          )
+
+    )
+   (semanticdb-table "int-ll64.h"
+    :major-mode 'c-mode
+    :tags 
+        '( ("_ASM_GENERIC_INT_LL64_H" variable (:constant-flag t) nil [163 186])
+            ("asm/bitsperlong.h" include (:system-flag t) nil [188 216])
+            ("__s8" variable (:type "char") nil [377 387])
+            ("__u8" type
+               (:typedef ("unsigned char")
+                :superclasses "unsigned char"
+                :type "typedef")
+                nil [388 415])
+            ("__s16" variable (:type "short") nil [436 448])
+            ("__u16" type
+               (:typedef ("unsigned short")
+                :superclasses "unsigned short"
+                :type "typedef")
+                nil [449 478])
+            ("__s32" variable (:type "int") nil [499 509])
+            ("__u32" type
+               (:typedef ("unsigned int")
+                :superclasses "unsigned int"
+                :type "typedef")
+                nil [510 537])
+            ("__s64" variable (:type "long long") nil [588 604])
+            ("__u64" type
+               (:typedef ("unsigned long long")
+                :superclasses "unsigned long long"
+                :type "typedef")
+                nil [619 652]))          
+    :file "int-ll64.h"
+    :pointmax 802
+    :fsize 801
+    :lastmodtime '(20111 30903)
+    :unmatched-syntax '((symbol 605 . 618) (symbol 577 . 587) (TYPEDEF 569 . 576) (symbol 555 . 568) (symbol 488 . 498) (TYPEDEF 480 . 487) (symbol 425 . 435) (TYPEDEF 417 . 424) (symbol 366 . 376) (TYPEDEF 358 . 365))
+    :lexical-table 
+        '(("_ASM_GENERIC_INT_LL64_H")
+          )
+
+    )
+   (semanticdb-table "bitsperlong.h"
+    :major-mode 'c-mode
+    :tags 
+        '( ("__ASM_GENERIC_BITS_PER_LONG" variable (:constant-flag t) nil [45 72])
+            ("__BITS_PER_LONG" variable (:constant-flag t) nil [434 449]))          
+    :file "bitsperlong.h"
+    :pointmax 502
+    :fsize 501
+    :lastmodtime '(20111 30903)
+    :unmatched-syntax 'nil
+    :lexical-table 
+        '(("__BITS_PER_LONG" . ((number "32" 450 . 452)))
+          ("__ASM_GENERIC_BITS_PER_LONG")
+          )
+
+    )
+   )
+  :file "!usr!include!asm-generic!semantic.cache"
+  :semantic-tag-version "2.0"
+  :semanticdb-version "2.0"
+  )
