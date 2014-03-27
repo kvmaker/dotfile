@@ -1,0 +1,15 @@
+#! /bin/sh
+
+username=y00186361
+password=cavendish#2014q1
+s_path=//10.66.67.171/d
+d_path=~/dc
+
+if [ ! -e $d_path ]
+then
+	mkdir $d_path
+	sudo mount -t cifs $s_path $d_path -o username=$username,password=$password
+else
+	echo "$d_path already mounted."
+fi
+

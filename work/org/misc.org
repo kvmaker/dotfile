@@ -1,0 +1,11 @@
+* 安装Ubuntu总结
+1. 编译v2r3需要的工具
+   a) u-boot-tools
+   b) bison
+   c) flex
+   d) g++
+   e) gettext
+   f) texinfo
+2. 编译v2r9需要的工具
+   a) cmake
+   b) ruby

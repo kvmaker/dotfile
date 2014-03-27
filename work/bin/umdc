@@ -1,0 +1,11 @@
+#! /bin/sh
+
+d_path=~/dc
+
+if [ -e $d_path ]
+then
+	sudo umount $d_path
+	rm -rf $d_path
+else
+	echo "$d_path not mounted."
+fi

@@ -1,0 +1,133 @@
+* 起步
+** 关于版本控制
+** Git历史
+** Git基础要点
+   1) 直接快照
+   2) 所有操作都可本地完成
+   3) 时刻保持数据完整性
+   4) 多数操作仅添加数据
+   5) 三种状态（已修改，已暂存，已提交）
+** 安装Git
+** 配置Git
+   1) git config [--global | --system]
+   2) git config --global user.name "YuBo"
+	  git config --global user.email kvmaker.yubo@huawei.com
+	  git config --global core.editor emacs
+	  git config --list
+** 获取帮助
+   1) git help <verb>
+   2) git <verb> --help
+   3) man git-<verb>
+
+* Git基础
+** 获取新的仓库
+   1) 从当前目录初始化
+	  git init
+	  git add *.c
+	  git add README
+	  git commit -m "Init project"
+   2) 克隆
+	  git clone url [dir]
+** 记录每次更新到仓库
+   1) 文件状态
+	  #+BEGIN_ASCII
+	  untracked  unmodified modified staged
+	     |  add     |          |         |
+	     |--------->|  modifie |         |
+         |          |--------->| stage   |
+         |          |          |-------->|
+         |          |    commit          |
+         |  remove  |<-------------------|
+         |<---------|                    |
+	  #+END_ASCII
+   2) 跟踪新文件
+	  git add
+   3) 暂存已修改文件
+	  git add
+   4) 忽略某些文件
+	  .gitignore
+   5) 查看已暂存或未暂存的更新
+	  git status
+	  git diff
+	  git diff --staged
+	  git diff --cached
+   6) 提交更新
+	  git commit -m "..."
+	  git commit
+   7) 跳过暂存
+	  git commit -a
+   8) 移除文件
+	  git rm 
+	  git rm --cached
+   9) 移动文件
+	  git mv
+** 查看历史
+   git log
+   git log -p -2
+** 撤销操作
+   1) 修改最后一次提交
+	  git commit -m "init commit"
+	  git add file1 file2
+	  git commit --amend
+   2) 撤销暂存文件
+	  git add file1
+	  git reset HEAD file1
+   3) 取消对文件的修改
+	  git checkout file1
+** 远程仓库的使用
+   1) 查看当前远程仓库
+	  git remote -v
+   2) 添加远程仓库
+	  git remote add <name> <url>
+   3) 从远程仓库抓取数据
+	  git pull
+   4) 推送数据到远程仓库
+	  git push
+   5) 查看远程仓库信息
+	  git remote show
+** 打标签
+   1) 新建标签
+	  git tag -a v0.1 -m "..."
+   2) 分享标签
+	  git push origin v0.1
+	  git push origin tags
+** 技巧和窍门
+   1) 自动完成
+   2) Git命令别名
+	  git config --global alias.co checkout
+	  git config --global alias.ci commit
+	  git config --global alias.st status
+	  git config --global alias.unstage 'reset HEAD
+	  git config --global alias.last 'log -1 HEAD'
+* Git分支
+** 何谓分支
+** 基本的分支与合并
+   git branch testing
+   git co testing
+   git co master
+   git merge testing
+   git branch -d testing
+** 分支管理
+   git branch 
+   git branch -v
+   git branch --merged
+   git branch --no-merged
+   git branch -d <name>
+** 分支工作流程
+   1) 长期分支
+   2) 特性分支
+** 远程分支
+   1) 推送
+	  git push origin bugfix
+   2) 跟踪
+	  git fetch
+	  git co --track origin/bugfix
+   3) 删除远程分支
+	  git push origin :bugfix
+** 衍合
+* 服务器上的Git
+* 分布式Git
+* Git工具
+* 自定义Git
+* Git与其它系统
+* Git内部原理
