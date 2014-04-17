@@ -158,7 +158,7 @@ Emacs buffer are those starting with “*”."
 
 ;; slime
 (add-to-list 'load-path "~/.emacs.d/3rd/slime")
-(setq inferior-lisp-program "/usr/local/bin/sbcl")
+(setq inferior-lisp-program "/usr/bin/sbcl")
 (require 'slime-autoloads)
 (slime-setup '(slime-fancy))
 
