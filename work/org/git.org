@@ -18,7 +18,6 @@
    1) git help <verb>
    2) git <verb> --help
    3) man git-<verb>
-
 * Git基础
 ** 获取新的仓库
    1) 从当前目录初始化

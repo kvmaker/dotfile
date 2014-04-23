@@ -60,9 +60,9 @@
 (desktop-read)
 
 ;; session
-;;(require 'session)
-;;(add-hook 'after-init-hook
-;;          'session-initialize)
+(require 'session)
+(add-hook 'after-init-hook
+          'session-initialize)
 
 ;; fill-column
 (require 'fill-column-indicator)
@@ -220,11 +220,11 @@ Emacs buffer are those starting with “*”."
 (setq file-name-coding-system 'euc-cn)
 
 ;; ecb
-;;(add-to-list 'load-path "/home/yubo/.emacs.d/3rd/ecb")
-;;(require 'ecb)
-;;(setq ecb-auto-activate t
-;;      ecb-tip-of-the-day nil)
-;;(semantic-mode 1)
+(add-to-list 'load-path "/home/yubo/.emacs.d/3rd/ecb")
+(require 'ecb)
+(setq ecb-auto-activate t
+      ecb-tip-of-the-day nil)
+(semantic-mode 1)
 
 ;; emacs-server
 ;; 1) use emacsclient xxx

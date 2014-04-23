@@ -126,7 +126,7 @@ export SVN_EDITOR="cat ~/.svn-log.tmpl >> svn-commit.tmp2 && cat svn-commit.tmp 
 
 # proxy setting
 user=y00186361
-passwd=cavendish#2014q1
+passwd=cavendish#2014q2
 export http_proxy=http://$user:$passwd@proxy.huawei.com:8080/
 export ftp_proxy=ftp://$user:$passwd@proxy.huawei.com:8080/
 export socks_proxy=socks://$user:$passwd@proxy.huawei.com:8080/
@@ -145,4 +145,4 @@ export OS_AUTH_URL=http://localhost:5000/v2.0/
 
 # add path
 export PATH=$PATH:~/work/bin
-
+export PATH=$PATH:~/v2r9/build/toolchains/arm-wap-linux-uclibcgnueabi/bin/
