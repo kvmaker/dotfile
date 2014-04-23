@@ -9,13 +9,13 @@
 (show-paren-mode 1)
 (setq show-paren-delay 0)
 (setq tab-width 4)
-(setq user-full-name "Yu Bo")
-(setq user-mail-address "kvmaker.yubo@huawei.com")
+(setq user-full-name "kvmaker")
+(setq user-mail-address "kvmaker@gmail.com")
 (setq default-major-mode 'text-mode)
 (add-hook 'text-mode-hook 'turn-on-auto-fill)
 (setq inhibit-startup-message t)
 (tool-bar-mode -1)
-(menu-bar-mode -1)
+(menu-bar-mode 1)
 (scroll-bar-mode -1)
 (icomplete-mode 1)
 (fset 'yes-or-no-p 'y-or-n-p)
@@ -23,10 +23,14 @@
 (setq suggest-key-bindings t)
 (put 'dired-find-alternate-file 'disabled nil)
 (setq frame-title-format "May the Force be with you!")
-;;(display-time-mode 1)
+(display-time-mode 1)
 (add-hook 'speedbar-mode-hook '(lambda () (linum-mode -1)))
 (add-hook 'eshell-mode-hook   '(lambda () (linum-mode -1)))
 (add-hook 'cscope-mode-hook   '(lambda () (linum-mode -1)))
+
+;;font
+(set-frame-font "Consolas-15")
+(set-fontset-font "fontset-default" 'han '("STSong" . "unicode-bmp"))
 
 ;;C/C++-Mode
 (setq default-tab-width 4)
@@ -68,7 +72,7 @@
 (require 'fill-column-indicator)
 (add-hook 'c-mode-hook 'fci-mode)
 (add-hook 'makefile-mode-hook 'fci-mode)
-(setq-default fill-column 79)
+(setq-default fill-column 80)
 
 ;; color
 (require 'color-theme)
@@ -173,23 +177,26 @@ Emacs buffer are those starting with “*”."
 ;;Quick key
 (global-set-key (kbd "C-q") 'set-mark-command)
 (custom-set-variables
-  ;; custom-set-variables was added by Custom.
-  ;; If you edit it by hand, you could mess it up, so be careful.
-  ;; Your init file should contain only one such instance.
-  ;; If there is more than one, they won't work right.
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(custom-enabled-themes (quote (wombat)))
  '(ecb-layout-name "left9")
  '(ecb-methods-menu-sorter nil)
  '(ecb-options-version "2.40")
  '(ecb-show-tags (quote ((default (include collapsed nil) (parent collapsed nil) (type flattened nil) (variable collapsed nil) (function flattened nil) (label hidden nil) (t collapsed nil)) (c++-mode (include collapsed nil) (parent collapsed nil) (type flattened nil) (variable collapsed nil) (function flattened nil) (function collapsed nil) (label hidden nil) (t collapsed nil)) (c-mode (include collapsed nil) (parent collapsed nil) (type flattened nil) (variable collapsed nil) (function flattened nil) (function collapsed nil) (label hidden nil) (t collapsed nil)) (bovine-grammar-mode (keyword collapsed name) (token collapsed name) (nonterminal flattened name) (rule flattened name) (t collapsed nil)) (wisent-grammar-mode (keyword collapsed name) (token collapsed name) (nonterminal flattened name) (rule flattened name) (t collapsed nil)) (texinfo-mode (section flattened nil) (def collapsed name) (t collapsed nil)))))
+ '(ecb-source-path (quote (("/" "/"))))
  '(ecb-tag-display-function (quote ((default . ecb-format-tag-name))))
  '(org-agenda-files (quote ("~/work/org/ffwd.org" "~/work/org/ssf.org")))
  '(semantic-c-dependency-system-include-path (quote ("/usr/include" "." "./include" "../include" "~/v2r9/build/include")))
+ '(session-use-package t nil (session))
  '(uniquify-buffer-name-style (quote forward) nil (uniquify)))
 (custom-set-faces
-  ;; custom-set-faces was added by Custom.
-  ;; If you edit it by hand, you could mess it up, so be careful.
-  ;; Your init file should contain only one such instance.
-  ;; If there is more than one, they won't work right.
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
  )
 
 ;; rename dup buffer
@@ -197,9 +204,9 @@ Emacs buffer are those starting with “*”."
 (setq uniquify-buffer-name-style 'forward)
 
 ;; high light current line
-(global-hl-line-mode 1)
-(set-face-background 'hl-line "#3e4446")
-(set-face-foreground 'highlight nil)
+;;(global-hl-line-mode 1)
+;;(set-face-background 'hl-line "#3e4446")
+;;(set-face-foreground 'highlight nil)
 
 ;; org-mod
 (define-key global-map "\C-cl" 'org-store-link)
@@ -220,7 +227,7 @@ Emacs buffer are those starting with “*”."
 (setq file-name-coding-system 'euc-cn)
 
 ;; ecb
-(add-to-list 'load-path "/home/yubo/.emacs.d/3rd/ecb")
+(add-to-list 'load-path "~/.emacs.d/3rd/ecb")
 (require 'ecb)
 (setq ecb-auto-activate t
       ecb-tip-of-the-day nil)
