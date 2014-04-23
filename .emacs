@@ -128,24 +128,6 @@
 (global-set-key [(meta i)] 'tabbar-forward-tab)
 (global-set-key [(meta \[)] 'tabbar-backward-group)
 (global-set-key [(meta \])] 'tabbar-forward-group)
-(set-face-attribute 'tabbar-default nil
-					:background "gray80"
-					:foreground "gray30"
-					:height 1.0)
-(set-face-attribute 'tabbar-button nil
-                    :inherit 'tabbar-default
-                    :box '(:line-width 1 :color "gray30"))
-(set-face-attribute 'tabbar-selected nil
-                    :inherit 'tabbar-default
-                    :foreground "DarkGreen"
-                    :background "LightGoldenrod"
-                    :box '(:line-width 2 :color "DarkGoldenrod")
-					:overline "black"
-					:underline "black"
-                    :weight 'bold)
-(set-face-attribute 'tabbar-unselected nil
-                    :inherit 'tabbar-default
-                    :box '(:line-width 2 :color "gray70"))
 (defun tabbar-buffer-groups ()
 "Return the list of group names the current buffer belongs to.
 This function is a custom function for tabbar-mode's tabbar-buffer-groups.
@@ -181,7 +163,6 @@ Emacs buffer are those starting with “*”."
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(custom-enabled-themes (quote (wombat)))
  '(ecb-layout-name "left9")
  '(ecb-methods-menu-sorter nil)
  '(ecb-options-version "2.40")
@@ -204,7 +185,7 @@ Emacs buffer are those starting with “*”."
 (setq uniquify-buffer-name-style 'forward)
 
 ;; high light current line
-;;(global-hl-line-mode 1)
+(global-hl-line-mode 1)
 ;;(set-face-background 'hl-line "#3e4446")
 ;;(set-face-foreground 'highlight nil)
 
@@ -227,11 +208,11 @@ Emacs buffer are those starting with “*”."
 (setq file-name-coding-system 'euc-cn)
 
 ;; ecb
-(add-to-list 'load-path "~/.emacs.d/3rd/ecb")
-(require 'ecb)
-(setq ecb-auto-activate t
-      ecb-tip-of-the-day nil)
-(semantic-mode 1)
+;;(add-to-list 'load-path "~/.emacs.d/3rd/ecb")
+;;(require 'ecb)
+;;(setq ecb-auto-activate t
+;;      ecb-tip-of-the-day nil)
+;;(semantic-mode 1)
 
 ;; emacs-server
 ;; 1) use emacsclient xxx
