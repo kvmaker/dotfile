@@ -18,4 +18,4 @@ alias emacs="/Applications/Emacs.app/Contents/MacOS/Emacs -nw"
 
 # use xterm in screen
 export TERM="xterm"
-
+export CLICOLOR=1

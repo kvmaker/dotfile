@@ -30,7 +30,7 @@
 
 ;;font
 (set-frame-font "Consolas-15")
-(set-fontset-font "fontset-default" 'han '("STSong" . "unicode-bmp"))
+(set-fontset-font "fontset-default" 'han '("STKai" . "unicode-bmp"))
 
 ;;C/C++-Mode
 (setq default-tab-width 4)
@@ -185,8 +185,8 @@ Emacs buffer are those starting with “*”."
 (setq uniquify-buffer-name-style 'forward)
 
 ;; high light current line
-(global-hl-line-mode 1)
-;;(set-face-background 'hl-line "#3e4446")
+;;(global-hl-line-mode 1)
+;;(set-face-background 'hl-line "#")
 ;;(set-face-foreground 'highlight nil)
 
 ;; org-mod
@@ -203,9 +203,10 @@ Emacs buffer are those starting with “*”."
 (setq ediff-split-window-function 'split-window-horizontally)
 
 ;; chinese code
-(set-language-environment 'Chinese-GB)
-(setq-default pathname-coding-system 'euc-cn)
-(setq file-name-coding-system 'euc-cn)
+;;(set-language-environment 'Chinese-GB)
+;;(setq-default pathname-coding-system 'euc-cn)
+;;(setq file-name-coding-system 'euc-cn)
+(setq default-buffer-file-coding-system 'utf-8)
 
 ;; ecb
 ;;(add-to-list 'load-path "~/.emacs.d/3rd/ecb")
