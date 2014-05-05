@@ -146,3 +146,4 @@ export OS_AUTH_URL=http://localhost:5000/v2.0/
 # add path
 export PATH=$PATH:~/work/bin
 export PATH=$PATH:~/v2r9/build/toolchains/arm-wap-linux-uclibcgnueabi/bin/
+export PATH=$PATH:/usr/local/go/bin
