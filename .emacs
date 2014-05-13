@@ -1,3 +1,13 @@
+;; home path
+(if (eq system-type 'windows-nt)
+	(progn
+	  (setenv "HOME" "d:/home")
+	  (setenv "PATH" "d:/home")
+	  (setq default-directory "~/")
+	  (set-face-attribute 'default nil :font "Consolas 10")
+	  (set-fontset-font (frame-parameter nil 'font)
+						'han (font-spec :family "Microsoft Yahei"))))
+
 ;; load path
 (add-to-list 'load-path "~/.emacs.d/my")
 (add-to-list 'load-path "~/.emacs.d/3rd")
@@ -23,10 +33,11 @@
 (setq suggest-key-bindings t)
 (put 'dired-find-alternate-file 'disabled nil)
 (setq frame-title-format "May the Force be with you!")
-;;(display-time-mode 1)
+(display-time-mode 1)
 (add-hook 'speedbar-mode-hook '(lambda () (linum-mode -1)))
 (add-hook 'eshell-mode-hook   '(lambda () (linum-mode -1)))
 (add-hook 'cscope-mode-hook   '(lambda () (linum-mode -1)))
+
 
 ;;C/C++-Mode
 (setq default-tab-width 4)
@@ -72,6 +83,7 @@
 
 ;; color
 (require 'color-theme)
+(color-theme-blue-mood)
 
 ;; putty
 (require 'putty)
@@ -220,7 +232,7 @@ Emacs buffer are those starting with “*”."
 (setq file-name-coding-system 'euc-cn)
 
 ;; ecb
-(add-to-list 'load-path "/home/yubo/.emacs.d/3rd/ecb")
+(add-to-list 'load-path "~/.emacs.d/3rd/ecb")
 (require 'ecb)
 (setq ecb-auto-activate t
       ecb-tip-of-the-day nil)
@@ -229,4 +241,5 @@ Emacs buffer are those starting with “*”."
 ;; emacs-server
 ;; 1) use emacsclient xxx
 ;; 2) usr C-x # to end edit
-(server-start)
+;;(server-start)
+
