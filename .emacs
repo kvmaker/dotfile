@@ -38,12 +38,9 @@
 (add-hook 'eshell-mode-hook   '(lambda () (linum-mode -1)))
 (add-hook 'cscope-mode-hook   '(lambda () (linum-mode -1)))
 
-<<<<<<< HEAD
-=======
 ;;font
 (set-frame-font "Consolas-15")
 (set-fontset-font "fontset-default" 'han '("STKai" . "unicode-bmp"))
->>>>>>> 4fdd4dc4f049871725b86b55787546d4025afbde
 
 ;;C/C++-Mode
 (setq default-tab-width 4)
@@ -223,26 +220,14 @@ Emacs buffer are those starting with “*”."
 (setq default-buffer-file-coding-system 'utf-8)
 
 ;; ecb
-<<<<<<< HEAD
 (add-to-list 'load-path "~/.emacs.d/3rd/ecb")
 (require 'ecb)
 (setq ecb-auto-activate t
       ecb-tip-of-the-day nil)
 (semantic-mode 1)
-=======
-;;(add-to-list 'load-path "~/.emacs.d/3rd/ecb")
-;;(require 'ecb)
-;;(setq ecb-auto-activate t
-;;      ecb-tip-of-the-day nil)
-;;(semantic-mode 1)
->>>>>>> 4fdd4dc4f049871725b86b55787546d4025afbde
 
 ;; emacs-server
 ;; 1) use emacsclient xxx
 ;; 2) usr C-x # to end edit
-<<<<<<< HEAD
 ;;(server-start)
 
-=======
-(server-start)
->>>>>>> 4fdd4dc4f049871725b86b55787546d4025afbde
