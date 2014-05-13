@@ -83,7 +83,7 @@
 
 ;; color
 (require 'color-theme)
-(color-theme-blue-mood)
+;; (color-theme-blue-mood)
 
 ;; putty
 (require 'putty)
