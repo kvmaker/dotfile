@@ -4,10 +4,9 @@
 	  (setenv "HOME" "d:/home")
 	  (setenv "PATH" "d:/home")
 	  (setq default-directory "~/")
-	  (set-face-attribute 'default nil :font "Consolas 11")
+	  (set-face-attribute 'default nil :font "Consolas 10")
 	  (set-fontset-font (frame-parameter nil 'font)
-                  'han (font-spec :family "Microsoft Yahei"
-                                  :size 16))))
+						'han (font-spec :family "Microsoft Yahei"))))
 
 ;; load path
 (add-to-list 'load-path "~/.emacs.d/my")
