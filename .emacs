@@ -19,13 +19,13 @@
 (show-paren-mode 1)
 (setq show-paren-delay 0)
 (setq tab-width 4)
-(setq user-full-name "Yu Bo")
-(setq user-mail-address "kvmaker.yubo@huawei.com")
+(setq user-full-name "kvmaker")
+(setq user-mail-address "kvmaker@gmail.com")
 (setq default-major-mode 'text-mode)
 (add-hook 'text-mode-hook 'turn-on-auto-fill)
 (setq inhibit-startup-message t)
 (tool-bar-mode -1)
-(menu-bar-mode -1)
+(menu-bar-mode 1)
 (scroll-bar-mode -1)
 (icomplete-mode 1)
 (fset 'yes-or-no-p 'y-or-n-p)
@@ -38,6 +38,12 @@
 (add-hook 'eshell-mode-hook   '(lambda () (linum-mode -1)))
 (add-hook 'cscope-mode-hook   '(lambda () (linum-mode -1)))
 
+<<<<<<< HEAD
+=======
+;;font
+(set-frame-font "Consolas-15")
+(set-fontset-font "fontset-default" 'han '("STKai" . "unicode-bmp"))
+>>>>>>> 4fdd4dc4f049871725b86b55787546d4025afbde
 
 ;;C/C++-Mode
 (setq default-tab-width 4)
@@ -79,7 +85,7 @@
 (require 'fill-column-indicator)
 (add-hook 'c-mode-hook 'fci-mode)
 (add-hook 'makefile-mode-hook 'fci-mode)
-(setq-default fill-column 79)
+(setq-default fill-column 80)
 
 ;; color
 (require 'color-theme)
@@ -136,24 +142,6 @@
 (global-set-key [(meta i)] 'tabbar-forward-tab)
 (global-set-key [(meta \[)] 'tabbar-backward-group)
 (global-set-key [(meta \])] 'tabbar-forward-group)
-(set-face-attribute 'tabbar-default nil
-					:background "gray80"
-					:foreground "gray30"
-					:height 1.0)
-(set-face-attribute 'tabbar-button nil
-                    :inherit 'tabbar-default
-                    :box '(:line-width 1 :color "gray30"))
-(set-face-attribute 'tabbar-selected nil
-                    :inherit 'tabbar-default
-                    :foreground "DarkGreen"
-                    :background "LightGoldenrod"
-                    :box '(:line-width 2 :color "DarkGoldenrod")
-					:overline "black"
-					:underline "black"
-                    :weight 'bold)
-(set-face-attribute 'tabbar-unselected nil
-                    :inherit 'tabbar-default
-                    :box '(:line-width 2 :color "gray70"))
 (defun tabbar-buffer-groups ()
 "Return the list of group names the current buffer belongs to.
 This function is a custom function for tabbar-mode's tabbar-buffer-groups.
@@ -185,23 +173,25 @@ Emacs buffer are those starting with “*”."
 ;;Quick key
 (global-set-key (kbd "C-q") 'set-mark-command)
 (custom-set-variables
-  ;; custom-set-variables was added by Custom.
-  ;; If you edit it by hand, you could mess it up, so be careful.
-  ;; Your init file should contain only one such instance.
-  ;; If there is more than one, they won't work right.
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
  '(ecb-layout-name "left9")
  '(ecb-methods-menu-sorter nil)
  '(ecb-options-version "2.40")
  '(ecb-show-tags (quote ((default (include collapsed nil) (parent collapsed nil) (type flattened nil) (variable collapsed nil) (function flattened nil) (label hidden nil) (t collapsed nil)) (c++-mode (include collapsed nil) (parent collapsed nil) (type flattened nil) (variable collapsed nil) (function flattened nil) (function collapsed nil) (label hidden nil) (t collapsed nil)) (c-mode (include collapsed nil) (parent collapsed nil) (type flattened nil) (variable collapsed nil) (function flattened nil) (function collapsed nil) (label hidden nil) (t collapsed nil)) (bovine-grammar-mode (keyword collapsed name) (token collapsed name) (nonterminal flattened name) (rule flattened name) (t collapsed nil)) (wisent-grammar-mode (keyword collapsed name) (token collapsed name) (nonterminal flattened name) (rule flattened name) (t collapsed nil)) (texinfo-mode (section flattened nil) (def collapsed name) (t collapsed nil)))))
+ '(ecb-source-path (quote (("/" "/"))))
  '(ecb-tag-display-function (quote ((default . ecb-format-tag-name))))
  '(org-agenda-files (quote ("~/work/org/ffwd.org" "~/work/org/ssf.org")))
  '(semantic-c-dependency-system-include-path (quote ("/usr/include" "." "./include" "../include" "~/v2r9/build/include")))
+ '(session-use-package t nil (session))
  '(uniquify-buffer-name-style (quote forward) nil (uniquify)))
 (custom-set-faces
-  ;; custom-set-faces was added by Custom.
-  ;; If you edit it by hand, you could mess it up, so be careful.
-  ;; Your init file should contain only one such instance.
-  ;; If there is more than one, they won't work right.
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
  )
 
 ;; rename dup buffer
@@ -209,9 +199,9 @@ Emacs buffer are those starting with “*”."
 (setq uniquify-buffer-name-style 'forward)
 
 ;; high light current line
-(global-hl-line-mode 1)
-(set-face-background 'hl-line "#3e4446")
-(set-face-foreground 'highlight nil)
+;;(global-hl-line-mode 1)
+;;(set-face-background 'hl-line "#")
+;;(set-face-foreground 'highlight nil)
 
 ;; org-mod
 (define-key global-map "\C-cl" 'org-store-link)
@@ -227,19 +217,32 @@ Emacs buffer are those starting with “*”."
 (setq ediff-split-window-function 'split-window-horizontally)
 
 ;; chinese code
-(set-language-environment 'Chinese-GB)
-(setq-default pathname-coding-system 'euc-cn)
-(setq file-name-coding-system 'euc-cn)
+;;(set-language-environment 'Chinese-GB)
+;;(setq-default pathname-coding-system 'euc-cn)
+;;(setq file-name-coding-system 'euc-cn)
+(setq default-buffer-file-coding-system 'utf-8)
 
 ;; ecb
+<<<<<<< HEAD
 (add-to-list 'load-path "~/.emacs.d/3rd/ecb")
 (require 'ecb)
 (setq ecb-auto-activate t
       ecb-tip-of-the-day nil)
 (semantic-mode 1)
+=======
+;;(add-to-list 'load-path "~/.emacs.d/3rd/ecb")
+;;(require 'ecb)
+;;(setq ecb-auto-activate t
+;;      ecb-tip-of-the-day nil)
+;;(semantic-mode 1)
+>>>>>>> 4fdd4dc4f049871725b86b55787546d4025afbde
 
 ;; emacs-server
 ;; 1) use emacsclient xxx
 ;; 2) usr C-x # to end edit
+<<<<<<< HEAD
 ;;(server-start)
 
+=======
+(server-start)
+>>>>>>> 4fdd4dc4f049871725b86b55787546d4025afbde
