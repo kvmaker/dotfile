@@ -177,7 +177,8 @@ Emacs buffer are those starting with “*”."
 ;; haskell-mode
 (add-to-list 'load-path "~/.emacs.d/3rd/haskell-mode/")
 (add-to-list 'Info-default-directory-list "~/.emacs.d/3rd/haskell-mode/")
-(require 'haskell-mode-autoloads)
+(if (eq system-type 'linux)
+	(require 'haskell-mode-autoloads))
 (add-hook 'haskell-mode-hook 'turn-on-haskell-doc-mode)
 (add-hook 'haskell-mode-hook 'turn-on-haskell-indent)
 (add-hook 'haskell-mode-hook 'turn-on-haskell-simple-indent)
