@@ -33,11 +33,9 @@
 (setq suggest-key-bindings t)
 (put 'dired-find-alternate-file 'disabled nil)
 (setq frame-title-format "May the Force be with you!")
-(display-time-mode 1)
 (add-hook 'speedbar-mode-hook '(lambda () (linum-mode -1)))
 (add-hook 'eshell-mode-hook   '(lambda () (linum-mode -1)))
 (add-hook 'cscope-mode-hook   '(lambda () (linum-mode -1)))
-
 
 ;;C/C++-Mode
 (setq default-tab-width 4)
@@ -65,29 +63,11 @@
 		  '(lambda ()
 			 (setq indent-tabs-mode nil)))
 
-;; desktop
-(require 'desktop)
-(desktop-load-default)
-(desktop-read)
-
-;; session
-(require 'session)
-(add-hook 'after-init-hook
-          'session-initialize)
-
 ;; fill-column
 (require 'fill-column-indicator)
 (add-hook 'c-mode-hook 'fci-mode)
 (add-hook 'makefile-mode-hook 'fci-mode)
 (setq-default fill-column 79)
-
-;; color
-(require 'color-theme)
-;; (color-theme-blue-mood)
-
-;; putty
-(require 'putty)
-(putty-hack)
 
 ;; hsan
 (require 'hsan)
@@ -177,7 +157,7 @@ Emacs buffer are those starting with “*”."
 ;; haskell-mode
 (add-to-list 'load-path "~/.emacs.d/3rd/haskell-mode/")
 (add-to-list 'Info-default-directory-list "~/.emacs.d/3rd/haskell-mode/")
-(if (eq system-type 'linux)
+(if (not (eq system-type 'windows-nt))
 	(require 'haskell-mode-autoloads))
 (add-hook 'haskell-mode-hook 'turn-on-haskell-doc-mode)
 (add-hook 'haskell-mode-hook 'turn-on-haskell-indent)
@@ -185,24 +165,21 @@ Emacs buffer are those starting with “*”."
 
 ;;Quick key
 (global-set-key (kbd "C-q") 'set-mark-command)
+
 (custom-set-variables
-  ;; custom-set-variables was added by Custom.
-  ;; If you edit it by hand, you could mess it up, so be careful.
-  ;; Your init file should contain only one such instance.
-  ;; If there is more than one, they won't work right.
- '(ecb-layout-name "left9")
- '(ecb-methods-menu-sorter nil)
- '(ecb-options-version "2.40")
- '(ecb-show-tags (quote ((default (include collapsed nil) (parent collapsed nil) (type flattened nil) (variable collapsed nil) (function flattened nil) (label hidden nil) (t collapsed nil)) (c++-mode (include collapsed nil) (parent collapsed nil) (type flattened nil) (variable collapsed nil) (function flattened nil) (function collapsed nil) (label hidden nil) (t collapsed nil)) (c-mode (include collapsed nil) (parent collapsed nil) (type flattened nil) (variable collapsed nil) (function flattened nil) (function collapsed nil) (label hidden nil) (t collapsed nil)) (bovine-grammar-mode (keyword collapsed name) (token collapsed name) (nonterminal flattened name) (rule flattened name) (t collapsed nil)) (wisent-grammar-mode (keyword collapsed name) (token collapsed name) (nonterminal flattened name) (rule flattened name) (t collapsed nil)) (texinfo-mode (section flattened nil) (def collapsed name) (t collapsed nil)))))
- '(ecb-tag-display-function (quote ((default . ecb-format-tag-name))))
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
  '(org-agenda-files (quote ("~/work/org/ffwd.org" "~/work/org/ssf.org")))
  '(semantic-c-dependency-system-include-path (quote ("/usr/include" "." "./include" "../include" "~/v2r9/build/include")))
+ '(session-use-package t nil (session))
  '(uniquify-buffer-name-style (quote forward) nil (uniquify)))
 (custom-set-faces
-  ;; custom-set-faces was added by Custom.
-  ;; If you edit it by hand, you could mess it up, so be careful.
-  ;; Your init file should contain only one such instance.
-  ;; If there is more than one, they won't work right.
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
  )
 
 ;; rename dup buffer
@@ -231,16 +208,3 @@ Emacs buffer are those starting with “*”."
 (set-language-environment 'Chinese-GB)
 (setq-default pathname-coding-system 'euc-cn)
 (setq file-name-coding-system 'euc-cn)
-
-;; ecb
-(add-to-list 'load-path "~/.emacs.d/3rd/ecb")
-(require 'ecb)
-(setq ecb-auto-activate t
-      ecb-tip-of-the-day nil)
-(semantic-mode 1)
-
-;; emacs-server
-;; 1) use emacsclient xxx
-;; 2) usr C-x # to end edit
-;;(server-start)
-
