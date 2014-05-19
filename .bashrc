@@ -135,13 +135,7 @@ export no_proxy=localhost,10.0.0.0/8,rnd-git.huawei.com
 
 # use xterm in screen
 export TERM="xterm"
-
-# openstack variable
-export OS_TENANT_NAME=admin
-export OS_USERNAME=admin
-export OS_PASSWORD=admin
-export OS_PASSWORD=yubo
-export OS_AUTH_URL=http://localhost:5000/v2.0/
+export CLICOLOR=1
 
 # add path
 export PATH=$PATH:~/work/bin
