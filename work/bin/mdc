@@ -1,7 +1,7 @@
 #! /bin/sh
 
 username=y00186361
-password=cavendish#2014q1
+password=cavendish#2014q2
 s_path=//10.66.67.171/d
 d_path=~/dc
 
