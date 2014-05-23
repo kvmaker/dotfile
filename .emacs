@@ -54,6 +54,7 @@
 (yas/global-mode 1)
 (yas/minor-mode-on)
 
+;; popup for yas
 (add-to-list 'load-path "~/.emacs.d/3rd/ac")
 (require 'popup)
 (define-key popup-menu-keymap (kbd "M-n") 'popup-next)
@@ -61,7 +62,7 @@
 (define-key popup-menu-keymap (kbd "<tab>") 'popup-next)
 (define-key popup-menu-keymap (kbd "<backtab>") 'popup-previous)
 (define-key popup-menu-keymap (kbd "M-p") 'popup-previous)
- 
+
 (defun yas/popup-isearch-prompt (prompt choices &optional display-fn)
   (when (featurep 'popup)
     (popup-menu*
