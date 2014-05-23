@@ -77,7 +77,7 @@
      ;; start isearch mode immediately
      :isearch t
      )))
- 
+
 (setq yas/prompt-functions '(yas/popup-isearch-prompt yas/no-prompt))
 
 ;; auto-complete
@@ -174,7 +174,6 @@ Emacs buffer are those starting with “*”."
  ;; If there is more than one, they won't work right.
  '(org-agenda-files (quote ("~/work/org/ffwd.org" "~/work/org/ssf.org")))
  '(semantic-c-dependency-system-include-path (quote ("/usr/include" ".")))
- '(session-use-package t nil (session))
  '(uniquify-buffer-name-style (quote forward) nil (uniquify)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
