@@ -137,7 +137,6 @@ Emacs buffer are those starting with “*”."
 ;; desktop
 (load "desktop")
 (desktop-load-default) 
-(desktop-read)
 
 ;; ibuffer
 (require 'ibuffer)
@@ -168,6 +167,7 @@ Emacs buffer are those starting with “*”."
 (global-set-key (kbd "C-q") 'set-mark-command)
 (global-set-key (kbd "C-t") 'copy-region-as-kill)
 (global-set-key (kbd "C-w") 'kill-region)
+(global-set-key (kbd "C-c d s") 'desktop-save-mode)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;                               Mode                                         ;;
@@ -233,3 +233,5 @@ Emacs buffer are those starting with “*”."
 (add-hook 'speedbar-mode-hook '(lambda () (linum-mode -1)))
 (add-hook 'eshell-mode-hook   '(lambda () (linum-mode -1)))
 (add-hook 'cscope-mode-hook   '(lambda () (linum-mode -1)))
+
+(desktop-read)
