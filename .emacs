@@ -182,7 +182,8 @@ Emacs buffer are those starting with “*”."
 			 (setq ac-sources (append '(ac-source-semantic)  ac-sources))
 			 (linum-mode t)
 			 (semantic-mode t)
-			 (semantic-idle-summary-mode)))
+			 (semantic-idle-summary-mode)
+			 (abbrev-mode -1)))
 
 (add-hook 'c++-mode-hook
 		  '(lambda()
