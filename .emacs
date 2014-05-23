@@ -1,18 +1,17 @@
-;; home path
-(if (eq system-type 'windows-nt)
-	(progn
-	  (setenv "HOME" "d:/home")
-	  (setenv "PATH" "d:/home")
-	  (setq default-directory "~/")
-	  (set-face-attribute 'default nil :font "Consolas 10")
-	  (set-fontset-font (frame-parameter nil 'font)
-						'han (font-spec :family "Microsoft Yahei"))))
-
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; .emacs --- kvmaker's own emacs config file                                 ;;
+;; Copyright (C) 2013, 2014 kvmaker                                           ;;
+;; Author:   <kvmaker@gmail.com>                                              ;;
+;; Created:  2015/05/23                                                       ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;                            Pakcage                                         ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; load path
 (add-to-list 'load-path "~/.emacs.d/my")
 (add-to-list 'load-path "~/.emacs.d/3rd")
 
-;; misc set
+;; misc config
 (setq make-backup-files nil)
 (global-linum-mode t)
 (setq linum-format "%4d ")
@@ -27,70 +26,31 @@
 (tool-bar-mode -1)
 (menu-bar-mode -1)
 (scroll-bar-mode -1)
-(icomplete-mode 1)
+(icomplete-mode 99)
 (fset 'yes-or-no-p 'y-or-n-p)
 (setq resize-mini-windows t)
 (setq suggest-key-bindings t)
 (put 'dired-find-alternate-file 'disabled nil)
-(setq frame-title-format "May the Force be with you!")
-(add-hook 'speedbar-mode-hook '(lambda () (linum-mode -1)))
-(add-hook 'eshell-mode-hook   '(lambda () (linum-mode -1)))
-(add-hook 'cscope-mode-hook   '(lambda () (linum-mode -1)))
-
-;;C/C++-Mode
-(setq default-tab-width 4)
-(add-hook 'c-mode-hook
-		  '(lambda()
-			 (c-set-style "k&r")
-			 (setq c-basic-offset 4)
-			 (setq indent-tabs-mode nil)))
-
-(add-hook 'c++-mode-hook
-		  '(lambda()
-			 (c-set-style "k&r")
-			 (setq c-basic-offset 4)
-			 (setq indent-tabs-mode nil)))
-
-;; javascript mode
-(add-to-list 'auto-mode-alist '("\\.json\\'" . javascript-mode))
-(add-hook 'javascript-mode
-		  '(lambda ()
-			 (setq indent-tabs-mode nil)))
-
-;; makefile mode
-(add-to-list 'auto-mode-alist '("\\.hsan\\'" . makefile-mode))
-(add-hook 'makefile-mode
-		  '(lambda ()
-			 (setq indent-tabs-mode nil)))
-
-;; fill-column
-(require 'fill-column-indicator)
-(add-hook 'c-mode-hook 'fci-mode)
-(add-hook 'makefile-mode-hook 'fci-mode)
-(setq-default fill-column 79)
-
-;; hsan
-(require 'hsan)
 
 ;; cscope 
 (require 'xcscope)
 
-;; CC-mode
-(add-hook 'c-mode-hook '(lambda ()
-						  (setq ac-sources (append '(ac-source-semantic)  ac-sources))
-						  (linum-mode t)
-						  (semantic-mode t)
-						  (semantic-idle-summary-mode)))
+;; fill-column
+(require 'fill-column-indicator)
+(setq-default fill-column 80)
+(add-hook 'after-change-major-mode-hook 'fci-mode)
+
+;; high light current line
+(global-hl-line-mode 1)
+(set-face-background 'hl-line "#3e4446")
+(set-face-foreground 'highlight nil)
 
 ;; yasnapt
 (add-to-list 'load-path "~/.emacs.d/3rd/yasnippet")
 (require 'yasnippet)
 (setq yas-snippet-dirs '("~/.emacs.d/3rd/yasnippet/yasmate"
 						 "~/.emacs.d/my/yas"))
-(yas-global-mode 1)
-(add-hook 'c-mode-hook '(lambda () (yas-minor-mode)))
 (defalias 'yas/current-snippet-table 'yas--get-snippet-tables)
-(yas/minor-mode-on)
 (setq yas/prompt-functions
       '(yas/dropdown-prompt 
 		yas/x-prompt
@@ -154,52 +114,9 @@ Emacs buffer are those starting with “*”."
 (require 'slime-autoloads)
 (slime-setup '(slime-fancy))
 
-;; haskell-mode
-(add-to-list 'load-path "~/.emacs.d/3rd/haskell-mode/")
-(add-to-list 'Info-default-directory-list "~/.emacs.d/3rd/haskell-mode/")
-(if (not (eq system-type 'windows-nt))
-	(require 'haskell-mode-autoloads))
-(add-hook 'haskell-mode-hook 'turn-on-haskell-doc-mode)
-(add-hook 'haskell-mode-hook 'turn-on-haskell-indent)
-(add-hook 'haskell-mode-hook 'turn-on-haskell-simple-indent)
-
-;;Quick key
-(global-set-key (kbd "C-q") 'set-mark-command)
-
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(org-agenda-files (quote ("~/work/org/ffwd.org" "~/work/org/ssf.org")))
- '(semantic-c-dependency-system-include-path (quote ("/usr/include" "." "./include" "../include" "~/v2r9/build/include")))
- '(session-use-package t nil (session))
- '(uniquify-buffer-name-style (quote forward) nil (uniquify)))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
-
 ;; rename dup buffer
 (require 'uniquify)
 (setq uniquify-buffer-name-style 'forward)
-
-;; high light current line
-(global-hl-line-mode 1)
-(set-face-background 'hl-line "#3e4446")
-(set-face-foreground 'highlight nil)
-
-;; org-mod
-(define-key global-map "\C-cl" 'org-store-link)
-(define-key global-map "\C-ca" 'org-agenda)
-(setq org-log-done t)
-(put 'set-goal-column 'disabled nil)
-
-;; scala-mod
-(add-to-list 'load-path "~/.emacs.d/3rd/scala/")
-(require 'scala-mode-auto)
 
 ;; ediff
 (setq ediff-split-window-function 'split-window-horizontally)
@@ -208,3 +125,111 @@ Emacs buffer are those starting with “*”."
 (set-language-environment 'Chinese-GB)
 (setq-default pathname-coding-system 'euc-cn)
 (setq file-name-coding-system 'euc-cn)
+
+;; use italic for comment
+(require 'font-lock)
+(copy-face 'italic 'font-lock-comment-face)
+
+;; session
+(require 'session)
+(add-hook 'after-init-hook 'session-initialize)
+
+;; desktop
+(load "desktop")
+(desktop-load-default) 
+(desktop-read)
+
+;; ibuffer
+(require 'ibuffer)
+(global-set-key (kbd "C-x C-b") 'ibuffer)
+
+;; ido
+(require 'ido)
+(ido-mode t)
+
+;; custom-set-variable
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(org-agenda-files (quote ("~/work/org/ffwd.org" "~/work/org/ssf.org")))
+ '(semantic-c-dependency-system-include-path (quote ("/usr/include" ".")))
+ '(session-use-package t nil (session))
+ '(uniquify-buffer-name-style (quote forward) nil (uniquify)))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(custom-comment ((t (:background "gray85" :slant normal)))))
+
+;;Quick key
+(global-set-key (kbd "C-q") 'set-mark-command)
+(global-set-key (kbd "C-t") 'copy-region-as-kill)
+(global-set-key (kbd "C-w") 'kill-region)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;                               Mode                                         ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; C/C++-Mode
+(setq default-tab-width 4)
+(add-hook 'c-mode-hook
+		  '(lambda()
+			 (c-set-style "k&r")
+			 (setq c-basic-offset 4)
+			 (setq indent-tabs-mode nil)
+			 (setq ac-sources (append '(ac-source-semantic)  ac-sources))
+			 (linum-mode t)
+			 (semantic-mode t)
+			 (semantic-idle-summary-mode)))
+
+(add-hook 'c++-mode-hook
+		  '(lambda()
+			 (c-set-style "k&r")
+			 (setq c-basic-offset 4)
+			 (setq indent-tabs-mode nil)))
+
+;; javascript mode
+(add-to-list 'auto-mode-alist '("\\.json\\'" . javascript-mode))
+(add-hook 'javascript-mode
+		  '(lambda ()
+			 (setq indent-tabs-mode nil)))
+
+;; makefile mode
+(add-to-list 'auto-mode-alist '("\\.hsan\\'" . makefile-mode))
+(add-hook 'makefile-mode
+		  '(lambda ()
+			 (setq indent-tabs-mode nil)))
+
+;; haskell-mode
+(add-to-list 'load-path "~/.emacs.d/3rd/haskell-mode/")
+(add-to-list 'Info-default-directory-list "~/.emacs.d/3rd/haskell-mode/")
+(require 'haskell-mode-autoloads)
+(add-hook 'haskell-mode-hook 
+		  '(lambda ()
+			 (turn-on-haskell-doc-mode)
+			 (turn-on-haskell-indent)
+			 (turn-on-haskell-simple-indent)))
+
+;; org-mode
+(define-key global-map "\C-cl" 'org-store-link)
+(define-key global-map "\C-ca" 'org-agenda)
+(setq org-log-done t)
+(put 'set-goal-column 'disabled nil)
+
+;; scala-mode
+(add-to-list 'load-path "~/.emacs.d/3rd/scala/")
+(require 'scala-mode-auto)
+
+;; Lisp-mode
+(add-hook 'lisp-mode-hook 
+		  '(lambda()
+			 (fci-mode t)))
+(add-hook 'emacs-lisp-mode-hook 
+		  '(lambda()
+			 (fci-mode t)))
+
+(add-hook 'speedbar-mode-hook '(lambda () (linum-mode -1)))
+(add-hook 'eshell-mode-hook   '(lambda () (linum-mode -1)))
+(add-hook 'cscope-mode-hook   '(lambda () (linum-mode -1)))
