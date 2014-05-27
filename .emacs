@@ -16,7 +16,7 @@
 (global-linum-mode t)
 (setq linum-format "%4d ")
 (show-paren-mode 1)
-(setq show-paren-delay 0)
+(setq show-paren-delay 1)
 (setq tab-width 4)
 (setq user-full-name "Yu Bo")
 (setq user-mail-address "kvmaker.yubo@huawei.com")

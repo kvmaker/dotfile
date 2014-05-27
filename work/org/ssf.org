@@ -1,6 +1,6 @@
 * SSFv2.0开发 [40%]
 ** DONE 优化BASIC [100%]
-   CLOSED: [2014-01-09 四 08:18] DEADLINE: <2014-01-08 三> SCHEDULED: <2014-01-07 二>
+   CLOSED: [2014-05-26 一 13:38] DEADLINE: <2014-01-08 三> SCHEDULED: <2014-01-07 二>
 1. [X] 删除log和cmdtype相关文件
    1) include/
       1) common/

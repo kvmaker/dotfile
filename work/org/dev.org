@@ -1,0 +1,102 @@
+* 接口管理模型
+** 接口类型
+   1. 物理接口
+      物理上有对应实例的接口，一般由芯片厂商提供驱动和管理软件即可。
+   2. 逻辑接口
+      物理上不存在，为方便业务的开展而由软件虚拟出来的接口。
+** 物理接口
+   1. Ethernet
+	  1. 公共(ifconfig)
+	     1. MAC
+	     2. 速率（10M，100M, 1000M）
+		 3. 模式（半双公， 全双工）
+         4. MTU
+	  2. 私有
+	     1. Checksum Offload
+         2. 流量控制
+	     3. 帧间隙
+		 4. 私有控制命令
+		 5. 出/入带宽利用率日志和告警阈值
+		 6. 端口隔离
+		 7. 配置环回检测
+   2. Serial
+      1. 物理属性(<termios.h>)
+		 1. 波特率
+		 2. 数据位
+		 3. 停止位
+		 4. 奇偶校验位
+		 5. 流控
+      2. 链路层协议
+         1. PPP(pppd, pppoe-server)
+         2. HDLC, FR(sethdlc)
+   3. CE1/PRI
+      1. 20世纪60年代，随着PCM（Pulse Code Modulation）技术的出现，TDM（Time
+         Division Multiplexing）技术在数字通信系统中逐渐得到广泛的应用。目前，在
+         数字通信系统中存在两种时分复用系统，一种是ITU-T推荐的E1系统，广泛应用于
+         欧洲以及中国；一种是由ANSI推荐的T1系统，主要应用于北美和日本（日本采用
+         的J1，与T1基本相似，可以算作T1系统）。
+	  2. 物理属性
+		 1. 时钟模式(主，从)
+		 2. 帧格式（CRC4, 非CRC4）
+		 3. 线路空闲码（0x7e， 0xff）
+		 4. 帧间填充
+	  3. 工作方式
+		 1. E1:
+            1. 数据带宽为2.048Mbit/s的接口
+            2. 支持PPP, HDLC, FR
+		 2. CE1: 
+            1. 2M的传输线路分成了32个64K的时隙
+            2. 0号时隙由于传输同步信息
+			3. 各个时隙对应一个接口
+            4. 支持PPP, HDLC, FR
+		 3. PRI
+            1. 2M的传输线路分成了32个64K的时隙
+            2. 0号时隙由于传输同步信息
+			3. 时隙16被作为D信道来传输信令
+			4. 其它时隙与16好组合作为ISDN PRI使用
+            5. 支持PPP, HDLC, FR
+   4. CT1/PRI
+	  1. T1系统的物理接口
+   5. CE3
+	  1. E3系统的物理接口
+	  2. 数据传输速率为34.368Mbps
+   6. E1-F
+	  1. 简化版的CE1/PRI接口
+   7. T1-F
+	  1. 简化版的TE1/PRI接口
+   8. ISDN BRI
+   9. POS
+   10. CPOS
+   11. ADSL
+   12. VDSL
+   13. 3G
+	   1. 使用数据卡
+	   2. 标准(WCDMA, CDMA2000)
+	   3. APN(Access Point Name)
+		  1. 单APN
+		  2. 多APN
+	   4. MTU
+	   5. PIN管理功能
+   14. LTE
+	   1. 使用数据卡
+   15. WLAN
+	   1. 公共 && 私有(ifconfig + iwconfig + iwpriv)
+		  1. MAC
+		  2. 模式（802.1g, 802.11n, 802.11ac等）
+		  3. 频宽（40M, 20M）
+		  4. 工作频率(2.4G, 5G, 2.4G+5G)
+		  5. SSID
+		  6. Channel
+   16. PON
+       1. EPON
+	      1. 光模块参数
+     	  2. 认证
+			 1. MAC / LOID
+	   2. GPON
+** 逻辑接口
+   
+** 参考
+   1. 《AR150&160&200&1200&2200&3200 产品文档- 2014.3.31》
+   2. Linux Programmer's Manual - TERMIOS(3)
+   3. linux-kernel-3.8/Documentation/networking/generic-ppp.txt
+   4. linux-kernel-3.8/Documentation/networking/generic-hdlc.txt
