@@ -1,102 +1,178 @@
-* �ӿڹ���ģ��
-** �ӿ�����
-   1. �����ӿ�
-      �������ж�Ӧʵ���Ľӿڣ�һ����оƬ�����ṩ�����͹����������ɡ�
-   2. �߼��ӿ�
-      �����ϲ����ڣ�Ϊ����ҵ��Ŀ�չ����������������Ľӿڡ�
-** �����ӿ�
-   1. Ethernet
-	  1. ����(ifconfig)
-	     1. MAC
-	     2. ���ʣ�10M��100M, 1000M��
-		 3. ģʽ����˫���� ȫ˫����
-         4. MTU
-	  2. ˽��
-	     1. Checksum Offload
-         2. ��������
-	     3. ֡��϶
-		 4. ˽�п�������
-		 5. ��/�������������־�͸澯��ֵ
-		 6. �˿ڸ���
-		 7. ���û��ؼ��
-   2. Serial
-      1. ��������(<termios.h>)
-		 1. ������
-		 2. ����λ
-		 3. ֹͣλ
-		 4. ��żУ��λ
-		 5. ����
-      2. ��·��Э��
-         1. PPP(pppd, pppoe-server)
-         2. HDLC, FR(sethdlc)
-   3. CE1/PRI
-      1. 20����60���������PCM��Pulse Code Modulation�������ĳ��֣�TDM��Time
-         Division Multiplexing������������ͨ��ϵͳ���𽥵õ��㷺��Ӧ�á�Ŀǰ����
-         ����ͨ��ϵͳ�д�������ʱ�ָ���ϵͳ��һ����ITU-T�Ƽ���E1ϵͳ���㷺Ӧ����
-         ŷ���Լ��й���һ������ANSI�Ƽ���T1ϵͳ����ҪӦ���ڱ������ձ����ձ�����
-         ��J1����T1�������ƣ���������T1ϵͳ����
-	  2. ��������
-		 1. ʱ��ģʽ(������)
-		 2. ֡��ʽ��CRC4, ��CRC4��
-		 3. ��·�����루0x7e�� 0xff��
-		 4. ֡�����
-	  3. ������ʽ
-		 1. E1:
-            1. ���ݴ���Ϊ2.048Mbit/s�Ľӿ�
-            2. ֧��PPP, HDLC, FR
-		 2. CE1: 
-            1. 2M�Ĵ�����·�ֳ���32��64K��ʱ϶
-            2. 0��ʱ϶���ڴ���ͬ����Ϣ
-			3. ����ʱ϶��Ӧһ���ӿ�
-            4. ֧��PPP, HDLC, FR
-		 3. PRI
-            1. 2M�Ĵ�����·�ֳ���32��64K��ʱ϶
-            2. 0��ʱ϶���ڴ���ͬ����Ϣ
-			3. ʱ϶16����ΪD�ŵ�����������
-			4. ����ʱ϶��16�������ΪISDN PRIʹ��
-            5. ֧��PPP, HDLC, FR
-   4. CT1/PRI
-	  1. T1ϵͳ�������ӿ�
-   5. CE3
-	  1. E3ϵͳ�������ӿ�
-	  2. ���ݴ�������Ϊ34.368Mbps
-   6. E1-F
-	  1. �򻯰��CE1/PRI�ӿ�
-   7. T1-F
-	  1. �򻯰��TE1/PRI�ӿ�
-   8. ISDN BRI
-   9. POS
-   10. CPOS
-   11. ADSL
-   12. VDSL
-   13. 3G
-	   1. ʹ�����ݿ�
-	   2. ��׼(WCDMA, CDMA2000)
-	   3. APN(Access Point Name)
-		  1. ��APN
-		  2. ��APN
-	   4. MTU
-	   5. PIN��������
-   14. LTE
-	   1. ʹ�����ݿ�
-   15. WLAN
-	   1. ���� && ˽��(ifconfig + iwconfig + iwpriv)
-		  1. MAC
-		  2. ģʽ��802.1g, 802.11n, 802.11ac�ȣ�
-		  3. Ƶ����40M, 20M��
-		  4. ����Ƶ��(2.4G, 5G, 2.4G+5G)
-		  5. SSID
-		  6. Channel
-   16. PON
-       1. EPON
-	      1. ��ģ�����
-     	  2. ��֤
-			 1. MAC / LOID
-	   2. GPON
-** �߼��ӿ�
-   
-** �ο�
-   1. ��AR150&160&200&1200&2200&3200 ��Ʒ�ĵ�- 2014.3.31��
-   2. Linux Programmer's Manual - TERMIOS(3)
-   3. linux-kernel-3.8/Documentation/networking/generic-ppp.txt
-   4. linux-kernel-3.8/Documentation/networking/generic-hdlc.txt
+#+TITLE:     Linux网络接口介绍
+#+AUTHOR:    yubo y00186361
+#+EMAIL:     kvmaker.yubo@huawei.com
+#+DATE:      2014-05-28
+#+DESCRIPTION:
+#+KEYWORDS:
+#+LANGUAGE:  en
+#+OPTIONS:   H:3 num:t toc:t \n:nil @:t ::t |:t ^:t -:t f:t *:t <:t
+#+OPTIONS:   TeX:t LaTeX:t skip:nil d:nil todo:t pri:nil tags:not-in-toc
+#+INFOJS_OPT: view:nil toc:nil ltoc:t mouse:underline buttons:0 path:http://orgmode.org/org-info.js
+#+EXPORT_SELECT_TAGS: export
+#+EXPORT_EXCLUDE_TAGS: noexport
+#+LINK_UP:   
+#+LINK_HOME: 
+#+XSLT:
+#+startup: beamer
+#+LATEX_CLASS: beamer
+#+BEAMER_FRAME_LEVEL: 2
+#+LaTeX_CLASS_OPTIONS: [xcolor=svgnames,bigger,presentation]
+#+LATEX_HEADER:\usecolortheme[named=FireBrick]{structure}
+#+LATEX_HEADER:\setbeamercovered{transparent}
+#+LATEX_HEADER:\setbeamertemplate{caption}[numbered]
+#+LATEX_HEADER:\setbeamertemplate{blocks}[rounded][shadow=true]
+#+LATEX_HEADER:\usetheme{Darmstadt}
+#+LATEX_HEADER:\usepackage{tikz}\usepackage{xeCJK}
+#+LATEX_HEADER:\usepackage{amsmath}
+#+LATEX_HEADER:\setmainfont{Times New Roman}
+#+LATEX_HEADER:\setCJKmainfont{simsun.ttf}
+#+LATEX_HEADER:\setCJKsansfont{simhei.ttf}
+#+LATEX_HEADER:\setCJKmonofont{simfang.ttf}
+#+LATEX_HEADER:\usepackage{verbatim}
+#+LATEX_HEADER:\institute{HUAWEI}
+#+LATEX_HEADER:\graphicspath{{figures/}}
+#+LATEX_HEADER:\definecolor{lstbgcolor}{rgb}{0.9,0.9,0.9}
+#+LATEX_HEADER:\usepackage{listings}
+#+LATEX_HEADER:\usepackage{fancyvrb}
+#+LATEX_HEADER:\usepackage{xcolor}
+#+LATEX_HEADER:\lstset{escapeinside=`',frameround=ftft,language=C,breaklines=true,keywordstyle=\color{blue!70},commentstyle=\color{red!50!green!50!blue!50},frame=shadowbox,backgroundcolor=\color{yellow!20},rulesepcolor=\color{red!20!green!20!blue!20}}
+
+* 接口类型
+** 接口类型
+- 物理接口: 物理上有对应实例的接口，一般由芯片厂商提供驱动和管理软件即可。
+- 逻辑接口: 物理上不存在，为方便业务的开展而由软件虚拟出来的接口。
+
+* 物理接口
+** Ethernet
+- 公共(ifconfig)
+  1. MAC
+     #+begin_src sh
+     ifconfig eth0 hw ether 00:00:00:00:00:01
+	 #+end_src
+  2. MTU
+	 #+begin_src sh
+     ifconfig eth0 mtu 1200
+     #+end_src
+- 私有
+  1. 速率（10M，100M, 1000M）
+  2. 模式（半双公， 全双工）
+  3. Checksum Offload
+  4. 流量控制
+  5. 帧间隙
+  6. 私有控制命令
+  7. 出/入带宽利用率日志和告警阈值
+  8. 端口隔离
+  9. 配置环回检测
+** Serial
+- 物理属性(<termios.h>)
+  1. 波特率
+  2. 数据位
+  3. 停止位
+  4. 奇偶校验位
+  5. 流控
+- 链路层协议
+  1. PPP(pppd, pppoe-server)
+  2. HDLC, FR(sethdlc)
+** CE1/PRI
+- 历史
+  - 20世纪60年代，随着PCM（Pulse Code Modulation）技术的出现，TDM（Time
+    Division Multiplexing）技术在数字通信系统中逐渐得到广泛的应用。目前，在
+    数字通信系统中存在两种时分复用系统，一种是ITU-T推荐的E1系统，广泛应用于
+    欧洲以及中国；一种是由ANSI推荐的T1系统，主要应用于北美和日本（日本采用
+    的J1，与T1基本相似，可以算作T1系统）。
+- 物理属性
+  1. 时钟模式(主，从)
+  2. 帧格式（CRC4, 非CRC4）
+  3. 线路空闲码（0x7e， 0xff）
+  4. 帧间填充
+- E1
+  1. 数据带宽为2.048Mbit/s的接口
+  2. 支持PPP, HDLC, FR
+- CE1
+  1. 2M的传输线路分成了32个64K的时隙
+  2. 0号时隙由于传输同步信息
+  3. 各个时隙对应一个接口
+  4. 支持PPP, HDLC, FR
+- PRI
+  1. 2M的传输线路分成了32个64K的时隙
+  2. 0号时隙由于传输同步信息
+  3. 时隙16被作为D信道来传输信令
+  4. 其它时隙与16好组合作为ISDN PRI使用
+  5. 支持PPP, HDLC, FR
+** 其它
+- CT1/PRI：T1系统的物理接口
+- CE3: E3系统的物理接口
+- E1-F: 简化版的CE1/PRI接口
+- T1-F: 简化版的TE1/PRI接口
+- ISDN BRI
+- POS
+- CPOS
+- ADSL
+- VDSL
+** 3G
+- 使用数据卡
+- 标准(WCDMA, CDMA2000)
+- APN(Access Point Name)
+  1. 单APN
+  2. 多APN
+- MTU
+- PIN管理功能
+** LTE
+- 使用数据卡
+** WLAN
+- MAC
+- 模式（802.1g, 802.11n, 802.11ac等）
+- 频宽（40M, 20M）
+- 工作频率(2.4G, 5G, 2.4G+5G)
+- SSID
+- Channel
+** PON
+- 光模块参数
+- 认证(MAC, SN, LLID...)
+
+* 逻辑接口
+** PPP（链路协议，L2TP, PPTP VPN）
+   #+begin_src sh
+   pppd nic-eth0 user xxx password xxx
+   #+end_src
+** HDLC && FR
+   #+begin_src sh
+   sethdlc
+   #+end_src
+** Tunnel
+- IPv4 over IPv6, IPv6 over IPv4（IPv6过渡技术）
+  #+begin_src sh
+  ip -4 tunnel add sit
+  ip -6 tunnel add 6rd
+  #+end_src
+- IPv4 over IPv4, IPv6 over IPv6（IPSec VPN）
+  #+begin_src sh
+  ip -4 tunnel add ipip
+  ip -6 tunnel add ipip
+  #+end_src
+- GRE
+  #+begin_src sh
+  ip -4 tunnel add gre
+  #+end_src
+- VLAN
+  #+begin_src sh
+  vconfig add eth0 100
+  vconfig set_egress_map eth0-100 3
+  vconfig set_ingress_map eth0-100 2
+  #+end_src
+- VXLAN
+  #+begin_src sh
+  ip link add vxlan0 type vxlan id 42 dev eth1
+  #+end_src
+
+* 结论
+** 结论
+- 大多数的物理接口都只需要芯片供应商提供驱动
+- Linux支持大部分AR支持的逻辑接口类型
+
+** 参考
+- 《AR150&160&200&1200&2200&3200 产品文档- 2014.3.31》
+- Linux Programmer's Manual - TERMIOS(3)
+- linux-kernel-3.8/Documentation/networking/generic-ppp.txt
+- linux-kernel-3.8/Documentation/networking/generic-hdlc.txt
+- linux-kernel-3.8/Documentation/networking/vxlan.txt

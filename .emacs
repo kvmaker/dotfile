@@ -142,9 +142,9 @@ Emacs buffer are those starting with “*”."
 (setq ediff-split-window-function 'split-window-horizontally)
 
 ;; chinese code
-(set-language-environment 'Chinese-GB)
-(setq-default pathname-coding-system 'euc-cn)
-(setq file-name-coding-system 'euc-cn)
+;;(set-language-environment 'Chinese-GB)
+;;(setq-default pathname-coding-system 'euc-cn)
+;;(setq file-name-coding-system 'euc-cn)
 
 ;; use italic for comment
 (require 'font-lock)
