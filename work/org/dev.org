@@ -25,9 +25,9 @@
 #+LATEX_HEADER:\usepackage{tikz}\usepackage{xeCJK}
 #+LATEX_HEADER:\usepackage{amsmath}
 #+LATEX_HEADER:\setmainfont{Times New Roman}
-#+LATEX_HEADER:\setCJKmainfont{simsun.ttf}
-#+LATEX_HEADER:\setCJKsansfont{simhei.ttf}
-#+LATEX_HEADER:\setCJKmonofont{simfang.ttf}
+#+LATEX_HEADER:\setCJKmainfont{SimSun}
+#+LATEX_HEADER:\setCJKsansfont{SimHei}
+#+LATEX_HEADER:\setCJKmonofont{FangSong}
 #+LATEX_HEADER:\usepackage{verbatim}
 #+LATEX_HEADER:\institute{HUAWEI}
 #+LATEX_HEADER:\graphicspath{{figures/}}
@@ -164,7 +164,6 @@
   #+begin_src sh
   ip link add vxlan0 type vxlan id 42 dev eth1
   #+end_src
-
 * 结论
 ** 结论
 - 大多数的物理接口都只需要芯片供应商提供驱动
