@@ -1,0 +1,64 @@
+#+TITLE:     环境管理
+#+AUTHOR:    yubo y00186361
+#+EMAIL:     kvmaker.yubo@huawei.com
+#+DATE:      Fri May 30 10:54:54 2014
+#+DESCRIPTION:
+#+KEYWORDS:
+#+LANGUAGE:  en
+#+OPTIONS:   H:3 num:t toc:t \n:nil @:t ::t |:t ^:t -:t f:t *:t <:t
+#+OPTIONS:   TeX:t LaTeX:t skip:nil d:nil todo:t pri:nil tags:not-in-toc
+#+INFOJS_OPT: view:nil toc:nil ltoc:t mouse:underline buttons:0 path:http://orgmode.org/org-info.js
+#+EXPORT_SELECT_TAGS: export
+#+EXPORT_EXCLUDE_TAGS: noexport
+#+LINK_UP:   
+#+LINK_HOME: 
+#+XSLT:
+#+startup: beamer
+#+LATEX_CLASS: beamer
+#+BEAMER_FRAME_LEVEL: 2
+#+LaTeX_CLASS_OPTIONS: [xcolor=svgnames,bigger,presentation]
+#+LATEX_HEADER:\usecolortheme[named=FireBrick]{structure}
+#+LATEX_HEADER:\setbeamercovered{transparent}
+#+LATEX_HEADER:\setbeamertemplate{caption}[numbered]
+#+LATEX_HEADER:\setbeamertemplate{blocks}[rounded][shadow=true]
+#+LATEX_HEADER:\usetheme{Darmstadt}
+#+LATEX_HEADER:\usepackage{tikz}\usepackage{xeCJK}
+#+LATEX_HEADER:\usepackage{amsmath}
+#+LATEX_HEADER:\setmainfont{Times New Roman}
+#+LATEX_HEADER:\setCJKmainfont{SimSun}
+#+LATEX_HEADER:\setCJKsansfont{SimHei}
+#+LATEX_HEADER:\setCJKmonofont{FangSong}
+#+LATEX_HEADER:\usepackage{verbatim}
+#+LATEX_HEADER:\institute{HUAWEI}
+#+LATEX_HEADER:\graphicspath{{figures/}}
+#+LATEX_HEADER:\definecolor{lstbgcolor}{rgb}{0.9,0.9,0.9}
+#+LATEX_HEADER:\usepackage{listings}
+#+LATEX_HEADER:\usepackage{fancyvrb}
+#+LATEX_HEADER:\usepackage{xcolor}
+#+LATEX_HEADER:\lstset{escapeinside=`',frameround=ftft,language=C,breaklines=true,keywordstyle=\color{blue!70},commentstyle=\color{red!50!green!50!blue!50},frame=shadowbox,backgroundcolor=\color{yellow!20},rulesepcolor=\color{red!20!green!20!blue!20}}
+
+* 配置管理
+** 功能需求
+- 设备重启后，恢复应用模块的配置。
+- 按照指定的配置文件恢复业务。
+- 支持SET/GET命令。
+- 支持ADD/DEL命令。
+- 支持命令行或API两种方式。
+- 支持对配置文件的管理（加密，校验）。
+** 实现需求
+- 支持STRING, INT, BOOL, IPv4, IPv6, MAC等原子数据类型。
+- 支持原子数据类型的组合。
+- 支持数组。
+** 结论
+- 使用各个应用原有的配置方法。
+- 提供集中管理配置文件的方法，提供快照命令。
+- 所谓快照就是将各个配置文件集中存放起来。
+- 系统初始化的时候，
+
+* 软件升级
+
+* 框式设备
+- 在Linux协议栈中需要考虑到单板的概念
+- 在主控板上运行的软件只不过看到数据众多的网络设备而已
+- 需要考虑单板的热插拔、失效等问题。
+- LPU与MMU如何通讯？
