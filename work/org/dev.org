@@ -1,4 +1,4 @@
-#+TITLE:     Linux网络接口介绍
+#+TITLE:     Linux网络接口
 #+AUTHOR:    yubo y00186361
 #+EMAIL:     kvmaker.yubo@huawei.com
 #+DATE:      2014-05-28
@@ -160,14 +160,72 @@
   vconfig set_egress_map eth0-100 3
   vconfig set_ingress_map eth0-100 2
   #+end_src
+** Tunnel
+- Bridge
+  #+begin_src sh
+  brctl add br0
+  brctl addif br0 lan0
+  brctl addif br0 lan1
+  #+end_src
 - VXLAN
   #+begin_src sh
   ip link add vxlan0 type vxlan id 42 dev eth1
   #+end_src
+** VLAN
+- PORT类型：access，trunk, hybrid
+  Linux是trunk
+- 隔离物理端口
+  #+begin_src sh
+  vconfig add eth0 100
+  vconfig add eth1 100
+  vconfig add eth2 200
+  vconfig add eth3 200
+  brctl addbr br0
+  brctl addif br0 eth0.100 
+  brctl addif br0 eth1.100
+  brctl addbr br1
+  brctl addif br1 eth2.200
+  brctl addif br1 eth3.200
+  #+end_src
+** VLAN
+- 实现不同VLAN的通讯
+  #+begin_src sh
+  ifconfig br0 10.0.0.0/24
+  ifconfig br1 20.0.0.0/24
+  #+end_src
+- VLAN聚合
+  Linux不支持
+- QinQ
+  不支持
+  支持双层VLAN
+- VLAN-Mapping
+  不支持
+- 考虑ovs
+** MPLS
+- https://github.com/i-maravic/MPLS-Linux
+- https://github.com/i-maravic/iproute2
+- 独立的开发版本，实验性质的版本, 没有融入主分支。
+- 没有LDP支持，所以只能支持静态LSP。
+** MPLS
+- 举例
+  #+begin_src sh
+     +-----+    +----+   +-----+
+     |LER1 |----|LSR |---|LER2 |--(10.0.0.0/24)
+     +-----+    +----+   +-----+
+    LSR1:    
+    ip link add mpls1 type mpls push 200 192.168.2.2
+    ip route add 10.0.0.0/24 dev mpls1
+    LSR:
+    ip route add 200 mpls swap 300 dev eth0 192.168.3.3
+    LER2:
+    ip route add 10.0.0.0/24 mpls pop
+  #+end_src
+
 * 结论
 ** 结论
-- 大多数的物理接口都只需要芯片供应商提供驱动
-- Linux支持大部分AR支持的逻辑接口类型
+- 大多数的物理接口都只需要芯片供应商提供驱动。
+- Linux支持大部分AR支持的逻辑接口类型。
+- Linux对VLAN 和 MPLS的业务支持不完整，需要补充。
 
 ** 参考
 - 《AR150&160&200&1200&2200&3200 产品文档- 2014.3.31》
@@ -175,3 +233,4 @@
 - linux-kernel-3.8/Documentation/networking/generic-ppp.txt
 - linux-kernel-3.8/Documentation/networking/generic-hdlc.txt
 - linux-kernel-3.8/Documentation/networking/vxlan.txt
+- https://github.com/i-maravic/MPLS-Linux
