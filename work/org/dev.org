@@ -227,6 +227,7 @@
 - Linux支持大部分AR支持的逻辑接口类型。
 - Linux对VLAN 和 MPLS的业务支持不完整，需要补充。
 
+* 参考
 ** 参考
 - 《AR150&160&200&1200&2200&3200 产品文档- 2014.3.31》
 - Linux Programmer's Manual - TERMIOS(3)
