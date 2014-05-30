@@ -1,0 +1,14 @@
+# -*- mode: snippet -*-
+# name: hhd2
+# key: hhd2
+# --
+#+TITLE:     $1
+#+AUTHOR:    yubo y00186361
+#+EMAIL:     kvmaker.yubo@huawei.com
+#+DATE:      `(current-time-string)`
+#+LATEX_HEADER: \usepackage{xeCJK}
+#+LATEX_HEADER: \setCJKmainfont{SimSun}
+#+LATEX_HEADER:\setCJKmainfont{SimSun}
+#+LATEX_HEADER:\setCJKsansfont{SimHei}
+#+LATEX_HEADER:\setCJKmonofont{FangSong}
+$0

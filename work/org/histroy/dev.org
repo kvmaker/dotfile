@@ -22,7 +22,8 @@
 #+LATEX_HEADER:\setbeamertemplate{caption}[numbered]
 #+LATEX_HEADER:\setbeamertemplate{blocks}[rounded][shadow=true]
 #+LATEX_HEADER:\usetheme{Darmstadt}
-#+LATEX_HEADER:\usepackage{tikz}\usepackage{xeCJK}
+#+LATEX_HEADER:\usepackage{tikz}
+#+LATEX_HEADER:\usepackage{xeCJK}
 #+LATEX_HEADER:\usepackage{amsmath}
 #+LATEX_HEADER:\setmainfont{Times New Roman}
 #+LATEX_HEADER:\setCJKmainfont{SimSun}

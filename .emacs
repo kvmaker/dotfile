@@ -172,8 +172,9 @@ Emacs buffer are those starting with “*”."
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(org-agenda-files (quote ("~/work/org/ffwd.org" "~/work/org/ssf.org")))
+ '(org-agenda-files nil)
  '(semantic-c-dependency-system-include-path (quote ("/usr/include" ".")))
+ '(session-use-package t nil (session))
  '(uniquify-buffer-name-style (quote forward) nil (uniquify)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
