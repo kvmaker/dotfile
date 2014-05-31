@@ -234,10 +234,63 @@ Emacs buffer are those starting with “*”."
 			 (turn-on-haskell-simple-indent)))
 
 ;; org-mode
+(require 'org-install)
+(require 'org-latex)
 (define-key global-map "\C-cl" 'org-store-link)
 (define-key global-map "\C-ca" 'org-agenda)
 (setq org-log-done t)
 (put 'set-goal-column 'disabled nil)
+(setq org-latex-to-pdf-process
+	  '("xelatex -interaction nonstopmode %f"
+		"xelatex -interaction nonstopmode %f"))
+(setq org-confirm-babel-evaluate nil)
+(add-hook 'org-mode-hook
+          (lambda ()
+            (if (member "REFTEX" org-todo-keywords-1)
+                (org-mode-article-modes))))
+(unless (boundp 'org-export-latex-classes)
+  (setq org-export-latex-classes nil))
+(add-to-list 'org-export-latex-classes
+             '("cn-article"
+			   "\\documentclass[11pt]{article}
+\\usepackage[utf8]{inputenc}
+\\usepackage[T1]{fontenc}
+\\usepackage{fixltx2e}
+\\usepackage{graphicx}
+\\usepackage{longtable}
+\\usepackage{float}
+\\usepackage{listings}
+\\usepackage{courier}
+\\usepackage{wrapfig}
+\\usepackage{soul}
+\\usepackage{textcomp}
+\\usepackage{marvosym}
+\\usepackage{wasysym}
+\\usepackage{latexsym}
+\\usepackage{amssymb}
+\\usepackage{hyperref}
+\\tolerance=1000
+\\usepackage{xeCJK}
+\\setmainfont{Times New Roman}
+\\setCJKmainfont{SimSun}
+\\setCJKmainfont{SimSun}
+\\setCJKsansfont{SimHei}
+\\setCJKmonofont{FangSong}
+\\tolerance=1000
+[NO-DEFAULT-PACKAGES]
+[NO-PACKAGES]"
+			   ("\\section{%s}" . "\\section*{%s}")
+			   ("\\subsection{%s}" . "\\subsection*{%s}")
+			   ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+			   ("\\paragraph{%s}" . "\\paragraph*{%s}")
+			   ("\\subparagraph{%s}" . "\\subparagraph*{%s}")))
+(setq org-export-latex-listings 'listings)
+(setq org-export-latex-listings-options
+	  '(
+		("basicstyle" "\\footnotesize\\ttfamily")
+		("breaklines" "true")
+		("frame" "single")
+		("frameround" "tttt")))
 
 ;; scala-mode
 (add-to-list 'load-path "~/.emacs.d/3rd/scala/")

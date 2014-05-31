@@ -1,0 +1,334 @@
+#+TITLE:     设备分析
+#+AUTHOR:    yubo y00186361
+#+EMAIL:     kvmaker.yubo@huawei.com
+#+DATE:      2014-05-30
+#+LATEX_CLASS: cn-article
+
+* 设备管理配置
+** NTP
+*** 介绍
+- 定义：NTP用于在一系列分布式时间服务器与客户端之间同步时钟。
+- 目的：NTP主要应用于网络中所有设备时钟需要保持一致的场合
+  1. 网络管理
+  2. 计费系统：要求所有设备的时钟保持一致。
+  3. 多个系统协同处理同一个复杂事件：为保证正确的执行顺序，多个系统必须参考同一时钟。
+  4. 备份服务器和客户机之间进行增量备份：要求备份服务器和所有客户机之间的时钟同步。
+  5. 系统时间：某些应用程序需要知道用户登录系统的时间以及文件修改的时间。
+- 版本
+- 原理
+  #+CAPTION: NTP原理
+  [[./fig/ntp0.png]]
+  1. RouterA发送一个NTP报文给RouterB，该报文中带有它离开RouterA时的时间戳10:00:00a.m.（T1）。
+  2. 此NTP报文到达RouterB时，RouterB加上到达时间戳11:00:01a.m.（T2）。
+  3. 此NTP报文离开RouterB时，RouterB再加上离开时间戳11:00:02a.m.（T3）。
+  4. RouterA接收到该响应报文时，加上新的时间戳10:00:03a.m.（T4）。
+  5. 至此，RouterA获得了足够信息来计算以下两个重要参数：
+     - NTP报文来回一个周期的时延：Delay= ( T4 - T1 ) - ( T3 – T2 )。
+     - RouterA相对RouterB的时间差：Offset= ( ( T2- T1 ) + ( T3 – T4 ) ) / 2。
+     - RouterA根据计算得到Delay为2秒，Offset为1小时。RouterA根据这些信息来设定自己的时
+       钟，实现与RouterB的时钟同步。
+- 网络结构
+  #+CAPTION: NTP网络结构
+  [[./fig/ntp1.png]]
+  1. 同步子网
+  2. 主服务器
+  3. 二级服务器
+  4. 层数
+- 工作模式
+  1. 单播服务器/客户端模式
+  2. 对等体模式
+  3. 广播模式
+  4. 组播模式
+  5. 多播模式
+- 访问控制
+  1. 访问权限
+  2. KOD
+  3. 认证
+*** 开源方案
+- ntpdate
+  手动同步系统时间
+  #+begin_src sh
+  # 同步华为内部时间服务器
+  ntpdate szxntp01-in.huawei.com
+  ntpdate szxntp02-in.huawei.com
+  #+end_src
+- ntpd
+  ntpd配置
+  #+begin_src sh
+  /etc/ntp.conf
+
+  # 同步服务器
+  server szxntp01-in.huawei.com
+  server szxntp02-in.huawei.com
+  #+end_src
+- ntp-keygen
+  用于生成ntp需要的公钥和私钥
+*** 结论
+- 开源方案支持单播，广播，组播等工作模式。
+- 开源方案支持访问控制。
+- 开源方案支持NTP服务器和客户端。
+- 开源方案支持基于共享密钥的安全和非对称密钥的安全。
+
+* 接口管理配置
+** Ethernet
+- 公共(ifconfig)
+  1. MAC
+     #+begin_src sh
+     ifconfig eth0 hw ether 00:00:00:00:00:01
+	 #+end_src
+  2. MTU
+	 #+begin_src sh
+     ifconfig eth0 mtu 1200
+     #+end_src
+- 私有
+  1. 速率（10M，100M, 1000M）
+  2. 模式（半双公， 全双工）
+  3. Checksum Offload
+  4. 流量控制
+  5. 帧间隙
+  6. 私有控制命令
+  7. 出/入带宽利用率日志和告警阈值
+  8. 端口隔离
+  9. 配置环回检测
+** Serial
+- 物理属性(<termios.h>)
+  1. 波特率
+  2. 数据位
+  3. 停止位
+  4. 奇偶校验位
+  5. 流控
+- 链路层协议
+  1. PPP(pppd, pppoe-server)
+  2. HDLC, FR(sethdlc)
+** CE1/PRI
+- 历史
+  - 20世纪60年代，随着PCM（Pulse Code Modulation）技术的出现，TDM（Time
+    Division Multiplexing）技术在数字通信系统中逐渐得到广泛的应用。目前，在
+    数字通信系统中存在两种时分复用系统，一种是ITU-T推荐的E1系统，广泛应用于
+    欧洲以及中国；一种是由ANSI推荐的T1系统，主要应用于北美和日本（日本采用
+    的J1，与T1基本相似，可以算作T1系统）。
+- 物理属性
+  1. 时钟模式(主，从)
+  2. 帧格式（CRC4, 非CRC4）
+  3. 线路空闲码（0x7e， 0xff）
+  4. 帧间填充
+- E1
+  1. 数据带宽为2.048Mbit/s的接口
+  2. 支持PPP, HDLC, FR
+- CE1
+  1. 2M的传输线路分成了32个64K的时隙
+  2. 0号时隙由于传输同步信息
+  3. 各个时隙对应一个接口
+  4. 支持PPP, HDLC, FR
+- PRI
+  1. 2M的传输线路分成了32个64K的时隙
+  2. 0号时隙由于传输同步信息
+  3. 时隙16被作为D信道来传输信令
+  4. 其它时隙与16好组合作为ISDN PRI使用
+  5. 支持PPP, HDLC, FR
+** 其它
+- CT1/PRI：T1系统的物理接口
+- CE3: E3系统的物理接口
+- E1-F: 简化版的CE1/PRI接口
+- T1-F: 简化版的TE1/PRI接口
+- ISDN BRI
+- POS
+- CPOS
+- ADSL
+- VDSL
+** 3G
+- 使用数据卡
+- 标准(WCDMA, CDMA2000)
+- APN(Access Point Name)
+  1. 单APN
+  2. 多APN
+- MTU
+- PIN管理功能
+** LTE
+- 使用数据卡
+** WLAN
+- MAC
+- 模式（802.1g, 802.11n, 802.11ac等）
+- 频宽（40M, 20M）
+- 工作频率(2.4G, 5G, 2.4G+5G)
+- SSID
+- Channel
+** PON
+- 光模块参数
+- 认证(MAC, SN, LLID...)
+
+** 逻辑接口
+*** PPP（链路协议，L2TP, PPTP VPN）
+   #+begin_src sh
+   pppd nic-eth0 user xxx password xxx
+   #+end_src
+*** HDLC && FR
+   #+begin_src sh
+   sethdlc
+   #+end_src
+*** Tunnel
+- IPv4 over IPv6, IPv6 over IPv4（IPv6过渡技术）
+  #+begin_src sh
+  ip -4 tunnel add sit
+  ip -6 tunnel add 6rd
+  #+end_src
+- IPv4 over IPv4, IPv6 over IPv6（IPSec VPN）
+  #+begin_src sh
+  ip -4 tunnel add ipip
+  ip -6 tunnel add ipip
+  #+end_src
+- GRE
+  #+begin_src sh
+  ip -4 tunnel add gre
+  #+end_src
+- VLAN
+  #+begin_src sh
+  vconfig add eth0 100
+  vconfig set_egress_map eth0-100 3
+  vconfig set_ingress_map eth0-100 2
+  #+end_src
+- Bridge
+  #+begin_src sh
+  brctl add br0
+  brctl addif br0 lan0
+  brctl addif br0 lan1
+  #+end_src
+- VXLAN
+  #+begin_src sh
+  ip link add vxlan0 type vxlan id 42 dev eth1
+  #+end_src
+*** VLAN
+- PORT类型：access，trunk, hybrid
+  Linux是trunk
+- 隔离物理端口
+  #+begin_src sh
+  vconfig add eth0 100
+  vconfig add eth1 100
+  vconfig add eth2 200
+  vconfig add eth3 200
+  brctl addbr br0
+  brctl addif br0 eth0.100 
+  brctl addif br0 eth1.100
+  brctl addbr br1
+  brctl addif br1 eth2.200
+  brctl addif br1 eth3.200
+  #+end_src
+- 实现不同VLAN的通讯
+  #+begin_src sh
+  ifconfig br0 10.0.0.0/24
+  ifconfig br1 20.0.0.0/24
+  #+end_src
+- VLAN聚合
+  Linux不支持
+- QinQ
+  不支持
+  支持双层VLAN
+- VLAN-Mapping
+  不支持
+- 考虑ovs
+*** MPLS
+- https://github.com/i-maravic/MPLS-Linux
+- https://github.com/i-maravic/iproute2
+- 独立的开发版本，实验性质的版本, 没有融入主分支。
+- 没有LDP支持，所以只能支持静态LSP。
+- 举例
+  #+begin_src sh
+     +-----+    +----+   +-----+
+     |LER1 |----|LSR |---|LER2 |--(10.0.0.0/24)
+     +-----+    +----+   +-----+
+    LSR1:    
+    ip link add mpls1 type mpls push 200 192.168.2.2
+    ip route add 10.0.0.0/24 dev mpls1
+    LSR:
+    ip route add 200 mpls swap 300 dev eth0 192.168.3.3
+    LER2:
+    ip route add 10.0.0.0/24 mpls pop
+  #+end_src
+
+* 以太网交换配置
+* 广域网互联
+* IP业务
+** IPv4地址配置
+*** 介绍
+- IPv4（Internet Protocol Version 4）协议族是TCP/IP协议族中最为核心的协议族。它工
+  作在TCP/IP协议栈的网络层，该层与OSI参考模型的网络层相对应。网络层提供了无连接数
+  据传输服务，即网络在发送分组时不需要先建立连接，每一个分组（也就是IP数据报文）独
+  立发送，与前后的分组无关。
+*** 开源方案
+- ifconfig
+  #+begin_src sh
+  ifconfig eth0 192.168.0.100/24
+  #+end_src
+- iproute2
+  #+begin_src sh
+  ip -4 addr add 192.168.0.100/24 dev eth0
+  #+end_src
+** ARP配置
+*** 介绍
+- 定义
+  - 地址解析协议ARP（Address Resolution Protocol）是用来将IP地址解析为MAC地址的
+    协议。
+- 目的
+  - 在局域网中，当主机或其它网络设备有数据要发送给另一个主机或设备时，它必须知道对方
+    的网络层地址（即IP地址）。但是仅有IP地址是不够的，因为IP数据报文必须封装成帧才能
+    通过物理网络发送，因此发送方还必须有接收方的物理地址（MAC地址），所以需要一个从
+    IP地址到物理地址的映射。ARP就是实现这个功能的协议。
+- 基本原理
+  #+CAPTION: ARP原理
+  [[./fig/arp0.png]]
+  [[./fig/arp1.png]]
+- Proxy ARP
+  1. 路由式Proxy ARP: 使那些在同一网段却不在同一物理网络上的网络设备能够相互通信的一种功能。
+     #+CAPTION: 
+     [[./fig/proxy_arp0.png]]
+  2. VLAN内Proxy ARP: 如果两个用户属于相同的VLAN，但VLAN内配置了用户隔离。此时用户间要互通，需要
+     在关联了VLAN的接口上启动VLAN内Proxy ARP功能。
+     #+CAPTION: 
+     [[./fig/proxy_arp1.png]]
+  3. VLAN间Proxy ARP: 如果两个用户属于不同的VLAN，用户间要进行三层互通，可以在关
+     联了VLAN的接口上启动VLAN间Proxy ARP功能。
+     #+CAPTION: 
+     [[./fig/proxy_arp2.png]]
+- 免费ARP
+  1. 主机主动使用自己的IP地址作为目标地址发送ARP请求。
+  2. 作用：
+	 - 检查重复的IP地址。
+	 - 通告新的MAC地址。
+	 - 在VRRP备份组中用来通告主备发生变换。
+- ARP-Ping
+  - ARP-Ping IP
+  - ARP-Ping MAC
+
+*** 开源方案
+- 动态ARP
+- 静态ARP
+  #+begin_src sh
+  # 添加ARP表项
+  ip -4 neigh add 192.168.1.1 00:00:00:00:00:01 dev eth0
+
+  # 删除ARP表项
+  ip -4 neigh del 192.168.1.1 00:00:00:00:00:01 dev eth0
+
+  # 查看ARP表项
+  ip -4 neigh show
+  #+end_src
+- ARP-Proxy
+- ARP-Ping IP
+  #+begin_src sh
+  arping 192.168.1.1
+  #+end_src
+- ARP-Ping MAC
+  不支持
+
+** DHCP配置
+
+* 参考
+- 《AR150&160&200&1200&2200&3200 产品文档》
+- Linux Manual: ntpd(8)
+- Linux Manual: ntp.conf(5)
+- Linux Manual: ntpdate(8)
+- Linux Manual: ntp-keygen(8)
+- Linux Manual: TERMIOS(3)
+- Linux-kernel-3.8/Documentation/networking/generic-ppp.txt
+- Linux-kernel-3.8/Documentation/networking/generic-hdlc.txt
+- Linux-kernel-3.8/Documentation/networking/vxlan.txt
