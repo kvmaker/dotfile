@@ -273,17 +273,64 @@ Emacs buffer are those starting with “*”."
 \\usepackage{xeCJK}
 \\setmainfont{Times New Roman}
 \\setCJKmainfont{SimSun}
-\\setCJKmainfont{SimSun}
 \\setCJKsansfont{SimHei}
 \\setCJKmonofont{FangSong}
 \\tolerance=1000
 [NO-DEFAULT-PACKAGES]
 [NO-PACKAGES]"
-			   ("\\section{%s}" . "\\section*{%s}")
-			   ("\\subsection{%s}" . "\\subsection*{%s}")
-			   ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
-			   ("\\paragraph{%s}" . "\\paragraph*{%s}")
-			   ("\\subparagraph{%s}" . "\\subparagraph*{%s}")))
+			  ("\\section{%s}" . "\\section*{%s}")
+			  ("\\subsection{%s}" . "\\subsection*{%s}")
+			  ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+			  ("\\paragraph{%s}" . "\\paragraph*{%s}")
+			  ("\\subparagraph{%s}" . "\\subparagraph*{%s}")))
+
+(add-to-list 'org-export-latex-classes
+             '("cn-beamer"
+			   "\\documentclass[xcolor=svgnames,bigger,presentation]{beamer}
+\\usepackage[utf8]{inputenc}
+\\usepackage[T1]{fontenc}
+\\usepackage{fixltx2e}
+\\usepackage{graphicx}
+\\usepackage{longtable}
+\\usepackage{float}
+\\usepackage{listings}
+\\usepackage{courier}
+\\usepackage{wrapfig}
+\\usepackage{soul}
+\\usepackage{textcomp}
+\\usepackage{marvosym}
+\\usepackage{wasysym}
+\\usepackage{latexsym}
+\\usepackage{amssymb}
+\\usepackage{hyperref}
+\\tolerance=1000
+\\usecolortheme[named=FireBrick]{structure}
+\\setbeamercovered{transparent}
+\\setbeamertemplate{caption}[numbered]
+\\setbeamertemplate{blocks}[rounded][shadow=true]
+\\usetheme{Darmstadt}
+\\usepackage{tikz}
+\\usepackage{xeCJK}
+\\usepackage{amsmath}
+\\setmainfont{Times New Roman}
+\\setCJKmainfont{SimSun}
+\\setCJKsansfont{SimHei}
+\\setCJKmonofont{FangSong}
+\\usepackage{verbatim}
+\\institute{HUAWEI}
+\\definecolor{lstbgcolor}{rgb}{0.9,0.9,0.9}
+\\usepackage{listings}
+\\usepackage{fancyvrb}
+\\usepackage{xcolor}
+%\\lstset{escapeinside=`',frameround=ftft,language=C,breaklines=true,keywordstyle=\color{blue!70},commentstyle=\color{red!50!green!50!blue!50},frame=shadowbox,backgroundcolor=\color{yellow!20},rulesepcolor=\color{red!20!green!20!blue!20}}
+[NO-DEFAULT-PACKAGES]
+[NO-PACKAGES]"
+               ("\\section{%s}" . "\\section*{%s}")
+               ("\\begin{frame}[fragile, allowframebreaks=0.8]\\frametitle{%s}"
+                "\\end{frame}"
+                "\\begin{frame}[fragile, allowframebreaks=0.8]\\frametitle{%s}"
+                "\\end{frame}")))
+
 (setq org-export-latex-listings 'listings)
 (setq org-export-latex-listings-options
 	  '(
