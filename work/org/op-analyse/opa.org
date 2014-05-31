@@ -2,7 +2,7 @@
 #+AUTHOR:    yubo y00186361
 #+EMAIL:     kvmaker.yubo@huawei.com
 #+DATE:      2014-05-30
-#+LATEX_CLASS: ex-beamer
+#+LATEX_CLASS: cn-article
 #+BEAMER_FRAME_LEVEL: 2
 #+LaTeX_CLASS_OPTIONS: [xcolor=svgnames,bigger,presentation]
 
@@ -19,6 +19,7 @@
 - 版本
 - 原理
   #+CAPTION: NTP原理
+  #+ATTR_LATEX: width=.6\textwidth
   [[./fig/ntp0.png]]
   1. RouterA发送一个NTP报文给RouterB，该报文中带有它离开RouterA时的时间戳10:00:00a.m.（T1）。
   2. 此NTP报文到达RouterB时，RouterB加上到达时间戳11:00:01a.m.（T2）。
@@ -31,6 +32,7 @@
        钟，实现与RouterB的时钟同步。
 - 网络结构
   #+CAPTION: NTP网络结构
+  #+ATTR_LATEX: width=.6\textwidth
   [[./fig/ntp1.png]]
   1. 同步子网
   2. 主服务器
@@ -277,19 +279,25 @@
     IP地址到物理地址的映射。ARP就是实现这个功能的协议。
 - 基本原理
   #+CAPTION: ARP原理
+  #+ATTR_LATEX: width=.6\textwidth
   [[./fig/arp0.png]]
+  #+CAPTION: ARP原理
+  #+ATTR_LATEX: width=.6\textwidth
   [[./fig/arp1.png]]
 - Proxy ARP
   1. 路由式Proxy ARP: 使那些在同一网段却不在同一物理网络上的网络设备能够相互通信的一种功能。
-     #+CAPTION: 
+     #+CAPTION: 路由Proxy ARP
+     #+ATTR_LATEX: width=.6\textwidth
      [[./fig/proxy_arp0.png]]
   2. VLAN内Proxy ARP: 如果两个用户属于相同的VLAN，但VLAN内配置了用户隔离。此时用户间要互通，需要
      在关联了VLAN的接口上启动VLAN内Proxy ARP功能。
-     #+CAPTION: 
+     #+CAPTION: VLAN内Proxy APR
+     #+ATTR_LATEX: width=.6\textwidth
      [[./fig/proxy_arp1.png]]
   3. VLAN间Proxy ARP: 如果两个用户属于不同的VLAN，用户间要进行三层互通，可以在关
      联了VLAN的接口上启动VLAN间Proxy ARP功能。
-     #+CAPTION: 
+     #+CAPTION: VLAN间Proxy ARP
+     #+ATTR_LATEX: width=.6\textwidth
      [[./fig/proxy_arp2.png]]
 - 免费ARP
   1. 主机主动使用自己的IP地址作为目标地址发送ARP请求。
