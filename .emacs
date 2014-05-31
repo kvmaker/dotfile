@@ -173,6 +173,7 @@ Emacs buffer are those starting with “*”."
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(org-agenda-files nil)
+ '(org-beamer-frame-default-options "[allowframebreaks=0.8]")
  '(semantic-c-dependency-system-include-path (quote ("/usr/include" ".")))
  '(session-use-package t nil (session))
  '(uniquify-buffer-name-style (quote forward) nil (uniquify)))
@@ -287,7 +288,7 @@ Emacs buffer are those starting with “*”."
 (add-to-list 'org-export-latex-classes
              '("cn-beamer"
 			   "\\documentclass[xcolor=svgnames,bigger,presentation]{beamer}
-\\usepackage[utf8]{inputenc}
+% \\usepackage[utf8]{inputenc}
 \\usepackage[T1]{fontenc}
 \\usepackage{fixltx2e}
 \\usepackage{graphicx}
@@ -324,20 +325,71 @@ Emacs buffer are those starting with “*”."
 \\usepackage{xcolor}
 %\\lstset{escapeinside=`',frameround=ftft,language=C,breaklines=true,keywordstyle=\color{blue!70},commentstyle=\color{red!50!green!50!blue!50},frame=shadowbox,backgroundcolor=\color{yellow!20},rulesepcolor=\color{red!20!green!20!blue!20}}
 [NO-DEFAULT-PACKAGES]
-[NO-PACKAGES]"
+[NO-PACKAGES]
+[EXTRA]"
                ("\\section{%s}" . "\\section*{%s}")
                ("\\begin{frame}[fragile, allowframebreaks=0.8]\\frametitle{%s}"
                 "\\end{frame}"
                 "\\begin{frame}[fragile, allowframebreaks=0.8]\\frametitle{%s}"
                 "\\end{frame}")))
 
+(add-to-list 'org-export-latex-classes
+			 '("ex-beamer"
+			   "\\documentclass{beamer}
+\\usecolortheme[named=FireBrick]{structure}
+\\setbeamercovered{transparent}
+\\setbeamertemplate{caption}[numbered]
+\\setbeamertemplate{blocks}[rounded][shadow=true]
+\\usetheme{Darmstadt}
+\\usepackage{tikz}
+\\usepackage{xeCJK}
+\\usepackage{amsmath}
+\\setmainfont{Times New Roman}
+\\setCJKmainfont{SimSun}
+\\setCJKsansfont{SimHei}
+\\setCJKmonofont{FangSong}
+\\usepackage{verbatim}
+\\institute{HUAWEI}
+\\graphicspath{{figures/}}
+\\definecolor{lstbgcolor}{rgb}{0.9,0.9,0.9}
+\\usepackage{listings}
+\\usepackage{fancyvrb}
+\\usepackage{xcolor}
+[NO-DEFAULT-PACKAGES]
+[NO-PACKAGES]
+[EXTRA]"
+              org-beamer-sectioning))
+
 (setq org-export-latex-listings 'listings)
 (setq org-export-latex-listings-options
 	  '(
-		("basicstyle" "\\footnotesize\\ttfamily")
-		("breaklines" "true")
-		("frame" "single")
-		("frameround" "tttt")))
+		("frameround"      "tttt")
+		("keywordstyle"    "\\color{blue!70}")
+		("commentstyle"    "\\color{red!50!green!50!blue!50}")
+		("backgroundcolor" "\\color{yellow!20}")
+		("rulesepcolor"    "\\color{red!20!green!20!blue!20}")
+		("basicstyle"      "\\footnotesize\\ttfamily")
+		("breaklines"      "true")
+		("frame"           "shadowbox")))
+
+;; Make Org use ido-completing-read for most of its completing prompts.
+(setq org-completion-use-ido t)
+;; 各种Babel语言支持
+(org-babel-do-load-languages
+ 'org-babel-load-languages
+ '((R . t)
+   (emacs-lisp . t)
+   (matlab . t)
+   (C . t)
+   (perl . t)
+   (sh . t)
+   (ditaa . t)
+   (python . t)
+   (haskell . t)
+   (dot . t)
+   (latex . t)
+   (js . t)
+   ))
 
 ;; scala-mode
 (add-to-list 'load-path "~/.emacs.d/3rd/scala/")

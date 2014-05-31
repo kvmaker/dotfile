@@ -2,7 +2,9 @@
 #+AUTHOR:    yubo y00186361
 #+EMAIL:     kvmaker.yubo@huawei.com
 #+DATE:      2014-05-30
-#+LATEX_CLASS: cn-article
+#+LATEX_CLASS: ex-beamer
+#+BEAMER_FRAME_LEVEL: 2
+#+LaTeX_CLASS_OPTIONS: [xcolor=svgnames,bigger,presentation]
 
 * 设备管理配置
 ** NTP
@@ -321,8 +323,21 @@
   不支持
 
 ** DHCP配置
+#+begin_src c
+  #include <stdio.h>
+  
+  int main()
+  {
+      int i;
+      for (i = 0; i < 100; i++)
+          printf("hello world.\n");
+  
+      return 0;
+  }
+#+end_src
 
 * 参考
+** 参考
 - 《AR150&160&200&1200&2200&3200 产品文档》
 - Linux Manual: ntpd(8)
 - Linux Manual: ntp.conf(5)
