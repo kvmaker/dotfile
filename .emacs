@@ -273,6 +273,7 @@ Emacs buffer are those starting with “*”."
 \\usepackage{fancyvrb}
 \\usepackage{xcolor}
 \\tolerance=1000
+\\usepackage{tikz}
 \\usepackage{xeCJK}
 \\setmainfont{Times New Roman}
 \\setCJKmainfont{SimSun}
@@ -310,21 +311,24 @@ Emacs buffer are those starting with “*”."
 \\usepackage{fancyvrb}
 \\usepackage{xcolor}
 [NO-DEFAULT-PACKAGES]
-[NO-PACKAGES]
-[EXTRA]"
+[NO-PACKAGES]"
               org-beamer-sectioning))
 
 (setq org-export-latex-listings 'listings)
 (setq org-export-latex-listings-options
 	  '(
+		("frame"           "shadowbox")
 		("frameround"      "tttt")
-		("keywordstyle"    "\\color{blue!70}")
-		("commentstyle"    "\\color{red!50!green!50!blue!50}")
 		("backgroundcolor" "\\color{yellow!20}")
-		("rulesepcolor"    "\\color{red!20!green!20!blue!20}")
 		("basicstyle"      "\\footnotesize\\ttfamily")
 		("breaklines"      "true")
-		("frame"           "shadowbox")))
+		("keywordstyle"    "\\bfseries\\color{green!40!black}")
+		("commentstyle"    "\\itshape\\color{purple!40!black}")
+		("identifierstyle" "\\color{blue}")
+		("stringstyle"     "\\color{orange}")
+		("rulesepcolor"    "\\color{red!20!green!20!blue!20}")
+		))
+
 (setq org-completion-use-ido t)
 (org-babel-do-load-languages
  'org-babel-load-languages

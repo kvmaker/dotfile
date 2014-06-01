@@ -1,0 +1,13 @@
+# -*- mode: snippet -*-
+# name: beamer
+# key: beamer
+# --
+#+TITLE:     $1
+#+AUTHOR:    yubo y00186361
+#+EMAIL:     kvmaker.yubo@huawei.com
+#+DATE:      `(current-time-string)`
+#+LATEX_CLASS: cn-beamer
+#+BEAMER_FRAME_LEVEL: 2
+#+LaTeX_CLASS_OPTIONS: [xcolor=svgnames,bigger,presentation]
+#+OPTIONS: LaTeX:dvipng
+$0

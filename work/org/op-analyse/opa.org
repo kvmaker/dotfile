@@ -2,7 +2,7 @@
 #+AUTHOR:    yubo y00186361
 #+EMAIL:     kvmaker.yubo@huawei.com
 #+DATE:      2014-05-30
-#+LATEX_CLASS: cn-article
+#+LATEX_CLASS: cn-beamer
 #+BEAMER_FRAME_LEVEL: 2
 #+LaTeX_CLASS_OPTIONS: [xcolor=svgnames,bigger,presentation]
 
