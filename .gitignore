@@ -1,9 +1,5 @@
-.*/
-!.emacs.d/
-.*
 semanticdb/
 auto-save-list/
 ac-comphist.dat
 *.pdf
 *.tex
-download/

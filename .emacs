@@ -241,6 +241,24 @@ Emacs buffer are those starting with “*”."
 (define-key global-map "\C-ca" 'org-agenda)
 (setq org-log-done t)
 (put 'set-goal-column 'disabled nil)
+(setq org-ditaa-jar-path "~/.emacs.d/3rd/ditaa/ditaa0_9.jar")
+(setq org-completion-use-ido t)
+(org-babel-do-load-languages
+ 'org-babel-load-languages
+ '((R . t)										   
+   (emacs-lisp . t)
+   (matlab . t)
+   (C . t)
+   (perl . t)
+   (sh . t)
+   (ditaa . t)
+   (python . t)
+   (haskell . t)
+   (dot . t)
+   (latex . t)
+   (js . t)
+   ))
+
 (setq org-latex-to-pdf-process
 	  '("xelatex -interaction nonstopmode %f"
 		"xelatex -interaction nonstopmode %f"))
@@ -295,6 +313,7 @@ Emacs buffer are those starting with “*”."
 \\setbeamercovered{transparent}
 \\setbeamertemplate{caption}[numbered]
 \\setbeamertemplate{blocks}[rounded][shadow=true]
+\\setbeamertemplate{frametitle continuation}[from second][\\insertcontinuationcount]
 \\usetheme{Darmstadt}
 \\usepackage{tikz}
 \\usepackage{xeCJK}
@@ -311,14 +330,15 @@ Emacs buffer are those starting with “*”."
 \\usepackage{fancyvrb}
 \\usepackage{xcolor}
 [NO-DEFAULT-PACKAGES]
-[NO-PACKAGES]"
+[NO-PACKAGES]
+[EXTRA]"
               org-beamer-sectioning))
 
 (setq org-export-latex-listings 'listings)
 (setq org-export-latex-listings-options
 	  '(
-		("frame"           "shadowbox")
-		("frameround"      "tttt")
+		("frame"           "single")
+		("frameround"      "ffff")
 		("backgroundcolor" "\\color{yellow!20}")
 		("basicstyle"      "\\footnotesize\\ttfamily")
 		("breaklines"      "true")
@@ -326,25 +346,7 @@ Emacs buffer are those starting with “*”."
 		("commentstyle"    "\\itshape\\color{purple!40!black}")
 		("identifierstyle" "\\color{blue}")
 		("stringstyle"     "\\color{orange}")
-		("rulesepcolor"    "\\color{red!20!green!20!blue!20}")
 		))
-
-(setq org-completion-use-ido t)
-(org-babel-do-load-languages
- 'org-babel-load-languages
- '((R . t)
-   (emacs-lisp . t)
-   (matlab . t)
-   (C . t)
-   (perl . t)
-   (sh . t)
-   (ditaa . t)
-   (python . t)
-   (haskell . t)
-   (dot . t)
-   (latex . t)
-   (js . t)
-   ))
 
 ;; scala-mode
 (add-to-list 'load-path "~/.emacs.d/3rd/scala/")
