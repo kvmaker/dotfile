@@ -342,9 +342,9 @@ Emacs buffer are those starting with “*”."
 		("backgroundcolor" "\\color{yellow!20}")
 		("basicstyle"      "\\footnotesize\\ttfamily")
 		("breaklines"      "true")
-		("keywordstyle"    "\\bfseries\\color{green!40!black}")
-		("commentstyle"    "\\itshape\\color{purple!40!black}")
-		("identifierstyle" "\\color{blue}")
+;;		("keywordstyle"    "\\bfseries\\color{green!40!black}")
+;;		("commentstyle"    "\\itshape\\color{purple!40!black}")
+;;		("identifierstyle" "\\color{blue}")
 		("stringstyle"     "\\color{orange}")
 		))
 

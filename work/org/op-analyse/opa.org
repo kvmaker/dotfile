@@ -236,10 +236,12 @@
 - 独立的开发版本，实验性质的版本, 没有融入主分支。
 - 没有LDP支持，所以只能支持静态LSP。
 - 举例
-  #+begin_src sh
+  #+begin_src ditaa :file ./fig/mpls.png :cmdline -s 2
      +-----+    +----+   +-----+
      |LER1 |----|LSR |---|LER2 |--(10.0.0.0/24)
      +-----+    +----+   +-----+
+  #+end_src
+  #+begin_src sh
     LSR1:    
     ip link add mpls1 type mpls push 200 192.168.2.2
     ip route add 10.0.0.0/24 dev mpls1
