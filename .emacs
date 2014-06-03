@@ -166,6 +166,37 @@ Emacs buffer are those starting with “*”."
 (require 'ido)
 (ido-mode t)
 
+;; url
+(setq url-proxy-services
+   '(("no_proxy" . "^\\(localhost\\|10.*\\)")
+     ("http" . "proxy.huawei.com:8080")
+     ("https" . "proxy.huawei.com:8080")))
+
+(setq url-http-proxy-basic-auth-storage
+    (list (list "proxy.huawei.com:8080"
+                (cons "Input your LDAP UID !"
+                      (base64-encode-string "y00186361:cavendish#2014q2")))))
+
+;; encode
+;; UTF-8 settings 
+(set-language-environment 'utf-8)
+(set-terminal-coding-system 'utf-8)
+(set-keyboard-coding-system 'utf-8)
+(set-clipboard-coding-system 'utf-8) 
+(set-buffer-file-coding-system 'utf-8)
+(set-selection-coding-system 'utf-8)
+(modify-coding-system-alist 'process "*" 'utf-8)
+(setq default-process-coding-system
+	  '(utf-8 . utf-8))
+(setq default-buffer-file-coding-system 'utf-8)
+
+;; youdao translate
+(add-to-list 'load-path "~/.emacs.d/3rd/youdao.el")
+(require 'youdao)
+(setf youdao-key-from "JustDoDDD")
+(setf youdao-key "486401619")
+(global-set-key (kbd "C-c C-v") 'youdao-translate-word)
+
 ;; custom-set-variable
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
