@@ -5,7 +5,7 @@
 ;; Created:  2015/05/23                                                       ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;                            Pakcage                                         ;;
+;;                            PKG                                             ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; load path
 (add-to-list 'load-path "~/.emacs.d/my")
@@ -13,7 +13,7 @@
 
 ;; misc config
 (setq make-backup-files nil)
-(global-linum-mode t)
+;;(global-linum-mode t)
 (setq linum-format "%4d ")
 (show-paren-mode 1)
 (setq show-paren-delay 1)
@@ -38,7 +38,7 @@
 ;; fill-column
 (require 'fill-column-indicator)
 (setq-default fill-column 80)
-(add-hook 'after-change-major-mode-hook 'fci-mode)
+;;(add-hook 'after-change-major-mode-hook 'fci-mode)
 
 ;; high light current line
 (global-hl-line-mode 1)
@@ -191,7 +191,7 @@ Emacs buffer are those starting with “*”."
 (global-set-key (kbd "C-c d s") 'desktop-save-mode)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;                               Mode                                         ;;
+;;                               MODE                                         ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; C/C++-Mode
 (setq default-tab-width 4)
@@ -202,6 +202,7 @@ Emacs buffer are those starting with “*”."
 			 (setq indent-tabs-mode nil)
 			 (setq ac-sources (append '(ac-source-semantic)  ac-sources))
 			 (linum-mode t)
+			 (fci-mode t)
 			 (semantic-mode t)
 			 (semantic-idle-summary-mode)
 			 (abbrev-mode -1)))
@@ -210,7 +211,13 @@ Emacs buffer are those starting with “*”."
 		  '(lambda()
 			 (c-set-style "k&r")
 			 (setq c-basic-offset 4)
-			 (setq indent-tabs-mode nil)))
+			 (setq indent-tabs-mode nil)
+			 (setq ac-sources (append '(ac-source-semantic)  ac-sources))
+			 (linum-mode t)
+			 (fci-mode t)
+			 (semantic-mode t)
+			 (semantic-idle-summary-mode)
+			 (abbrev-mode -1)))
 
 ;; javascript mode
 (add-to-list 'auto-mode-alist '("\\.json\\'" . javascript-mode))
@@ -237,6 +244,11 @@ Emacs buffer are those starting with “*”."
 ;; org-mode
 (require 'org-install)
 (require 'org-latex)
+(global-set-key (kbd "C-TAB") 'org-table-previous-field)
+(add-hook 'org-mode-hook
+		  '(lambda ()
+			 (fci-mode t)
+			 (linum-mode t)))
 (define-key global-map "\C-cl" 'org-store-link)
 (define-key global-map "\C-ca" 'org-agenda)
 (setq org-log-done t)
@@ -355,13 +367,17 @@ Emacs buffer are those starting with “*”."
 ;; Lisp-mode
 (add-hook 'lisp-mode-hook 
 		  '(lambda()
+			 (linum-mode t)
 			 (fci-mode t)))
 (add-hook 'emacs-lisp-mode-hook 
 		  '(lambda()
+			 (linum-mode t)
 			 (fci-mode t)))
 
-(add-hook 'speedbar-mode-hook '(lambda () (linum-mode -1)))
-(add-hook 'eshell-mode-hook   '(lambda () (linum-mode -1)))
-(add-hook 'cscope-mode-hook   '(lambda () (linum-mode -1)))
+;; rfc-mode
+(setq auto-mode-alist
+	  (cons '("/rfc[0-9]+\\.txt\\(\\.gz\\)?\\'" . rfcview-mode)
+			auto-mode-alist))
+(autoload 'rfcview-mode "rfcview" nil t)
 
 (desktop-read)

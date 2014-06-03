@@ -468,6 +468,16 @@
 	 #+CAPTION: 动态DNS
 	 #+ATTR_LaTeX: width=.6\textwidth
 	 [[./fig/dns0.png]]
+  3. DDNS
+	 - RFC2136定义的DDNS更新方式：设备作为DDNS客户端，动态更新DNS服务器中域名和
+       IP地址的映射关系。
+     - 通过DDNS服务器实现的更新方式：设备作为DDNS客户端，将域名与IP地址的映射
+       关系发送给指定URL地址的DDNS服务器，然后DDNS服务器通知DNS服务器动态更新
+       域名和IP地址之间的映射关系
+	   #+CAPTION: 动态DNS
+	   #+ATTR_LaTeX: width=.6\textwidth
+       [[./fig/dns4.png]]
+	 
 - DNS Proxy/Relay工作原理
   #+CAPTION: DNS Proxy工作原理
   #+ATTR_LaTeX: width=.6\textwidth
@@ -475,10 +485,217 @@
   1. DNS Client将DNS请求报文发送给DNS Proxy，即请求报文的目的地址为DNS Proxy的IP地址。
   2. DNS Proxy收到请求报文后，首先查找本地的域名解析表，如果存在请求的信息，则DNS
   3. Proxy直接通过DNS应答报文将域名解析结果返回给DNS Client。
-  4. 如果不存在请求的信息，则DNS Proxy将报文转发给DNS Server，通过DNS Server进行域名
-	 解析。
+  4. 如果不存在请求的信息，则DNS Proxy将报文转发给DNS Server，通过DNS Server进行域名解析。
   5. DNS Proxy收到DNS Server的应答报文后，记录域名解析的结果，并将报文转发给DNS Client。
+- 应用场景
+  #+CAPTION: DNS Client场景
+  #+ATTR_LaTeX: width=.6\textwidth
+  [[./fig/dns2.png]]
+  #+CAPTION: DNS Proxy场景
+  #+ATTR_LaTeX: width=.6\textwidth
+  [[./fig/dns3.png]]
+*** 开源方案
+- nslookup
+  1. 作用：用于查询主机的IP地址
+  2. 用法
+   #+begin_src sh
+   nslookup [-option] [name | -] [server]
+   #+end_src
+   当出现如下情况时，nslookup进入交互模式，交互模式下允许用户多次查询。
+   #+begin_src sh
+yubo@u1:~/work/org/op-analyse/fig$ nslookup
+> www.baidu.com
+Server:         10.72.55.81
+Address:        10.72.55.81#53
 
+Non-authoritative answer:
+www.baidu.com   canonical name = www.a.shifen.com.
+Name:   www.a.shifen.com
+Address: 61.135.169.125
+Name:   www.a.shifen.com
+Address: 61.135.169.105
+> www.huawei.com
+Server:         10.72.55.81
+Address:        10.72.55.81#53
+
+Non-authoritative answer:
+Name:   www.huawei.com
+Address: 10.82.49.59
+#+end_src
+  3. 当没有给出参数时。
+  4. 当第一个参数是-, 第二个参数是一个主机名或IP地址。
+- /etc/resolv.conf
+  1. 作用：主机的DNS解析配置
+  2. 用法：
+   |-------------------------------------+----------------------------------------------|
+   | 选项                                | 说明                                         |
+   |-------------------------------------+----------------------------------------------|
+   | *nameserver* Name Server IP address | 服务器地址，可以配置多个，解析是顺序查找     |
+   | *domain* Local domain name          | 配置域名称                                   |
+   | *search* List for host-name         | 对于没有给出域的名称，一次使用List中的域查找 |
+   |-------------------------------------+----------------------------------------------|
+  3. 举例：
+     #+begin_src sh
+nameserver 10.72.55.81
+nameserver 10.72.255.100
+nameserver 10.98.48.39
+search huawei.com
+     #+end_src
+- /etc/hosts
+  1. 作用：配置静态解析地址
+  2. 举例：
+	 #+begin_src sh
+127.0.0.1       localhost
+127.0.1.1       u1
+10.67.226.203   u0
+
+# The following lines are desirable for IPv6 capable hosts
+::1     ip6-localhost ip6-loopback
+fe00::0 ip6-localnet
+ff00::0 ip6-mcastprefix
+ff02::1 ip6-allnodes
+ff02::2 ip6-allrouters
+	 #+end_src
+- dnsmasq
+  1. 作用：DNS缓存服务器。
+
+** NAT配置
+*** 介绍
+- 定义：
+  网络地址转换NAT（Network Address Translation）是将IP数据报报头中的IP地址
+  转换为另一个IP地址的过程。
+- 目的：
+  随着Internet的发展和网络应用的增多，IPv4地址枯竭已成为制约网络发展的瓶颈。尽管
+  IPv6可以从根本上解决IPv4地址空间不足问题，但目前众多网络设备和网络应用大多是基于
+  IPv4的，因此在IPv6广泛应用之前，一些过渡技术（如CIDR、私网地址等）的使用是解决这
+  个问题最主要的技术手段。NAT主要用于实现内部网络（简称内网，使用私有IP地址）访问
+  外部网络（简称外网，使用公有IP地址）的功能。当内网的主机要访问外网时，通过NAT技
+  术可以将其私网地址转换为公网地址，可以实现多个私网用户共用一个公网地址来访问外部
+  网络，这样既可保证网络互通，又节省了公网地址。
+- 概述：
+  1. Basic NAT
+	 #+CAPTION: Basic NAT
+	 #+ATTR_LaTeX: width=.6\textwidth
+	 [[./fig/nat0.png]]
+  2. NAPT
+	 #+CAPTION: NAPT
+	 #+ATTR_LaTeX: width=.6\textwidth
+	 [[./fig/nat1.png]]
+- NAT ALG
+  1. 说明：
+  NAT和NAPT只能对IP报文的头部地址和TCP/UDP头部的端口信息进行转换。对于一些特殊协
+  议，例如FTP等，它们报文的数据部分可能包含IP地址信息或者端口信息，这些内容不能
+  被NAT有效的转换。解决这些特殊协议的NAT转换问题的方法就是在NAT实现中使用应用层
+  网关ALG（Application Level Gateway）功能。ALG是对特定的应用层协议进行转换，在
+  对这些特定的应用层协议进行NAT转换过程中，通过NAT的状态信息来改变封装在IP报文数
+  据部分中的特定数据，最终使应用层协议可以跨越不同范围运行。
+  1. 部分需要做ALG的协议
+     |----------+--------------------------------------------------------------------------|
+     | 应用协议 | 做NAT变换的字段                                                          |
+     |----------+--------------------------------------------------------------------------|
+     | DNS      | 响应报文中的IP和Port                                                     |
+     | FTP      | - Port请求报文中载荷里的IP和Port                                         |
+     |          | - Passive响应报文中载荷里的IP和Port                                      |
+     | SIP      | - Request line                                                           |
+     |          | - From                                                                   |
+     |          | - Via                                                                    |
+     |          | - O                                                                      |
+     |          | - Message body的C字段地址和M字段的端口                                   |
+     | PPTP     | 分PPTP Client在私网还是PPTP Server在私网两种场景：                       |
+     |          | - PPTP Client在私网，PPTP Server在公网时，仅对Client-Call-ID进行端口替换 |
+     |          | - PPTP Server在私网，PPTP Client在公网时，仅对Server-Call-ID进行端口替换 |
+     | RTSP     | setup/reply OK 报文中的端口字段                                          |
+     |----------+--------------------------------------------------------------------------|
+- DNS Mapping
+  #+CAPTION: DNS Mapping
+  #+ATTR_LaTeX: width=.6\textwidth
+  [[./fig/nat2.png]]
+- NAT关联VPN
+- 两次NAT
+- NAT过滤和映射方式
+- 典型应用
+  - 私网主机访问公网
+	 #+CAPTION: 私网主机访问公网
+	 #+ATTR_LaTeX: width=.6\textwidth
+	 [[./fig/nat3.png]]
+  - 公网主机访问私网
+	 #+CAPTION: 公网主机访问私网
+	 #+ATTR_LaTeX: width=.6\textwidth
+	 [[./fig/nat4.png]]
+  - 私网主机通过域名访问公网
+	 #+CAPTION: 私网主机通过域名访问公网
+	 #+ATTR_LaTeX: width=.6\textwidth
+	 [[./fig/nat5.png]]
+  - NAT多实例
+	 #+CAPTION: NAT多实例
+	 #+ATTR_LaTeX: width=.6\textwidth
+	 [[./fig/nat6.png]]
+*** 开源方案
+- Netfilter
+  Linux内核态实现的状态防火墙，其中包括NAT功能。
+- iptables
+  用户态配置防火墙的工具。
+  - SNAT
+	#+begin_src ditaa :file fig/nat7.png
+    +-----+         +------+
+    |     |     LAN |      | WAN     
+    |A    |---------|Router|--------
+    +-----+         +------+        
+	#+end_src
+	#+begin_src sh
+    iptables -t nat -A POSTROUTING -s 10.0.0.0/24 -j SNAT --to 192.168.1.1
+	#+end_src
+  - DNAT
+	#+begin_src ditaa :file fig/nat7.png
+    +-----+              +------+
+    |     |         LAN  |      | WAN
+    |A    |--------------|Router|------  
+    +-----+              +------+                
+    10.0.0.1:8080                192.168.1.1:8080
+	#+end_src
+	#+begin_src sh
+    iptables -t nat -A PREROUTING -p tcp -d 192.168.1.1:8080 --dport 8080 -j DNAT --to 10.0.0.1:8080
+	#+end_src
+- ALG
+  Netifiler支持如下ALG
+  1. tftp
+  2. ftp
+  3. sip
+  4. h232
+  5. gre
+  6. ipsec
+  7. pptp
+  8. dccp
+  9. sctp
+** UDP Helper
+** IP性能配置
+*** 介绍
+    |------------------------------------+----------|
+    | 参数                               | 缺省配置 |
+    |------------------------------------+----------|
+    | IP源地址校验功能                   | 未使能   |
+    | 出接口IP报文强制分片功能           | 未使能   |
+    | ping快回功能                       | 使能     |
+    | 业务接口板丢弃TTL=1的ICMP报文功能  | 未使能   |
+    | 业务接口板丢弃带选项的ICMP报文功能 | 未使能   |
+    | 丢弃目的不可达ICMP报文功能         | 未使能   |
+    | SYN-Wait定时器                     | 75秒     |
+    | FIN-Wait定时器                     | 675秒    |
+    | TCP window-size                    | 8k字节   |
+    |------------------------------------+----------|
+*** 开源方案
+** IPv6基础配置
+   参考IPv4地址配置
+** DHCPv6配置
+   参考DHCP配置
+** IPv6 DNS配置
+   参考DNS配置
+** IPv6 over IPv4隧道配置
+   参考逻辑接口配置
+** IPv4 over IPv6隧道配置
+   参考逻辑接口配置
+   
+* IP单播路由配置
 * 参考
 ** 参考
 - 《AR150&160&200&1200&2200&3200 产品文档》
@@ -492,3 +709,7 @@
 - Linux-kernel-3.8/Documentation/networking/vxlan.txt
 - Linux Manual: dhclient(8)
 - Linux Manual: dhclient.conf(8)
+- Linux Manual: nskookup(8)
+- Linux Manual: resolv.conf(5)
+- Linux Manual: hosts(5)
+- Linux Manula: iptables(8)
