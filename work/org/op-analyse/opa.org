@@ -1,10 +1,9 @@
 #+TITLE:     设备分析
 #+AUTHOR:    yubo y00186361
 #+EMAIL:     kvmaker.yubo@huawei.com
-#+DATE:      2014-05-30
-#+LATEX_CLASS: cn-beamer
-#+BEAMER_FRAME_LEVEL: 2
-#+LaTeX_CLASS_OPTIONS: [xcolor=svgnames,bigger,presentation]
+#+DATE:      Tue Jun  3 10:25:57 2014
+#+LATEX_CLASS: cn-article
+#+OPTIONS: LaTeX:dvipng
 
 * 设备管理配置
 ** NTP
@@ -333,18 +332,152 @@
   不支持
 
 ** DHCP配置
-#+begin_src c
-  #include <stdio.h>
+*** 介绍
+- 定义：动态主机配置协议DHCP（Dynamic Host Configuration Protocol）是一种用于集
+  中对用户IP地址进行动态管理和配置的技术。
+- 目的：
+  1. DHCP实现了IP地址及网络配置参数的自动分配的功能。
+  2. DHCP实现了IP地址及网络配置参数的自动分配的功能。
+- 基本架构
+  #+CAPTION: DHCP基本架构
+  #+ATTR_LATEX: width=.6\textwidth
+  [[./fig/dhcp0.png]]
+  1. DHCP Client：DHCP客户端，通过与DHCP服务器进行报文交互，获取IP地址和其他网络
+	 配置信息，完成自身的地址配置。在设备接口上配置DHCP Client功能，这样接口可以作为
+	 DHCP Client，使用DHCP协议从DHCP Server动态获得IP地址等参数，方便用户配置，
+	 也便于集中管理。
+  2. DHCP Relay：DHCP中继，负责转发来自客户端方向或服务器方向的DHCP报文，协助
+	 DHCP客户端和DHCP服务器完成地址配置功能。如果DHCP服务器和DHCP客户端不在同一
+     个网段范围内，则需要通过DHCP中继来转发报文，这样可以避免在每个网段范围内都
+	 部署DHCP服务器，既节省了成本，又便于进行集中管理。在DHCP基本协议架构中，
+	 DHCP中继不是必须的角色。只有当DHCP客户端和DHCP服务器不在同一网段内，
+	 才需要DHCP中继进行报文的转发。
+  3. DHCP Server：DHCP服务器，负责处理来自客户端或中继的地址分配、地址续租、
+	 地址释放等请求，为客户端分配IP地址和其他网络配置信息。
+- 应用场景
+  #+CAPTION: DHCP Server的典型组网应用
+  #+ATTR_LATEX: width=.6\textwidth
+  [[./fig/dhcp1.png]]
+
+  #+CAPTION: DHCP Relay的典型组网应
+  #+ATTR_LATEX: width=.6\textwidth
+  [[./fig/dhcp2.png]]
+
+  #+CAPTION: DHCP/BOOTP Client的典型组网应用
+  #+ATTR_LATEX: width=.6\textwidth
+  [[./fig/dhcp3.png]]
+
+*** 开源方案
+- http://www.isc.org/downloads/dhcp/
+- dhclent
+  1. 操作：启动时通过制定-4或-6来开启DHCPv4或DHCPv6。通过读取dhclient.conf
+	 获取到需要启动dhcp clent的接口和参数。使用dhclient.lease来跟踪获取到的
+	 IP地址。
+  2. 命令行：当命令行没有指定接口名称，dhclient.conf中也没有指定是，dhclient
+	 默认工作在所有接口上。
+  3. 选项：
+     |-----------------+------------------------------------------|
+     | 选项            | 说明                                     |
+     |-----------------+------------------------------------------|
+     | -4              | 使用DHCPv4协议                           |
+     | -6              | 使用DHCPv6协议                           |
+     | -l              | 强制获取一次租期，如果失败返回2          |
+     | -d              | 运行在前台                               |
+     | -nw             | 成为一个daemon                           |
+     | -q              | 静默模式，不输出任何信息。默认选项       |
+     | -v              | 输出信息                                 |
+     | -w              | 即使没有找到广播接口，也继续运行         |
+     | -n              | 不要配置任务接口，与-w一起使用           |
+     | -e              | 自定义环境变量                           |
+     | -r              | 释放当前地址                             |
+     | -x              | 退出dhcp clent                           |
+     | -p port         | 使用udp端口port，默认使用68              |
+     | -s server       | 指定DHCP Server地址                      |
+     | -g relay        | 指定DHCP Realy地址                       |
+     | --version       | 输出版本信息                             |
+     | -cf confgi-file | 指定配置文件                             |
+     | -lf lease-file  | 指定lease文件                            |
+     | -pf pid-file    | 指定pid记录文件                          |
+     | --no-pid        | 没有pid记录文件                          |
+     | -sf script-file | 指定获取到租期后执行的脚本文件。默认使用 |
+     |                 | BINDDIR/dhclient-script                  |
+     |-----------------+------------------------------------------|
+  4. dhclient.conf
+     |----------------------------+----------------------------------------|
+     | 选项                       | 说明                                   |
+     |----------------------------+----------------------------------------|
+     | *timout* _time_            | 设定超时时间。                         |
+     | *retry* _time_             | 设定没有服务器时的重试次数。           |
+     | *select-time* _time_       | 设定select时间。                       |
+     | *reboot* _time_            | 设定reboot时间。                       |
+     | *initital-interval* _time_ | 设定初始化间隔。                       |
+     | *request* _option_ [, ...] | 设定客户端需要请求的option。           |
+     | *require* _option_ [, ...] | 设定客户端需要请求的option，如果其中有 |
+     |                            | option没有在offer中，则忽略此offer。   |
+     | *send* _option_            | 设定客户端发送给服务器的option。       |
+     |----------------------------+----------------------------------------|
+	 #+begin_src sh
+       timeout 300;
+       retry 60;
+       reboot 10;
+       select-timeout 5;
+       initial-interval 2;
+       reject 192.33.137.209;
+
+       interface "ep0" {
+           send host-name "andare.fugue.com";
+           send dhcp-client-identifier 1:0:a0:24:ab:fb:9c;
+           send dhcp-lease-time 3600;
+           supersede domain-search "fugue.com", "rc.vix.com", "home.vix.com";
+           prepend domain-name-servers 127.0.0.1;
+           request subnet-mask, broadcast-address, time-offset, routers,
+                domain-name, domain-name-servers, host-name;
+           require subnet-mask, domain-name-servers;
+           script "CLIENTBINDIR/dhclient-script";
+           media "media 10baseT/UTP", "media 10base2/BNC";
+       }
+
+       alias {
+         interface "ep0";
+         fixed-address 192.5.5.213;
+         option subnet-mask 255.255.255.255;
+       }
+	 #+end_src
+- dhcpd
+- dhrelay
   
-  int main()
-  {
-      int i;
-      for (i = 0; i < 100; i++)
-          printf("hello world.\n");
-  
-      return 0;
-  }
-#+end_src
+** DNS配置
+*** 介绍
+- 定义：
+  域名系统DNS（Domain Name System）是一种用于TCP/IP应用程序的分布式数据库，
+  提供域名与IP地址之间的转换服务。
+- 作用：
+  网络中的每台主机都是由IP地址来标识的，用户只有获得待访问主机的IP地址才能够
+  成功实现访问操作。对于用户来讲，记住主机的IP地址是相当困难的，因此设计了一
+  种字符串形式的主机命名机制，这些主机名与IP地址一一对应，这就是域名系统。域
+  名系统解决了IP地址信息不便于记忆这一问题。用户进行访问网络主机操作时，可以
+  直接使用便于记忆的、有意义的域名，由网络中的域名解析服务器将域名解析为正确
+  的IP地址。
+- 工作原理：
+  DNS域名解析分为静态域名解析和动态域名解析，二者可以配合使用。在解析域名时，首
+  先采用静态域名解析（查找静态域名解析表），如果静态域名解析不成功，再采用动态域
+  名解析。由于动态域名解析可能会花费一定的时间，且需要域名服务器的配合，因而可以
+  将一些常用的域名放入静态域名解析表中，这样可以大大提高域名解析效率。
+  1. 静态DNS
+  2. 动态DNS
+	 #+CAPTION: 动态DNS
+	 #+ATTR_LaTeX: width=.6\textwidth
+	 [[./fig/dns0.png]]
+- DNS Proxy/Relay工作原理
+  #+CAPTION: DNS Proxy工作原理
+  #+ATTR_LaTeX: width=.6\textwidth
+  [[./fig/dns1.png]]
+  1. DNS Client将DNS请求报文发送给DNS Proxy，即请求报文的目的地址为DNS Proxy的IP地址。
+  2. DNS Proxy收到请求报文后，首先查找本地的域名解析表，如果存在请求的信息，则DNS
+  3. Proxy直接通过DNS应答报文将域名解析结果返回给DNS Client。
+  4. 如果不存在请求的信息，则DNS Proxy将报文转发给DNS Server，通过DNS Server进行域名
+	 解析。
+  5. DNS Proxy收到DNS Server的应答报文后，记录域名解析的结果，并将报文转发给DNS Client。
 
 * 参考
 ** 参考
@@ -357,3 +490,5 @@
 - Linux-kernel-3.8/Documentation/networking/generic-ppp.txt
 - Linux-kernel-3.8/Documentation/networking/generic-hdlc.txt
 - Linux-kernel-3.8/Documentation/networking/vxlan.txt
+- Linux Manual: dhclient(8)
+- Linux Manual: dhclient.conf(8)
