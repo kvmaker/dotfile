@@ -191,11 +191,10 @@ Emacs buffer are those starting with “*”."
 (setq default-buffer-file-coding-system 'utf-8)
 
 ;; youdao translate
-(add-to-list 'load-path "~/.emacs.d/3rd/youdao.el")
 (require 'youdao)
-(setf youdao-key-from "JustDoDDD")
-(setf youdao-key "486401619")
-(global-set-key (kbd "C-c C-v") 'youdao-translate-word)
+(setf keyfrom "JustDoDDD")
+(setf key     "486401619")
+(global-set-key (kbd "C-c C-v") 'translate)
 
 ;; custom-set-variable
 (custom-set-variables
