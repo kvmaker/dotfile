@@ -194,7 +194,7 @@ Emacs buffer are those starting with “*”."
 (require 'youdao)
 (setf keyfrom "JustDoDDD")
 (setf key     "486401619")
-(global-set-key (kbd "C-c C-t") 'translate)
+(global-set-key (kbd "C-c t t") 'translate)
 
 ;; custom-set-variable
 (custom-set-variables

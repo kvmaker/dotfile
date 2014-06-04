@@ -1,8 +1,10 @@
 #+TITLE:     设备分析
 #+AUTHOR:    yubo y00186361
 #+EMAIL:     kvmaker.yubo@huawei.com
-#+DATE:      Tue Jun  3 10:25:57 2014
+#+DATE:      Wed Jun  4 13:58:03 2014
 #+LATEX_CLASS: cn-article
+#+BEAMER_FRAME_LEVEL: 2
+#+LaTeX_CLASS_OPTIONS: [xcolor=svgnames,bigger,presentation]
 #+OPTIONS: LaTeX:dvipng
 
 * 设备管理配置
@@ -235,13 +237,17 @@
 - 独立的开发版本，实验性质的版本, 没有融入主分支。
 - 没有LDP支持，所以只能支持静态LSP。
 - 举例
-  #+begin_src ditaa :file ./fig/mpls.png :cmdline -s 2
-     +-----+    +----+   +-----+
-     |LER1 |----|LSR |---|LER2 |--(10.0.0.0/24)
-     +-----+    +----+   +-----+
+  #+begin_src ditaa :file ./temp/mpls.png
+    +--------+             +---------+             +---------+
+    |        |             |         |             |         |
+    | LER1   |  192.168.2.2|  LSR    |  192.168.3.3|  LER2   | 10.0.0.0/24
+----+        +-------------+         +-------------+         +------------
+    |        |    [200]    |         |    [300]    |         |           
+    +--------+             +---------+             +---------+
   #+end_src
+  
   #+begin_src sh
-    LSR1:    
+    LER1:    
     ip link add mpls1 type mpls push 200 192.168.2.2
     ip route add 10.0.0.0/24 dev mpls1
     LSR:
@@ -252,8 +258,81 @@
 
 * 以太网交换配置
 * 广域网互联
+** DCC
+- 定义：
+  拨号控制中心DCC（Dial Control Center）是指路由器之间通过ISDN网络、3G网络等进行
+  互联时或者路由器作为PPPoE/PPPoEoA/PPPoA Client与PPPoE/PPPoEoA/PPPoA Server之间
+  互联时所采用的技术，DCC主要提供按需拨号服务。
+- 目的：
+  由于某些场合下，路由器之间仅在有数据需要传送时才建立连接并通信，传送的信息具有
+  时间不相关性、突发性、总体数据量小等特点，DCC为此种应用提供了灵活、经济、高效
+  的解决方案。
+  实际应用中，DCC主要应用于以下两种场景：
+  1. 以备份形式为干线通讯提供保障，在干线因为线路或其它原因出现故障而不能正常
+     通信时，提供替代的辅助通路，确保业务正常进行。
+  2. 当路由器作为PPPoE/PPPoEoA/PPPoA Client时，DCC通过按需拨号的功能，
+	 为用户节省费用。
+- 受益：DCC特性给企业用户带来了如下的受益。
+  1. 费用的节省：路由器之间不预先建立连接，当它们之间有数据需要传送时才以拨号的方式建
+	 立连接，当连接再次空闲，DCC会切断当前的连接，以节省用户的费用。
+  2. 通讯保障：DCC作为干线备份为用户提供了通讯保障，在干线因为线路或其它原因出现故障
+	 而不能正常通信时，提供替代的辅助通路，确保业务正常进行运转。
+  3. 灵活的部属：共享DCC可以使物理接口根据连接选择不同的工作参数，从而实现一口多用。
+- 应用场景
+  1. 通过接口备份实现主干线路通信备份
+	 #+CAPTION: DCC备份线路
+	 #+ATTR_LaTeX: width=.6\textwidth
+	 [[./fig/dcc0.png]]
+  2. 当路由器作为PPPoE/PPPoEoA/PPPoA Client时，DCC通过按需拨号的功能，为用户节省
+     费用
+	 #+CAPTION: DCC按需拨号
+	 #+ATTR_LaTeX: width=.6\textwidth
+	 [[./fig/dcc1.png]]
+- 开源方案
+  无
+
+** PPP
+*** 介绍
+- 定义：
+  PPP（Point-to-Point Protocol）协议是一种点到点链路层协议，主要用于在全双工的同
+  异步链路上进行点到点的数据传输。
+- 优点
+  1. 对物理层而言，PPP既支持同步链路又支持异步链路，而X.25、FR（Frame Relay）等
+	 数据链路层协议仅支持同步链路，SLIP仅支持异步链路。
+  2. PPP协议具有良好的扩展性，例如，当需要在以太网链路上承载PPP协议时，PPP可以
+	 扩展为PPPoE。
+  3. 提供LCP（Link Control Protocol）协议，用于各种链路层参数的协商。
+  4. 提供各种NCP（Network Control Protocol）协议（如IPCP、IPXCP），用于各网络层
+	 参数的协商，更好地支持了网络层协议。
+  5. 提供认证协议CHAP（Challenge-Handshake Authentication Protocol）、
+	 PAP（Password Authentication Protocol），更好的保证了网络的安全性。
+  6. 无重传机制，网络开销小，速度快。
+- 建链过程：
+  #+CAPTION: PPP建链过程
+  #+begin_src ditaa :file temp/ppp0.png
+    +----------+          +-------------+        +---------------+
+    |          |    UP    |             | OPENED |               |       
+    | Dead     +--------->| Establish   +------->| Authenticate  +-------+
+    +----------+          +-----+-------+        +------+--------+       |
+         ^                      |                       |                |
+         |       FAIL           |                       |                |
+         |<---------------------+            FAIL       |            SUCC|
+         |                            +-----------------+                |
+         |                            |                                  |
+         |     +--------------+       |      +----------------+          |
+         |     |              |       v      |                |          |
+         +-----+ Terminate    |<-------------+ Netowrk        |<---------+
+         DOWN  +--------------+   CLOSING    +----------------+
+  #+end_src
+- 应用场景
+  #+CAPTION: PPP应用场景
+  #+ATTR_LaTeX: width=.6\textwidth
+  [[./fig/ppp0.png]]
+
+*** 开源方案
+	
 * IP业务
-** IPv4地址配置
+** IPv4基础
 *** 介绍
 - IPv4（Internet Protocol Version 4）协议族是TCP/IP协议族中最为核心的协议族。它工
   作在TCP/IP协议栈的网络层，该层与OSI参考模型的网络层相对应。网络层提供了无连接数
@@ -268,7 +347,7 @@
   #+begin_src sh
   ip -4 addr add 192.168.0.100/24 dev eth0
   #+end_src
-** ARP配置
+** ARP
 *** 介绍
 - 定义
   - 地址解析协议ARP（Address Resolution Protocol）是用来将IP地址解析为MAC地址的
@@ -309,18 +388,17 @@
 - ARP-Ping
   - ARP-Ping IP
   - ARP-Ping MAC
-
 *** 开源方案
 - 动态ARP
 - 静态ARP
   #+begin_src sh
-  # 添加ARP表项
+  # 添加表项
   ip -4 neigh add 192.168.1.1 00:00:00:00:00:01 dev eth0
 
-  # 删除ARP表项
+  # 删除表项
   ip -4 neigh del 192.168.1.1 00:00:00:00:00:01 dev eth0
 
-  # 查看ARP表项
+  # 查看表项
   ip -4 neigh show
   #+end_src
 - ARP-Proxy
@@ -331,7 +409,7 @@
 - ARP-Ping MAC
   不支持
 
-** DHCP配置
+** DHCP
 *** 介绍
 - 定义：动态主机配置协议DHCP（Dynamic Host Configuration Protocol）是一种用于集
   中对用户IP地址进行动态管理和配置的技术。
@@ -446,7 +524,7 @@
 - dhcpd
 - dhrelay
   
-** DNS配置
+** DNS
 *** 介绍
 - 定义：
   域名系统DNS（Domain Name System）是一种用于TCP/IP应用程序的分布式数据库，
@@ -477,7 +555,6 @@
 	   #+CAPTION: 动态DNS
 	   #+ATTR_LaTeX: width=.6\textwidth
        [[./fig/dns4.png]]
-	 
 - DNS Proxy/Relay工作原理
   #+CAPTION: DNS Proxy工作原理
   #+ATTR_LaTeX: width=.6\textwidth
@@ -559,7 +636,7 @@ ff02::2 ip6-allrouters
 - dnsmasq
   1. 作用：DNS缓存服务器。
 
-** NAT配置
+** NAT
 *** 介绍
 - 定义：
   网络地址转换NAT（Network Address Translation）是将IP数据报报头中的IP地址
@@ -590,22 +667,24 @@ ff02::2 ip6-allrouters
   对这些特定的应用层协议进行NAT转换过程中，通过NAT的状态信息来改变封装在IP报文数
   据部分中的特定数据，最终使应用层协议可以跨越不同范围运行。
   1. 部分需要做ALG的协议
-     |----------+--------------------------------------------------------------------------|
-     | 应用协议 | 做NAT变换的字段                                                          |
-     |----------+--------------------------------------------------------------------------|
-     | DNS      | 响应报文中的IP和Port                                                     |
-     | FTP      | - Port请求报文中载荷里的IP和Port                                         |
-     |          | - Passive响应报文中载荷里的IP和Port                                      |
-     | SIP      | - Request line                                                           |
-     |          | - From                                                                   |
-     |          | - Via                                                                    |
-     |          | - O                                                                      |
-     |          | - Message body的C字段地址和M字段的端口                                   |
-     | PPTP     | 分PPTP Client在私网还是PPTP Server在私网两种场景：                       |
-     |          | - PPTP Client在私网，PPTP Server在公网时，仅对Client-Call-ID进行端口替换 |
-     |          | - PPTP Server在私网，PPTP Client在公网时，仅对Server-Call-ID进行端口替换 |
-     | RTSP     | setup/reply OK 报文中的端口字段                                          |
-     |----------+--------------------------------------------------------------------------|
+     |----------+----------------------------------------------------|
+     | 应用协议 | 做NAT变换的字段                                    |
+     |----------+----------------------------------------------------|
+     | DNS      | 响应报文中的IP和Port                               |
+     | FTP      | - Port请求报文中载荷里的IP和Port                   |
+     |          | - Passive响应报文中载荷里的IP和Port                |
+     | SIP      | - Request line                                     |
+     |          | - From                                             |
+     |          | - Via                                              |
+     |          | - O                                                |
+     |          | - Message body的C字段地址和M字段的端口             |
+     | PPTP     | 分PPTP Client在私网还是PPTP Server在私网两种场景： |
+     |          | - PPTP Client在私网，PPTP Server在公网时，         |
+     |          |   仅对Client-Call-ID进行端口替换                   |
+     |          | - PPTP Server在私网，PPTP Client在公网时，         |
+     |          |   仅对Server-Call-ID进行端口替换                   |
+     | RTSP     | setup/reply OK 报文中的端口字段                    |
+     |----------+----------------------------------------------------|
 - DNS Mapping
   #+CAPTION: DNS Mapping
   #+ATTR_LaTeX: width=.6\textwidth
@@ -615,60 +694,57 @@ ff02::2 ip6-allrouters
 - NAT过滤和映射方式
 - 典型应用
   - 私网主机访问公网
-	 #+CAPTION: 私网主机访问公网
-	 #+ATTR_LaTeX: width=.6\textwidth
-	 [[./fig/nat3.png]]
+	#+CAPTION: 私网主机访问公网
+	#+ATTR_LaTeX: width=.6\textwidth
+	[[./fig/nat3.png]]
   - 公网主机访问私网
-	 #+CAPTION: 公网主机访问私网
-	 #+ATTR_LaTeX: width=.6\textwidth
-	 [[./fig/nat4.png]]
+	#+CAPTION: 公网主机访问私网
+	#+ATTR_LaTeX: width=.6\textwidth
+	[[./fig/nat4.png]]
   - 私网主机通过域名访问公网
-	 #+CAPTION: 私网主机通过域名访问公网
-	 #+ATTR_LaTeX: width=.6\textwidth
-	 [[./fig/nat5.png]]
+	#+CAPTION: 私网主机通过域名访问公网
+	#+ATTR_LaTeX: width=.6\textwidth
+	[[./fig/nat5.png]]
   - NAT多实例
-	 #+CAPTION: NAT多实例
-	 #+ATTR_LaTeX: width=.6\textwidth
-	 [[./fig/nat6.png]]
+	#+CAPTION: NAT多实例
+	#+ATTR_LaTeX: width=.6\textwidth
+	[[./fig/nat6.png]]
 *** 开源方案
 - Netfilter
   Linux内核态实现的状态防火墙，其中包括NAT功能。
 - iptables
   用户态配置防火墙的工具。
   - SNAT
-	#+begin_src ditaa :file fig/nat7.png
-    +-----+         +------+
-    |     |     LAN |      | WAN     
-    |A    |---------|Router|--------
-    +-----+         +------+        
+	#+CAPTION: SNAT
+	#+ATTR_LaTeX: width = .6\textwidth
+	#+begin_src ditaa :file temp/nat7.png
+  +-----+              +------+
+  |     |     LAN      |      | WAN
+  |Host +------------->|Router+------>
+  +-----+  10.0.0.0/24 +------+ 192.168.1.1                
+  10.0.0.1             
 	#+end_src
 	#+begin_src sh
     iptables -t nat -A POSTROUTING -s 10.0.0.0/24 -j SNAT --to 192.168.1.1
 	#+end_src
   - DNAT
-	#+begin_src ditaa :file fig/nat7.png
-    +-----+              +------+
-    |     |         LAN  |      | WAN
-    |A    |--------------|Router|------  
-    +-----+              +------+                
-    10.0.0.1:8080                192.168.1.1:8080
+	#+CAPTION: DNAT
+	#+ATTR_LaTeX: width=.6\textwidth
+	#+begin_src ditaa :file temp/nat8.png
+  +-----+              +------+
+  |     |      LAN     |      | WAN
+  |Host |<-------------+Router|<-----
+  +-----+  10.0.0.0/24 +------+ 192.168.1.1:8080
+  10.0.0.1:8080                
 	#+end_src
 	#+begin_src sh
     iptables -t nat -A PREROUTING -p tcp -d 192.168.1.1:8080 --dport 8080 -j DNAT --to 10.0.0.1:8080
 	#+end_src
 - ALG
-  Netifiler支持如下ALG
-  1. tftp
-  2. ftp
-  3. sip
-  4. h232
-  5. gre
-  6. ipsec
-  7. pptp
-  8. dccp
-  9. sctp
-** UDP Helper
-** IP性能配置
+  - Netifiler的ALG: tftp, ftp, sip, h232, gre, ipsec, pptp, dccp, sctp
+
+** TODO UDP Helper
+** IP性能
 *** 介绍
     |------------------------------------+----------|
     | 参数                               | 缺省配置 |
@@ -684,20 +760,32 @@ ff02::2 ip6-allrouters
     | TCP window-size                    | 8k字节   |
     |------------------------------------+----------|
 *** 开源方案
-** IPv6基础配置
+** IPv6基础
    参考IPv4地址配置
-** DHCPv6配置
+** DHCPv6
    参考DHCP配置
-** IPv6 DNS配置
+** IPv6 DNS
    参考DNS配置
-** IPv6 over IPv4隧道配置
+** IPv6 over IPv4隧道
    参考逻辑接口配置
-** IPv4 over IPv6隧道配置
+** IPv4 over IPv6隧道
    参考逻辑接口配置
    
-* IP单播路由配置
+* TODO IP单播路由配置
+* TODO IP组播配置
+* TODO MPLS配置
+* TODO VPN配置
+* TODO WLAN-FAT AP配置
+* TODO WLAN-AC配置
+* TODO 语音配置
+* TODO 可靠性配置
+* TODO 安全配置
+* TODO QoS配置
+* TODO 网络管理和监控
+* TODO 设备虚拟化
+* TODO 数据中心特性
+* TODO Smart Link & Monitor Link
 * 参考
-** 参考
 - 《AR150&160&200&1200&2200&3200 产品文档》
 - Linux Manual: ntpd(8)
 - Linux Manual: ntp.conf(5)
@@ -712,4 +800,6 @@ ff02::2 ip6-allrouters
 - Linux Manual: nskookup(8)
 - Linux Manual: resolv.conf(5)
 - Linux Manual: hosts(5)
-- Linux Manula: iptables(8)
+- Linux Manual: dnsmasq(8)
+- Linux Manual: iptables(8)
+- Linux Manual: pppd(8)
