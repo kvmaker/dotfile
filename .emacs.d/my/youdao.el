@@ -68,6 +68,10 @@
 
 (defun translate ()
   (interactive)
-  (popup-tip (translate1 (translate0 (get-current-word)))))
+  (let ((word (get-current-word)))
+	(popup-tip 
+	 (concat word
+			 "\n"
+			 (translate1 (translate0 word))))))
 
 (provide 'youdao)

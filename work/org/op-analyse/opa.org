@@ -131,16 +131,6 @@
   3. 时隙16被作为D信道来传输信令
   4. 其它时隙与16好组合作为ISDN PRI使用
   5. 支持PPP, HDLC, FR
-** 其它
-- CT1/PRI：T1系统的物理接口
-- CE3: E3系统的物理接口
-- E1-F: 简化版的CE1/PRI接口
-- T1-F: 简化版的TE1/PRI接口
-- ISDN BRI
-- POS
-- CPOS
-- ADSL
-- VDSL
 ** 3G
 - 使用数据卡
 - 标准(WCDMA, CDMA2000)
@@ -161,6 +151,17 @@
 ** PON
 - 光模块参数
 - 认证(MAC, SN, LLID...)
+
+** 其它
+- CT1/PRI：T1系统的物理接口
+- CE3: E3系统的物理接口
+- E1-F: 简化版的CE1/PRI接口
+- T1-F: 简化版的TE1/PRI接口
+- ISDN BRI
+- POS
+- CPOS
+- ADSL
+- VDSL
 
 ** 逻辑接口
 *** PPP（链路协议，L2TP, PPTP VPN）
@@ -259,6 +260,7 @@
 * 以太网交换配置
 * 广域网互联
 ** DCC
+*** 介绍
 - 定义：
   拨号控制中心DCC（Dial Control Center）是指路由器之间通过ISDN网络、3G网络等进行
   互联时或者路由器作为PPPoE/PPPoEoA/PPPoA Client与PPPoE/PPPoEoA/PPPoA Server之间
@@ -290,6 +292,13 @@
 	 [[./fig/dcc1.png]]
 - 开源方案
   无
+
+*** 开源方案
+- pppd
+  #+begin_src sh
+  # 设置ppp连接如果多长时间没有数据后，自动断开。
+  pppd idle n
+  #+end_src
 
 ** PPP
 *** 介绍
@@ -330,7 +339,33 @@
   [[./fig/ppp0.png]]
 
 *** 开源方案
-	
+- pppd
+  1. 介绍：
+	 pppd配合Linux内核的ppp驱动完成，ppp链路的建立，维护PPP链路。
+	 #+begin_src sh
+     pppd [ options ]
+	 #+end_src
+  2. 选项
+     |-----------------------+------------------------------------------|
+     | 选项                  | 说明                                     |
+     |-----------------------+------------------------------------------|
+     | _ttyname_             | 使用串口设备与对端通讯                   |
+     | _speed_               | 串口设备的速率                           |
+     | _asyncmp_             | 使用异步设备的时候，设置其不使用的控制字 |
+     | *auth*                | 使用认证                                 |
+     | call _name_           | 从/etc/ppp/peer/ _name_ 读取options      |
+     | *connect* _script_    | 建立PPP链接前，运行 _script_ 脚本        |
+     | *defaultroute*        | 建立连接后，增加一条默认路由             |
+     | *disconnect* _script_ | 端口PPP链接后，运行 _script_ 脚本        |
+     | *escape* _xx,yy,..._  | 传输时需要忽略的字符                     |
+     | *file* _name_         | 从文件 _name_ 获取options                |
+     | *init* _script_       | 执行 _script_ 脚本去配置串口             |
+     | lock                  | 创建一个lock文件来锁定串口               |
+     | mru _n_               | 设置LCP协商的mru                         |
+     | mtu _n_               | 设置LCP协商的mtu                         |
+     |                       |                                          |
+  
+- rp-pppoe	
 * IP业务
 ** IPv4基础
 *** 介绍

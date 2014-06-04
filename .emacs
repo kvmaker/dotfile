@@ -343,6 +343,7 @@ Emacs buffer are those starting with “*”."
 \\setCJKsansfont{SimHei}
 \\setCJKmonofont{FangSong}
 \\tolerance=1000
+\\renewcommand{\\figurename}{图}
 [NO-DEFAULT-PACKAGES]
 [NO-PACKAGES]"
 			  ("\\section{%s}" . "\\section*{%s}")
@@ -374,6 +375,7 @@ Emacs buffer are those starting with “*”."
 \\usepackage{listings}
 \\usepackage{fancyvrb}
 \\usepackage{xcolor}
+\\renewcommand{\\figurename}{图}
 [NO-DEFAULT-PACKAGES]
 [NO-PACKAGES]
 [EXTRA]"
