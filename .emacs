@@ -166,17 +166,6 @@ Emacs buffer are those starting with “*”."
 (require 'ido)
 (ido-mode t)
 
-;; url
-(setq url-proxy-services
-   '(("no_proxy" . "^\\(localhost\\|10.*\\)")
-     ("http" . "proxy.huawei.com:8080")
-     ("https" . "proxy.huawei.com:8080")))
-
-(setq url-http-proxy-basic-auth-storage
-    (list (list "proxy.huawei.com:8080"
-                (cons "Input your LDAP UID !"
-                      (base64-encode-string "y00186361:cavendish#2014q2")))))
-
 ;; encode
 ;; UTF-8 settings 
 (set-language-environment 'utf-8)
@@ -190,11 +179,22 @@ Emacs buffer are those starting with “*”."
 	  '(utf-8 . utf-8))
 (setq default-buffer-file-coding-system 'utf-8)
 
+;; url proxy
+(setq url-proxy-services
+	  '(("no_proxy" . "^\\(localhost\\|10.*\\)")
+		("http" . "proxy.huawei.com:8080")
+		("https" . "proxy.huawei.com:8080")))
+
+(setq url-http-proxy-basic-auth-storage
+	  (list (list "proxy.huawei.com:8080"
+				  (cons "Input your LDAP UID !"
+						(base64-encode-string "y00186361:cavendish#2014q2")))))
+
 ;; youdao translate
 (require 'youdao)
 (setf keyfrom "JustDoDDD")
 (setf key     "486401619")
-(global-set-key (kbd "C-c C-v") 'translate)
+(global-set-key (kbd "C-c C-t") 'translate)
 
 ;; custom-set-variable
 (custom-set-variables
@@ -206,7 +206,10 @@ Emacs buffer are those starting with “*”."
  '(org-beamer-frame-default-options "[allowframebreaks=0.8]")
  '(semantic-c-dependency-system-include-path (quote ("/usr/include" ".")))
  '(session-use-package t nil (session))
- '(uniquify-buffer-name-style (quote forward) nil (uniquify)))
+ '(uniquify-buffer-name-style (quote forward) nil (uniquify))
+ '(url-cookie-file "/home/yubo/.emacs.d/url/cookies")
+ '(url-history-file "/home/yubo/.emacs.d/url/history")
+ '(url-show-status nil))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
