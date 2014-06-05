@@ -258,6 +258,41 @@
   #+end_src
 
 * 以太网交换配置
+** MAC表
+*** 介绍
+- MAC地址表
+  1. 基于MAC地址转发
+  2. MAC地址表分类：
+	 - 动态地址表
+     - 静态地址表
+     - 黑洞表项
+- 关闭学习MAC能力，限制MAC地址数
+  由于MAC表的容量是有限的，当黑客伪造大量源MAC地址不同的报文并发送到设备后，设备
+  上的MAC地址表项资源可能会被耗尽。此时即使它收到正常的报文，也无法学习到报文中
+  的源MAC地。
+  1. 基于VLAN或接口关闭学习MAC能力。
+  2. 基于VLAN或接口进行MAC地址数限制。
+- 端口安全
+  端口安全（Port Security）功能将设备接口学习到的MAC地址变为安全MAC地址（包括安
+  全动态MAC和Sticky MAC），可以阻止除安全MAC和静态MAC之外的主机通过本接口和设备
+  通信，从而增强设备安全性。
+  1. 安全动态MAC地址：使能端口安全而未使能Sticky MAC功能时学习到的MAC地址。缺省情况
+     下，安全动态MAC地址不会被老化，设备重启后安全动态MAC地址会丢失，需要重新学习。
+  2. Sticky MAC地址：使能端口安全后又使能Sticky MAC功能后学习到的MAC地址。Sticky MAC
+	 地址不会被老化，保存配置后重启设备，Sticky MAC地址不会丢失，无需重新学习。
+- MAC地址漂移
+  #+CAPTION: MAC地址漂移
+  #+ATTR_LaTeX: widht=.6\textwidth
+  [[./fig/mac_table.png]]
+  若SwitchB和SwitchC之间误接网线，则Router、SwitchB、SwitchC之间形成环路。当
+  SwitchA上Port1接口从网络中收到一个广播报文后转发给Router，该报文经过环路，会被
+  SwitchA上Port2接口收到。在接口Port2上配置MAC地址漂移检测，此时SwitchA会感知到
+  MAC地址学习接口跳变的现象。若连续出现此现象，则在SwitchA上可以判断出现了MAC地
+  址漂移。
+
+** 以太网链路聚合
+*** 介绍
+
 * 广域网互联
 ** DCC
 *** 介绍
@@ -337,7 +372,6 @@
   #+CAPTION: PPP应用场景
   #+ATTR_LaTeX: width=.6\textwidth
   [[./fig/ppp0.png]]
-
 *** 开源方案
 - pppd
   1. 介绍：
@@ -346,26 +380,89 @@
      pppd [ options ]
 	 #+end_src
   2. 选项
-     |-----------------------+------------------------------------------|
-     | 选项                  | 说明                                     |
-     |-----------------------+------------------------------------------|
-     | _ttyname_             | 使用串口设备与对端通讯                   |
-     | _speed_               | 串口设备的速率                           |
-     | _asyncmp_             | 使用异步设备的时候，设置其不使用的控制字 |
-     | *auth*                | 使用认证                                 |
-     | call _name_           | 从/etc/ppp/peer/ _name_ 读取options      |
-     | *connect* _script_    | 建立PPP链接前，运行 _script_ 脚本        |
-     | *defaultroute*        | 建立连接后，增加一条默认路由             |
-     | *disconnect* _script_ | 端口PPP链接后，运行 _script_ 脚本        |
-     | *escape* _xx,yy,..._  | 传输时需要忽略的字符                     |
-     | *file* _name_         | 从文件 _name_ 获取options                |
-     | *init* _script_       | 执行 _script_ 脚本去配置串口             |
-     | lock                  | 创建一个lock文件来锁定串口               |
-     | mru _n_               | 设置LCP协商的mru                         |
-     | mtu _n_               | 设置LCP协商的mtu                         |
-     |                       |                                          |
-  
-- rp-pppoe	
+     |--------------------------+------------------------------------------|
+     | 选项                     | 说明                                     |
+     |--------------------------+------------------------------------------|
+     | _ttyname_                | 使用串口设备与对端通讯                   |
+     | _speed_                  | 串口设备的速率                           |
+     | _asyncmp_                | 使用异步设备的时候，设置其不使用的控制字 |
+     | *auth*                   | 使用认证                                 |
+     | *call* _name_            | 从/etc/ppp/peer/ _name_ 读取options      |
+     | *connect* _script_       | 建立PPP链接前，运行 _script_ 脚本        |
+     | *defaultroute*           | 建立连接后，增加一条默认路由             |
+     | *disconnect* _script_    | 端口PPP链接后，运行 _script_ 脚本        |
+     | *escape* _xx,yy,..._     | 传输时需要忽略的字符                     |
+     | *file* _name_            | 从文件 _name_ 获取options                |
+     | *init* _script_          | 执行 _script_ 脚本去配置串口             |
+     | *lock*                   | 创建一个lock文件来锁定串口               |
+     | *mru* _n_                | 设置LCP协商的mru                         |
+     | *mtu* _n_                | 设置LCP协商的mtu                         |
+     | *passive*                | PPPD主动发起链接                         |
+     |--------------------------+------------------------------------------|
+     | _<rip>_ : _<lip>_        | 设置IPCP协商的IP地址                     |
+     | *+ipv6*                  | 使能IPv6CP                               |
+     | *ipv6* _<lid>_ , _<rid>_ | 设置IPv6CP协商的IP地址                   |
+     | *allow-ip* _address_     | 使能对端使用这些IP而不需要认证           |
+     | *basdcomp* _nr,nt_       | 使能BSD压缩策略                          |
+     | *chap-interval* _n_      | 设置CHAP协议重认证间隔                   |
+     | *idle* _n_               | 当链路空闲超过 _n_ 秒后主动断开链路      |
+     | *ipcp-accept-local*      | 接收对端发送的LOCAL地址请求              |
+     | *ipc-accept-remote*      | 接收对端发送的RMOTE（它自己）地址请求    |
+     | *lcp-echo-interval* _n_  | 设置LCP-ECHO的时间间隔                   |
+     | *mp*                     | 使能PPP多链路功能                        |
+     | *noauth*                 | 不认证                                   |
+     | *password* _pwd_         | 设置认证密码                             |
+     | *pty* _script_           | 使用 _scrip_ 作为通讯设备                |
+     | *user* _name_            | 设置认证用户名                           |
+     |--------------------------+------------------------------------------|
+  3. 选项文件：
+	 在执行命令行选项前，首先从/etc/ppp/options, ~/.ppprc ,
+     /etc/ppp/options.ttyname读取选项。
+- pppoe
+  1. 介绍：配合pppd，提供PPPoE客户端的介入功能。
+	 #+begin_src sh
+     pppd pty 'pppoe [pppoe_options]' [pppd_options]
+     pppoe -A [pppoe_options]
+	 #+end_src
+
+	 #+CAPTION: PPPoE会话建立过程
+	 #+ATTR_LaTeX: width=.6\textwidth
+	 [[./fig/ppp1.png]]
+
+  2. 选项
+     |---------------------+----------------------------------|
+     | 选项                | 说明                             |
+     |---------------------+----------------------------------|
+     | *-I* _interface_    | 设置使用的以太网设备             |
+     | *-T* _timeout_      | 设值链路空闲多长时间后，自动断开 |
+     | *-S* _service_name_ | 设置service name                 |
+     | *-C* _ac_name_      | 设置ac name                      |
+     | *-U*                | 使用host unqiue                  |
+     |---------------------+----------------------------------|
+- pppoe-server
+  1. 介绍：配合pppd，完成PPPoE服务器功能
+	 #+begin_src sh
+     pppoe-server [options]
+	 #+end_src
+  2. 选项
+     |------------------+----------------------------|
+     | 选项             | 说明                       |
+     |------------------+----------------------------|
+     | *-F*             | 设置pppoe-server在前台运行 |
+     | *-I* _interface_ | 设置运行在那个接口         |
+     | *-C* _ac_name_   | 设置 ac_name               |
+     | *-S* _name_      | 设置 server name           |
+     | *-L* _ip_        | 设置本地IP地址             |
+     | *-R* _ip_        | 设置远端IP地址             |
+     |------------------+----------------------------|
+	 
+** ATM
+** 帧中继
+** HDLC
+** IP-Trunk
+** ISDN
+** Moderm
+** RTC
 * IP业务
 ** IPv4基础
 *** 介绍
@@ -779,6 +876,14 @@ ff02::2 ip6-allrouters
   - Netifiler的ALG: tftp, ftp, sip, h232, gre, ipsec, pptp, dccp, sctp
 
 ** TODO UDP Helper
+*** 介绍
+- 背景：网络中的主机有时需要向服务器发送UDP广播报文，用以获取网络配置或解析网络
+  主机名等。但是，如果主机和服务器不在同一个广播域时，无法利用UDP广播报文进行通
+  信，主机就无法从服务器获取所需要的信息。
+  为解决上述问题，路由器提供了UDP Helper功能。通过该功能可以对目的端口为指定端口的
+  UDP广播报文进行中继转发，将广播报文转换为单播报文发送给指定的目的服务器。	
+*** 开源方案
+	
 ** IP性能
 *** 介绍
     |------------------------------------+----------|
@@ -838,3 +943,5 @@ ff02::2 ip6-allrouters
 - Linux Manual: dnsmasq(8)
 - Linux Manual: iptables(8)
 - Linux Manual: pppd(8)
+- Linux Manual: pppoe(8)
+- Linux Manual: pppoe-server(8)
