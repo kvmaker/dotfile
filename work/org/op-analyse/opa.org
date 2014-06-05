@@ -292,6 +292,36 @@
 
 ** 以太网链路聚合
 *** 介绍
+- 定义：
+  链路聚合（Link Aggregation）是将多条物理链路捆绑在一起成为一条逻辑链路，从而增
+  加链路带宽的技术。
+  #+CAPTION: Eth-Trunk示意图
+  #+ATTR_LaTeX: width=.6\textwidth
+  [[./fig/eth_trunk0.png]]
+- 转发原理
+  #+CAPTION: Eth-Trunk转发原理
+  #+ATTR_LaTeX: width=.6\textwidth
+  [[./fig/eth_trunk1.png]]
+- LACP
+
+** VLAN
+*** 介绍
+- 定义：
+  VLAN（Virtual Local Area Network）即虚拟局域网，是将一个物理的LAN在逻辑
+  上划分成多个广播域的通信技术。VLAN内的主机间可以直接通信，而VLAN间不能直接互通，
+  从而将广播报文限制在一个VLAN内。  
+- 目的：
+  以太网是一种基于CSMA/CD（Carrier Sense Multiple Access/Collision Detection）的共
+  享通讯介质的数据网络通讯技术。当主机数目较多时会导致冲突严重、广播泛滥、性能显著
+  下降甚至造成网络不可用等问题。通过交换机实现LAN互连虽然可以解决冲突严重的问题，
+  但仍然不能隔离广播报文和提升网络质量。
+  在这种情况下出现了VLAN技术，这种技术可以把一个LAN划分成多个逻辑的VLAN，每个VLAN
+  是一个广播域，VLAN内的主机间通信就和在一个LAN内一样，而VLAN间则不能直接互通，这
+  样，广播报文就被限制在一个VLAN内。
+  #+CAPTION: VLAN示意图
+  #+ATTR_LaTeX: width=.6\textwidth
+  [[./fig/vlan0.png]]
+
 
 * 广域网互联
 ** DCC
