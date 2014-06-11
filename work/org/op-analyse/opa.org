@@ -321,8 +321,133 @@
   #+CAPTION: VLAN示意图
   #+ATTR_LaTeX: width=.6\textwidth
   [[./fig/vlan0.png]]
+- VLAN Aggregation
+  1. 背景：交换网络中，VLAN技术以其对广播域的灵活控制和部署方便而得到了广泛的应
+     用。但是在一般的三层交换机中，通常是采用一个VLAN对应一个三层逻辑接口的方式
+     实现广播域之间的互通，这样导致了IP地址的浪费。
+	 #+CAPTION: VLAN Aggregaton
+	 #+ATTR_LaTeX: width=.6\textwidth
+	 [[./fig/vlan1.png]]
+  2. 实现原理
+	 #+CAPTION: VLAN Aggregation原理
+	 #+ATTR_LaTeX: width=.6\textwidth
+	 [[./fig/vlan2.png]]
+  3. VLAN间通信: ARP-Proxy
+- VLAN Damping：
+  当使能VLAN Damping功能，VLAN中最后一个处于Up状态的接口变为Down后，会抑制一定时
+  间（抑制时间可配置）再上报给VLANIF接口。
+  #+CAPTION: VLAN Damping
+  #+ATTR_LaTeX: scale=0.75
+  #+begin_src ditaa :file temp/vlan_damping.png
+                 +---------+
+                 |         |
+                 | VLANIF  |
+                 +-+-+-+-+-+
+                   | | | |
+       +-----------+ | | +-----------+
+       |         +---+ +---+         |
+       |         |         |         |
+       |         |         |         |
+    +--+--+   +--+--+   +--+--+   +--+--+
+    |     |   |     |   |     |   |     |
+    |port1|   |port2|   |port3|   |port4|
+    +-----+   +-----+   +-----+   +-----+
+  #+end_src
 
+*** 开源方案
+** QinQ
+*** 介绍
+- 定义：
+  QinQ（802.1Q-in-802.1Q）技术是一项扩展VLAN空间的技术，通过在802.1Q标签报
+  文的基础上再增加一层802.1Q的Tag来达到扩展VLAN空间的功能，可以使私网VLAN透传公
+  网。由于在骨干网中传递的报文有两层802.1Q Tag（一层公网Tag，一层私网Tag），即
+  802.1Q-in-802.1Q，所以称之为QinQ协议。
+- 价值：
+  扩展VLAN，对用户进行隔离和标识不再受到限制。
+  QinQ内外层标签可以代表不同的信息，如内层标签代表用户，外层标签代表业务，更利于业
+  务的部署。QinQ封装、终结的方式很丰富，帮助运营商实现业务精细化运营。
+- 基本QinQ
+  #+CAPTION: 基本QinQ
+  #+ATTR_LaTeX: width=.6\textwidth
+  [[./fig/qinq0.png]]
+  企业A内部存在不同业务，因此划分了不同VLAN。在CE设备的运营商侧配置基本QinQ功能，
+  为通过该接口的报文统一添加VLAN ID为20的外层VLAN Tag，到达另一分支时统一剥掉外
+  层VLAN Tag。这样两分支之间的流量就可以在公网中透明传输，使企业A两分支相同业务
+  可以互通，不同业务之间互相隔离。
+- 灵活QinQ
+  #+CAPTION: 灵活QinQ
+  #+ATTR_LaTeX: width=.6\textwidth
+  [[./fig/qinq1.png]]
+  对进入二层QinQ接口的帧，可以根据不同的内层Tag而加上不同的外层Tag，对于用户VLAN
+  的划分更加细致。
+*** 开源方案
+** VLAN Mapping
+*** 介绍
+- 定义：
+  VLAN Mapping通过修改报文携带的VLAN Tag来实现不同VLAN的相互映射。
+- 目的：
+  在某些场景中，两个VLAN相同的二层用户网络通过骨干网络互联，为了实现用户之间的二
+  层互通，以及二层协议（例如MSTP等）的统一部署，需要实现两个用户网络的无缝连接，
+  此时就需要骨干网可以传输来自用户网络的二层VLAN报文。而在通常情况下，骨干网的
+  VLAN规划和用户网络的VLAN规划是不一致的，所以在骨干网中无法直接传输用户网络的
+  VLAN报文。
+  解决这个问题的方法有两个，其中一个是通过QinQ或者VPLS等二层隧道技术，将用户VLAN报
+  文封装在骨干网报文中进行传输，可以实现用户VLAN报文的透传。但是这种方法一方面需要
+  增加额外的报文开销（增加一层封装），另外一方面，二层隧道技术可能会对某些二层协议
+  报文的透传支持不是非常完善。另外一种方法就是通过VLAN Mapping技术，一侧用户网络的
+  VLAN报文进入骨干网后，骨干网边缘设备将用户网络的VLAN（C-VLAN）修改为骨干网中可以
+  识别和承载的VLAN（S-VLAN），传输到另一侧之后，边缘设备再将S-VLAN修改为C-VLAN。这
+  样就可以很好的实现两个用户网络二层无缝连接。
+  在另一种场景中，如果由于规划的差异，导致两个直接相连的二层网络中部署的VLAN ID不
+  一致。但是用户又希望可以把两个网络作为单个二层网络进行统一管理，例如用户二层互通
+  和二层协议的统一部署。此时也可以在连接两个网络的交换机上部署VLAN Mapping功能，实
+  现两个网络之间不同VLAN ID的映射，达到二层互通和统一管理的目的。
+- 应用场景：
+  1. 基于VLAN ID的Mapping
+	 #+CAPTION: VLAN ID的Mapping
+	 #+ATTR_LaTeX: width=.6\textwidth
+	 [[./fig/vlanmapping0.png]]
 
+  2. 基于802.1Q优先级的Mapping
+	 #+CAPTION: 基于801.1Q优先级的Mapping
+	 #+ATTR_LaTeX: width=.6\textwidth
+	 [[./fig/vlanmapping1.png]]
+*** 开源方案
+
+** GVRP
+*** 介绍
+- 作用：
+  GARP协议主要用于建立一种属性传递扩散的机制，以保证协议实体能够注册和注销该属性。
+  GARP作为一个属性注册协议的载体，可以用来传播属性。将GARP协议报文的内容映射成不
+  同的属性即可支持不同上层协议应用。
+  GVRP是GARP的一种应用，用于注册和注销VLAN属性。
+  GARP协议通过目的MAC地址区分不同的应用。在IEEE Std 802.1Q中将01-80-C2-00-00-21分
+  配给VLAN应用，即GVRP。
+** STP
+*** 介绍
+- 定义：以太网交换网络中为了进行链路备份，提高网络可靠性，通常会使用冗余链路。但
+  是使用冗余链路会在交换网络上产生环路，引发广播风暴以及MAC地址表不稳定等故障现
+  象，从而导致用户通信质量较差，甚至通信中断。为解决交换网络中的环路问题，提出了
+  生成树协议STP（Spanning Tree Protocol）。
+- 背景：
+  #+CAPTION: STP背景
+  #+ATTR_LaTeX: width=.6\textwidth
+  [[./fig/stp0.png]]
+  1. 广播风暴导致网络不可用。
+  2. MAC地址表震荡导致MAC地址表项被破坏。
+- 基本概念：
+  #+CAPTION: STP基本概念
+  #+ATTR_LaTeX: width=.6\textwidth
+  [[./fig/stp1.png]]
+  1. 根桥
+  2. 根端口
+  3. 指定端口
+- 拓扑计算
+  1. 初始状态
+  2. 选择根桥
+  3. 选择根端口和指定端口
+
+** MSTP
 * 广域网互联
 ** DCC
 *** 介绍
@@ -941,7 +1066,466 @@ ff02::2 ip6-allrouters
 ** IPv4 over IPv6隧道
    参考逻辑接口配置
    
-* TODO IP单播路由配置
+* IP单播路由配置
+** IP路由
+*** 原理描述
+- 路由器及路由基本原理
+- 静态路由与动态路由
+- 路由表和FIB表
+- 路由协议的优先级
+- 路由的度量
+  1. 路径长度
+  2. 网络带宽
+  3. 负载
+  4. 通信开销
+- 负载分担与路由备份
+- IP FRR
+  快速重路由FRR（Fast Reroute）是指当物理层或链路层检测到故障时将故障消息上报至
+  上层路由系统，并立即启用一条备份链路转发报文。IP FRR是一种快速实现路由备份的方
+  式。
+- 缺省路由
+- 自治系统
+** 静态路由
+*** 介绍
+- 定义：静态路由是一种需要管理员手工配置的特殊路由。
+- 目的：
+  1. 当网络结构比较简单时，只需配置静态路由就可以使网络正常工作。
+  2. 在复杂网络环境中，配置静态路由可以改进网络的性能，并可为重要的应用保证带宽。
+  3. 静态路由可在VPN实例中使用，主要用于VPN路由的管理。
+- 基础：
+  1. 目的地址和掩码
+  2. 出接口和下一跳地址
+  3. 静态路由优先级
+- 应用场景：
+  #+CAPTION: 负载分担
+  #+ATTR_LaTeX: width=.6\textwidth
+  [[./fig/route0.png]]
+  #+CAPTION: 路由备份
+  #+ATTR_LaTeX: width=.6\textwidth
+  [[./fig/route1.png]]
+  #+CAPTION: 静态缺省路由
+  #+ATTR_LaTeX: width=.6\textwidth
+  [[./fig/route2.png]]
+*** 开源方案
+- route
+  #+begin_src sh
+  /*显示路由表*/
+  yubo@u1:~$ route
+  Kernel IP routing table
+  Destination     Gateway         Genmask         Flags Metric Ref    Use Iface
+  default         10.68.166.1     0.0.0.0         UG    0      0        0 eth0
+  10.68.166.0     *               255.255.254.0   U     1      0        0 eth0
+  link-local      *               255.255.0.0     U     1000   0        0 eth0
+  192.168.1.0     *               255.255.255.0   U     0      0        0 eth1
+
+  /*添加路由表项*/
+  yubo@u1:~$ sudo route add -net 192.168.2.0 netmask 255.255.255.0 gw 192.168.1.100
+  yubo@u1:~$ route
+  Kernel IP routing table
+  Destination     Gateway         Genmask         Flags Metric Ref    Use Iface
+  default         10.68.166.1     0.0.0.0         UG    0      0        0 eth0
+  10.68.166.0     *               255.255.254.0   U     1      0        0 eth0
+  link-local      *               255.255.0.0     U     1000   0        0 eth0
+  192.168.1.0     *               255.255.255.0   U     0      0        0 eth1
+  192.168.2.0     192.168.1.100   255.255.255.0   UG    0      0        0 eth1
+
+  /*删除路由表*/
+  yubo@u1:~$ sudo route del -net 192.168.2.0 netmask 255.255.255.0 gw 192.168.1.100 dev eth1
+  yubo@u1:~$ route
+  Kernel IP routing table
+  Destination     Gateway         Genmask         Flags Metric Ref    Use Iface
+  default         10.68.166.1     0.0.0.0         UG    0      0        0 eth0
+  10.68.166.0     *               255.255.254.0   U     1      0        0 eth0
+  link-local      *               255.255.0.0     U     1000   0        0 eth0
+  192.168.1.0     *               255.255.255.0   U     0      0        0 eth1
+  #+end_src
+- ip
+  #+begin_src sh
+  /*显示路由表*/
+  yubo@u1:~$ ip route
+  default via 10.68.166.1 dev eth0  proto static
+  10.68.166.0/23 dev eth0  proto kernel  scope link  src 10.68.167.208  metric 1
+  169.254.0.0/16 dev eth0  scope link  metric 1000
+  192.168.1.0/24 dev eth1  proto kernel  scope link  src 192.168.1.1
+
+  /*添加路由表*/
+  yubo@u1:~$ sudo ip route add 192.168.2.0/24 via 192.168.1.100 dev eth1
+  yubo@u1:~$ sudo ip route
+  default via 10.68.166.1 dev eth0  proto static
+  10.68.166.0/23 dev eth0  proto kernel  scope link  src 10.68.167.208  metric 1
+  169.254.0.0/16 dev eth0  scope link  metric 1000
+  192.168.1.0/24 dev eth1  proto kernel  scope link  src 192.168.1.1
+  192.168.2.0/24 via 192.168.1.100 dev eth1
+
+  /*删除路由表*/
+  yubo@u1:~$ sudo ip route del 192.168.2.0/24 via 192.168.1.100 dev eth1
+  yubo@u1:~$ sudo ip route
+  default via 10.68.166.1 dev eth0  proto static
+  10.68.166.0/23 dev eth0  proto kernel  scope link  src 10.68.167.208  metric 1
+  169.254.0.0/16 dev eth0  scope link  metric 1000
+  192.168.1.0/24 dev eth1  proto kernel  scope link  src 192.168.1.1
+  192.168.2.0/24 via 192.168.1.100 dev eth1
+  #+end_src
+- ecmp
+  #+begin_src sh
+  /*配置两条等价路由，按照3：7分担流量*/
+  yubo@u1:~$ sudo ip -4 route add 192.168.2.0/24 nexthop via 192.168.1.100 dev eth1 weight 3 nexthop via 192.168.1.101 dev eth1 weight 7
+  yubo@u1:~$ sudo ip -4 route
+  default via 10.68.166.1 dev eth0  proto static
+  10.68.166.0/23 dev eth0  proto kernel  scope link  src 10.68.167.208  metric 1
+  169.254.0.0/16 dev eth0  scope link  metric 1000
+  192.168.1.0/24 dev eth1  proto kernel  scope link  src 192.168.1.1
+  192.168.2.0/24
+          nexthop via 192.168.1.100  dev eth1 weight 3
+          nexthop via 192.168.1.101  dev eth1 weight 7
+  #+end_src
+  由于Linux内核使用了路由缓存，可能导致实际流量并不能完全按照3：7分配。
+
+** RIP
+*** 介绍
+- 定义：RIP是一种基于距离矢量（Distance-Vector）算法的协议，它使用跳数（Hop
+  Count）作为度量来衡量到达目的网络的距离。
+- 目的：由于RIP的实现较为简单，在配置和维护管理方面也远比OSPF和IS-IS容易，因此
+  RIP主要应用于规模较小的网络中。
+- 基本原理
+  #+CAPTION: RIP基本原理
+  #+ATTR_LaTeX: width=.6\textwidth
+  [[./fig/rip0.png]]
+  1. RIP协议启动之后，RouterA会向相邻的路由器广播一个Request报文。
+  2. 当RouterB从接口接收到RouterA发送的Request报文后，把自己的RIP路由表封装在Respone
+	 报文内，然后向该接口对应的网络广播。
+  3. RouterA根据RouterB发送的Response报文，形成自己的路由表。
+- RIP2的增强特性
+  1. 支持外部路由标记（Route Tag）。
+  2. 支持CIDR。
+  3. 支持指定下一跳，在广播网上可以选择到目的网段最优下一跳地址。
+  4. 支持以组播方式发送更新报文。
+  5. 支持对协议报文进行验证。
+  6. 支持路由聚合。
+- 水平分割与毒性反转
+  1. 水平分割：水平分割（Split Horizon）的原理是，RIP从某个接口学到的路由，不会
+     从该接口再发回给邻居路由器。
+	 #+CAPTION: RIP水平分割
+	 #+ATTR_LaTeX: scale=0.75
+	 [[./fig/rip1.png]]
+  2. 毒性反转：毒性反转（Poison Reverse）的原理是，RIP从某个接口学到路由后，从原
+	 接口发回邻居路由器，并将该路由的开销设置为16（即指明该路由不可达）。利用这
+	 种方式，可以清除对方路由表中的无用路由。
+	 #+CAPTION: RIP毒性反转
+	 #+ATTR_LaTeX: scale=0.75
+	 [[./fig/rip2.png]]
+- 对进程与多实例
+- RIP与BFD联动
+- RIP NSR（Non-stop Routing）
+  通过NSR特性，RIP将所有与路由有关的数据从主用主控板AMB（Active Main Board）备份
+  到备用主控板SMB（Standby Main Board）。所以无论何时主用主控板出现故障，备用主
+  控板都会变成激活状态，接替主控板工作。由于主备板采取高度同步的方式，所以发生倒
+  换时邻居不会感知到本设备故障，因此保持了业务在整网中的平稳运行。
+*** 开源方案
+- quagga总体
+  1. 介绍：quagga支持包括RIPv1, RIPv2, RIPng, OSPFv2, OSPFv3, IS-IS, BGP-4, 
+	 BPG-4+协议的路由服务。
+  2. 架构
+	 #+CAPTION: Quagga系统架构
+	 #+ATTR_LaTeX: scale=0.75
+	 #+begin_src ditaa :file temp/guagga0.png
+     +----+  +----+  +-----+  +-----+
+     |bgpd|  |ripd|  |ospfd|  |zebra|
+     +----+  +----+  +-----+  +-----+
+                                 |
+     +---------------------------|--+
+     |                           v  |
+     |  UNIX Kernel  routing table  |
+     |                              |
+     +------------------------------+
+	 #+end_src
+	 - 提供一个统一的与内核进行对接的管理者zebra，所有的路由协议都是通过zebra来
+	   与内核路由表交互。
+	 - 不通的路由进程可以部署在不同的机器上，甚至，同一个机器上可以部署多个相同
+       的路由进程。
+	 - 提供一个统一的用户管理界面vtysh。
+  3. 安装
+	 #+begin_src sh
+     yubo@u1:~/download/quagga-0.99.22$ ./configure --enable-vtysh
+     yubo@u1:~/download/quagga-0.88.22$ make
+     yubo@u1:~/download/quagga-0.88.22$ make install
+     #+end_src
+	 将如下内容添加到/etc/services
+	 #+begin_src sh
+     zebrasrv      2600/tcp  # zebra service
+     zebra         2601/tcp  # zebra vty
+     ripd          2602/tcp  # RIPd vty
+     ripngd        2603/tcp  # RIPngd vty
+     ospfd         2604/tcp  # OSPFd vty
+     bgpd          2605/tcp  # BGPd vty
+     ospf6d        2606/tcp  # OSPF6d vty
+     ospfapi       2607/tcp  # ospfapi
+     isisd         2608/tcp  # ISISd vty
+	 #+end_src
+  4. 权限配置 && 添加用户
+	 #+begin_src sh
+     yubo@u1:~$ sudo groupadd quaggga
+     yubo@u1:~$ sudo useradd quaggga -g quaggga
+     yubo@u1:~$ sudo chown quaggga:quaggga /var/run/
+     yubo@u1:~$ sudo chmod 777 /var/run/ 
+	 #+end_src
+- zebra
+  1. 开启zebra
+	 #+begin_src sh
+     yubo@u1:~/$ sudo zebra -f /etc/quagga/zebra.conf -d
+     yubo@u1:~$ cat /etc/quagga/zebra.conf
+     hostname u1
+     log stdout
+     password zebra
+     enable password zebra
+	 #+end_src
+  2. 进入zebra
+     #+begin_src sh
+	 yubo@u1:~$ telnet localhost 2601
+     Trying 127.0.0.1...
+     Connected to localhost.
+     Escape character is '^]'.
+
+     Hello, this is Quagga (version 0.99.22).
+     Copyright 1996-2005 Kunihiro Ishiguro, et al.
+
+     User Access Verification
+      
+     Password:
+     Password:
+     u1>
+	 #+end_src
+  3. 进入config模式
+	 #+begin_src sh
+     u1> enable
+     Password:
+     u1# configure terminal
+     u1(config)#
+	 #+end_src
+  4. Interface命令：
+	 参考[quagga_doc]4.2
+	 #+begin_src sh
+     u1(config)# interface eth1
+     u1(config-if)# ip add
+     u1(config-if)# ip address 192.168.1.200/24
+	 #+end_src
+  5. 静态路由命令：
+	 参考[quagga_doc]4.3
+	 #+begin_src sh
+     u1(config)# ip route 192.168.3.0/24 192.168.1.100
+	 #+end_src
+- ripd
+  1. 开启ripd
+	 #+begin_src sh
+     yubo@u1:~$ sudo ripd -f /etc/quagga/ripd.conf -d
+     yubo@u1:~$ cat /etc/quagga/ripd.conf
+     hostname u1
+     log stdout
+     password ripd
+     enable password ripd
+	 #+end_src
+  2. 实验拓扑
+	 #+begin_src ditaa :file temp/rip1.png
+                 +------+      +------+       +-------+                +-----+
+                 |      |      |HuaWei|       |       |                |     |         
+          -------+  u0  +-=----+Net   +-=-----+   u1  +----------------+  R  +----(192.168.2.0/24)    
+                 +------+      +------+       +-------+                +--+--+                    
+       192.168.0.0/24                                   192.168.1.0/24    |                       
+                                                                          |                       
+                                                                   (192.168.3.0/24)               
+                                                                          |                       
+	 #+end_src
+  3. 配置
+	 - u0
+	   #+begin_src sh
+       # 建立到达u1的隧道
+       yubo@u0:~$ ip tunnel add ipip mode ipip local 10.67.226.203 remote 10.68.167.208
+       yubo@u0:~$ ip addr add 192.168.10.100 peer 192.168.10.101 dev ipip
+
+       # 配置ripd
+       yubo@u0:~$ telnet localhost 2602
+       Trying 127.0.0.1...
+       Connected to localhost.
+       Escape character is '^]'.
+
+       Hello, this is Quagga (version 0.99.22).
+       Copyright 1996-2005 Kunihiro Ishiguro, et al.
+
+
+       User Access Verification
+
+       Password:
+       u0-ripd> enable
+       Password:
+       u0-ripd# configure terminal
+       u0-ripd(config)# router rip
+       u0-ripd(config-router)# network ipip
+       There is a same network configuration ipip
+       u0-ripd(config-router)# network eth1
+       There is a same network configuration eth1
+	   #+end_src
+     - u1
+	   #+begin_src sh
+       # 建立达到u0的隧道
+       yubo@u1:~$ ip tunnel add ipip mode ipip remote 10.67.226.203 local 10.68.167.208
+       yubo@u1:~$ ip addr add 192.168.10.101 peer 192.168.10.100 dev ipip
+
+       # 配置ripd
+       yubo@u1:~$ telnet localhost 2602
+       Trying 127.0.0.1...
+       Connected to localhost.
+       Escape character is '^]'.
+
+       Hello, this is Quagga (version 0.99.22).
+       Copyright 1996-2005 Kunihiro Ishiguro, et al.
+
+
+       User Access Verification
+
+       Password:
+       u0-ripd> enable
+       Password:
+       u0-ripd# configure terminal
+       u0-ripd(config)# router rip
+       u0-ripd(config-router)# network ipip
+       There is a same network configuration ipip
+       u0-ripd(config-router)# network eth1
+       There is a same network configuration eth1
+       
+       # 配置zebra，增加静态路由
+       yubo@u1:~$ telnet localhost 2601
+       Trying 127.0.0.1...
+       Connected to localhost.
+       Escape character is '^]'.
+
+       Hello, this is Quagga (version 0.99.22).
+       Copyright 1996-2005 Kunihiro Ishiguro, et al.
+
+
+       User Access Verification
+
+       Password:
+       u1-zebra> enable
+       Password:
+       u1-zebra# configure terminal
+       u1-zebra(config)# ip route
+       u1-zebra(config)# ip route 192.168.2.0/24 192.168.1.200
+       u1-zebra(config)# ip route 192.168.3.0/24 192.168.1.200
+	   #+end_src
+  4. 其他特性
+	 - 引入路由：kernel, static, connnected, ospf, bgp。
+	 - 路由过滤
+	 - Metric设置
+	 - 认证
+     - 定时器
+
+** OSPF
+*** 介绍
+- 定义：
+  开放式最短路径优先OSPF（Open Shortest Path First）是IETF组织开发的一个基
+  于链路状态的内部网关协议（Interior Gateway Protocol）。
+  目前针对IPv4协议使用的是OSPF Version 2（RFC2328）；针对IPv6协议使用OSPF Version
+  3（RFC2740）。
+- 目的：
+  1. OSPF采用组播形式收发报文，这样可以减少对其它不运行OSPF路由器的影响。
+  2. OSPF支持无类型域间选路（CIDR）。
+  3. OSPF支持对等价路由进行负载分担。
+  4. OSPF支持报文加密。
+
+*** 开源方案
+
+** ISIS
+** BGP
+*** 介绍
+- 定义：边界网关协议BGP（Border Gateway Protocol）是一种实现自治系统
+  AS（Autonomous System）之间的路由可达，并选择最佳路由的距离矢量路由协议。
+- 优点：
+  1. BGP采用认证和GTSM的方式，保证了网络的安全性。
+  2. BGP提供了丰富的路由策略，能够灵活的进行路由选路，并且能指导邻居按策略发布路由。
+  3. BGP提供了路由聚合和路由衰减功能用于防止路由振荡，有效提高了网络的稳定性。
+  4. BGP使用TCP作为其传输层协议（端口号为179），并支持BGP与BFD联动、BGP Tracking和
+     BGP GR和NSR，提高了网络的可靠性。
+  5. 在邻居数目多、路由量大且大部分邻居具有相同出口策略的场景下，BGP使用按组打包技术
+	 极大的提高了BGP打包发包性能。
+- 基本概念：
+  1. 自治系统。
+  2. BGP分类：EBGP, IBGP。
+	 #+CAPTION: BGP分类
+	 #+ATTR_LaTeX: scale=0.75
+	 [[./fig/bgp0.png]]
+  3. 角色：Speaker, Peer。
+  4. BGP的路由器号。
+- BGP与IGP交互
+  1. BGP引入IGP路由。
+  2. IGP引入BGP路由。
+- BGP安全性
+  1. BGP认证：md5， keychain。
+  2. BGP GTSM：检测IP报文头中的TTL（time-to-live）值是否在一个预先设置好的特定范
+     围内，并对不符合TTL值范围的报文进行允许通过或丢弃的操作。
+- 常用属性
+  1. Origin：标记路由是如何成为BGP路由的。优先级：IGP > EGP > Incomplete。
+  2. AS_Path：按矢量顺序记录了某条路由从本地到目的地址所要经过的所有AS编号。
+  3. Next_Hop：记录了路由的下一跳信息。
+  4. Local_Pref：表明路由器的BGP优先级，用于判断流量离开AS时的最佳
+     路由。
+  5. MED：用于判断流量进入AS时的最佳路由
+- BGP选择路由的策略
+- BGP负载分担
+- 路由反射器
+  1. 背景：为保证IBGP对等体之间的连通性，需要在IBGP对等体之间建立全连接关系。假
+     设在一个AS内部有n台设备，那么建立的IBGP连接数就为n(n-1)/2。当设备数目很多时，
+     设备配置将十分复杂，而且配置后网络资源和CPU资源的消耗都很大。在IBGP对等体间
+     使用路由反射器可以解决以上问题。
+  2. 角色：RR, Client, Non-Client, Originator, Cluster。
+     #+CAPTION: 反射器示意图
+     #+ATTR_LaTeX: scale=0.75
+     [[./fig/bgp1.png]]
+  3. 原理：
+	 同一集群内的客户机只需要与该集群的RR直接交换路由信息，因此客户机只需要与RR
+     之间建立IBGP连接，不需要与其他客户机建立IBGP连接，从而减少了IBGP连接数量。
+	 RR向IBGP邻居发布路由规则如下：
+	 - 从非客户机学到的路由，发布给所有客户机。
+     - 从客户机学到的路由，发布给所有非客户机和客户机（发起此路由的客户机除外）。
+     - 从EBGP对等体学到的路由，发布给所有的非客户机和客户机。
+  4. 备份路由反射器。
+  5. 多集群路由反射器。
+- BGP联盟
+  1. 定义：联盟将一个AS划分为若干个子AS。每个子AS内部建立IBGP全连接关系，子AS之
+     间建立联盟EBGP连接关系，但联盟外部AS仍认为联盟是一个AS。
+	 #+CAPTION: BGP联盟
+	 #+ATTR_LaTeX: scale=0.75
+	 [[./fig/bgp2.png]]
+- 路由聚合
+- 路由衰减
+- BGP与BFD联动
+  #+CAPTION: BGP与BFD联动
+  #+ATTR_LaTeX: scale=0.75
+  [[./fig/bgp3.png]]
+- BGP Tracking
+- BGP GR和NSR
+- BGP按组打包
+- MP-BGP：传统的BGP-4只能管理IPv4单播路由信息，对于使用其它网络层协议（如IPv6、
+  组播等）的应用，在跨AS传播时就受到一定限制。BGP多协议扩展
+  MP-BGP（MultiProtocol BGP）就是为了提供对多种网络层协议的支持，对BGP-4进行的扩
+  展。目前的MP-BGP标准是RFC4760，使用扩展属性和地址族来实现对IPv6、组播和VPN相关
+  内容的支持，BGP协议原有的报文机制和路由机制并没有改变。
+
+*** 开源方案
+- bgpd
+  1. 
+  2. 实验拓扑
+	 #+begin_src ditaa :file temp/bgp.png
+                 +------+      +------+       +-------+                +-----+
+                 |      |      |HuaWei|       |       |                |     |         
+          -------+  u0  +-=----+Net   +-=-----+   u1  +----------------+  R  +----(192.168.2.0/24)    
+                 +------+      +------+       +-------+                +--+--+                    
+       192.168.0.0/24                                   192.168.1.0/24    |                       
+                                                                          |                       
+                                                                   (192.168.3.0/24)               
+                                                                          |                       
+	 #+end_src
+  3. 
+
 * TODO IP组播配置
 * TODO MPLS配置
 * TODO VPN配置
@@ -975,3 +1559,7 @@ ff02::2 ip6-allrouters
 - Linux Manual: pppd(8)
 - Linux Manual: pppoe(8)
 - Linux Manual: pppoe-server(8)
+- Linux Manual: ifconfig(8)
+- Linux Manual: ip(8)
+- Linux Manual: route(8)
+- http://www.nongnu.org/quagga/docs/docs-info.html

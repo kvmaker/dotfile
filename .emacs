@@ -196,6 +196,9 @@ Emacs buffer are those starting with “*”."
 (setf key     "486401619")
 (global-set-key (kbd "C-c t t") 'translate)
 
+;; test util
+(require 'test)
+
 ;; custom-set-variable
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
