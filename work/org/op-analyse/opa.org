@@ -353,8 +353,8 @@
     |port1|   |port2|   |port3|   |port4|
     +-----+   +-----+   +-----+   +-----+
   #+end_src
-
 *** 开源方案
+
 ** QinQ
 *** 介绍
 - 定义：
@@ -1231,11 +1231,11 @@ ff02::2 ip6-allrouters
 	 #+begin_src ditaa :file temp/guagga0.png
      +----+  +----+  +-----+  +-----+
      |bgpd|  |ripd|  |ospfd|  |zebra|
-     +----+  +----+  +-----+  +-----+
+     +----+  +----+  +-----+  +--+--+
                                  |
      +---------------------------|--+
      |                           v  |
-     |  UNIX Kernel  routing table  |
+     |  Kernel  routing table       |
      |                              |
      +------------------------------+
 	 #+end_src
@@ -1339,7 +1339,7 @@ ff02::2 ip6-allrouters
 	 - u0
 	   #+begin_src sh
        # 建立到达u1的隧道
-       yubo@u0:~$ ip tunnel add ipip mode ipip local 10.67.226.203 remote 10.68.167.208
+       yubo@u0:~$ ip tunnel add ipip mode ipip local 10.67.226.203 remote 10.68.167.208 ttl 255
        yubo@u0:~$ ip addr add 192.168.10.100 peer 192.168.10.101 dev ipip
 
        # 配置ripd
@@ -1367,7 +1367,7 @@ ff02::2 ip6-allrouters
      - u1
 	   #+begin_src sh
        # 建立达到u0的隧道
-       yubo@u1:~$ ip tunnel add ipip mode ipip remote 10.67.226.203 local 10.68.167.208
+       yubo@u1:~$ ip tunnel add ipip mode ipip remote 10.67.226.203 local 10.68.167.208 ttl 255
        yubo@u1:~$ ip addr add 192.168.10.101 peer 192.168.10.100 dev ipip
 
        # 配置ripd
@@ -1418,7 +1418,6 @@ ff02::2 ip6-allrouters
 	 - Metric设置
 	 - 认证
      - 定时器
-
 ** OSPF
 *** 介绍
 - 定义：
@@ -1431,7 +1430,6 @@ ff02::2 ip6-allrouters
   2. OSPF支持无类型域间选路（CIDR）。
   3. OSPF支持对等价路由进行负载分担。
   4. OSPF支持报文加密。
-
 *** 开源方案
 
 ** ISIS
@@ -1509,10 +1507,12 @@ ff02::2 ip6-allrouters
   MP-BGP（MultiProtocol BGP）就是为了提供对多种网络层协议的支持，对BGP-4进行的扩
   展。目前的MP-BGP标准是RFC4760，使用扩展属性和地址族来实现对IPv6、组播和VPN相关
   内容的支持，BGP协议原有的报文机制和路由机制并没有改变。
-
 *** 开源方案
 - bgpd
-  1. 
+  1. 开启bgpd
+	 #+begin_src sh
+     sudo bgpd -f /etc/quagga/bgpd.conf -d
+	 #+end_src
   2. 实验拓扑
 	 #+begin_src ditaa :file temp/bgp.png
                  +------+      +------+       +-------+                +-----+
@@ -1524,7 +1524,31 @@ ff02::2 ip6-allrouters
                                                                    (192.168.3.0/24)               
                                                                           |                       
 	 #+end_src
-  3. 
+  3. 配置
+	 - u0
+	   #+begin_src sh
+       router bgp 100
+        bgp router-id 192.168.10.100
+        network 192.168.0.0/24
+        redistribute connected metric 100
+        neighbor 192.168.10.101 remote-as 101
+	   #+end_src
+     - u1
+	   #+begin_src sh
+       router bgp 101
+        bgp router-id 192.168.10.101
+        network 192.168.1.0/24
+        redistribute connected metric 100
+        redistribute static
+        neighbor 192.168.10.100 remote-as 100
+	   #+end_src
+  4. 其他特性
+	 - Peer Group
+	 - BGP Communities Attribute
+	 - Route Reflector
+	 - Route Server
+
+** 策略路由
 
 * TODO IP组播配置
 * TODO MPLS配置
