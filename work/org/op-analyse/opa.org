@@ -1227,7 +1227,7 @@ ff02::2 ip6-allrouters
 	 BPG-4+协议的路由服务。
   2. 架构
 	 #+CAPTION: Quagga系统架构
-	 #+ATTR_LaTeX: scale=0.75
+	 #+ATTR_LaTeX: width=.8\textwidth
 	 #+begin_src ditaa :file temp/guagga0.png
      +----+  +----+  +-----+  +-----+
      |bgpd|  |ripd|  |ospfd|  |zebra|
@@ -1325,6 +1325,8 @@ ff02::2 ip6-allrouters
      enable password ripd
 	 #+end_src
   2. 实验拓扑
+	 #+CAPTION: RIP实验拓扑
+	 #+ATTR_LaTeX: width=.8\textwidth
 	 #+begin_src ditaa :file temp/rip1.png
                  +------+      +------+       +-------+                +-----+
                  |      |      |HuaWei|       |       |                |     |         
@@ -1430,9 +1432,174 @@ ff02::2 ip6-allrouters
   2. OSPF支持无类型域间选路（CIDR）。
   3. OSPF支持对等价路由进行负载分担。
   4. OSPF支持报文加密。
+- 路由器类型
+  #+CAPTION: OSPF的路由器类型
+  #+ATTR_LaTeX: scale=0.75
+  [[./fig/ospf0.png]]
+  1. 区域内路由器（Internal Router）
+  2. 区域边界路由器ABR（Area Border Router）
+  3. 骨干路由器（Backbone Router）
+  4. 自治系统边界路由器ASBR（AS Boundary Router）
+- 路由类型
+  1. Intra Area
+  2. Inter Area
+  3. 第一类外部路由（Type1 External）
+  4. 第二类外部路由（Type2 External）
+- 区域类型
+  1. 普通区域
+  2. STUB区域
+  3. Totally STUB区域
+  4. NSSA区域
+  5. Totally NSSA区域
+- OSPF报文认证
+  1. 区域验证方式
+  2. 接口验证方式
+- OSPF-TE
+  #+CAPTION: OSPF-TE
+  #+ATTR_LaTeX: scale=0.75
+  [[./fig/ospf1.png]]
+  在MPLS-TE体系结构中OSPF起到了信息发布组件的作用：
+  1. 收集TE相关信息。
+  2. 在同一个区域中的各设备间扩散TE信息。
+  4. 把同步收集到的TE信息组成流量工程数据库TEDB（TE DataBase）提供给CSPF计算。
+- OSPF-VPN
+  #+CAPTION: OSPF-VPN
+  #+ATTR_LaTeX: scale=0.75
+  [[./fig/ospf2.png]]
+  1. PE1将CE1上的OSPF路由引入到BGP中，形成BGP VPNv4路由。
+  2. PE1通过MP-BGP将这些BGP VPNv4路由发布给PE2。
+  3. PE2将BGP VPNv4路由引入到OSPF，再发布给CE3和CE4。
 *** 开源方案
-
+- ospfd
+  1. 开启ospfd
+	 #+begin_src sh
+     yubo@u1:~$ sudo ripd -f /etc/quagga/ripd.conf -d
+	 #+end_src
+  2. 实验拓扑
+	 #+CAPTION: OSPF实验拓扑
+	 #+ATTR_LaTeX: width=.9\textwidth
+	 #+begin_src ditaa :file temp/ospf.png
+                 +------+      +------+       +-------+                +-----+
+                 |      |      |HuaWei|       |       |                |     |         
+          -------+  u0  +-=----+Net   +-=-----+   u1  +----------------+  R  +----(192.168.2.0/24)    
+                 +------+      +------+       +-------+                +--+--+                    
+       192.168.0.0/24                                   192.168.1.0/24    |                       
+                    |                             |                       |
+                    :                             :                (192.168.3.0/24)
+                    |                             |                       |
+                    |                             |
+         AREA_2     |         AREA_1              |   AREA_0
+                                
+	 #+end_src
+  3. 配置
+	 - u0
+	   #+begin_src sh
+       Current configuration:
+       !
+       hostname u0-ospfd
+       password ospfd
+       enable password ospfd
+       log stdout
+       !
+       !
+       !
+       interface eth0
+       !
+       interface eth1
+       !
+       interface ipip
+       !
+       interface lo
+       !
+       interface tunl0
+       !
+       interface virbr0
+       !
+       router ospf
+        ospf router-id 192.168.10.100
+        redistribute connected
+        network 192.168.0.0/24 area 0.0.0.2
+        network 192.168.10.0/24 area 0.0.0.1
+       !
+       line vty
+       !
+       end
+	   #+end_src
+     - u1
+	   #+begin_src sh
+       Current configuration:
+       !
+       hostname u1-ospfd
+       password ospfd
+       enable password ospfd
+       log stdout
+       !
+       !
+       !
+       interface eth0
+       !
+       interface eth1
+       !
+       interface gre0
+       !
+       interface ipip
+       !
+       interface lo
+       !
+       interface tap0
+       !
+       interface tunl0
+       !
+       router ospf
+        ospf router-id 192.168.10.101
+        redistribute connected
+        redistribute static
+        network 192.168.1.0/24 area 0.0.0.0
+        network 192.168.10.0/24 area 0.0.0.1
+       !
+       line vty
+       !
+       end
+	   #+end_src
+  4. 其他特性
+	 - 路由聚合
+	 - 认证
+	 - 路由引入
+     - 优先级
 ** ISIS
+*** 介绍
+- 拓扑结构
+  #+CAPTION: ISIS的拓扑结构1
+  #+ATTR_LaTeX: scale=0.75
+  [[./fig/isis0.png]]
+  #+CAPTION: ISIS的拓扑结构2
+  #+ATTR_LaTeX: scale=0.75
+  [[./fig/isis1.png]]
+- 基本原理
+  IS-IS是一种链路状态路由协议，每一台路由器都会生成一个LSP，它包含了该路由器所有
+  使能IS-IS协议接口的链路状态信息。通过跟相邻设备建立IS-IS邻接关系，互相更新本地
+  设备的LSDB，可以使得LSDB与整个IS-IS网络的其他设备的LSDB实现同步。然后根据LSDB
+  运用SPF算法计算出IS-IS路由。如果此IS-IS路由是到目的地址的最优路由，则此路由会
+  下发的IP路由表中，并指导报文的转发。
+- 认证
+  1. 接口认证：是指使能IS-IS协议的接口以指定方式和密码对Level-1和Level-2的Hello
+     报文进行认证。
+  2. 区域认证：是指运行IS-IS的区域以指定方式和密码对Level-1的SNP和LSP报文进行认
+     证。
+  3. 路由域认证：是指运行IS-IS的路由域以指定方式和密码对Level-2的SNP和LSP报文进
+     行认证。
+- Overload
+  IS-IS OverLoad使用IS-IS过载标记位来标识过载状态。IS-IS过载标志位是指IS-IS LSP
+  报文中的OL字段。对设备设置过载标志位后，其它设备在进行SPF计算时不会使用这台设
+  备做转发，只计算该设备上的直连路由。
+  #+CAPTION: ISIS Overload
+  #+ATTR_LaTeX: scale=0.75
+  [[./fig/isis2.png]]
+- TE
+- 所实例、多进程
+*** 开源方案
+无   
+
 ** BGP
 *** 介绍
 - 定义：边界网关协议BGP（Border Gateway Protocol）是一种实现自治系统
@@ -1514,6 +1681,8 @@ ff02::2 ip6-allrouters
      sudo bgpd -f /etc/quagga/bgpd.conf -d
 	 #+end_src
   2. 实验拓扑
+	 #+CAPTION: BGP实验拓扑
+	 #+ATTR_LaTeX: width=.6\textwidth
 	 #+begin_src ditaa :file temp/bgp.png
                  +------+      +------+       +-------+                +-----+
                  |      |      |HuaWei|       |       |                |     |         
@@ -1549,8 +1718,145 @@ ff02::2 ip6-allrouters
 	 - Route Server
 
 ** 策略路由
+*** 介绍
+- 目的：传统的路由转发原理是首先根据报文的目的地址查找路由表，然后进行报文转发。
+  但是目前越来越多的用户希望能够在传统路由转发的基础上根据自己定义的策略进行报文
+  转发和选路。策略路由使网络管理者不仅能够根据报文的目的地址，而且能够根据报文的
+  源地址、报文大小和链路质量等属性来制定策略路由，以改变数据包转发路径，满足用户
+  需求。
+- 种类
+  1. 本地策略路由：针对本地向外发送的报文。
+  2. 接口策略路由：针对转发报文。
+  3. 智能策略路由：基于业务需求的策略路由，通过匹配链路质量和网络业务对链路质量的需求，实现智
+     能选路
+*** 开源方案
+- ip rule
+  1. 原理
+	 1. 使用rule + route table
+	 2. 按照优先级依次匹配rule，一旦匹配则使用对应的路由表，若路由表没有匹配的
+		项，则继续下一个匹配下一个rule。
+  2. 默认rule
+	 1. Priority 0, Selector: match any , Action : Lookup local route table.
+	 2. Priority 32766, Selector :  match any, Action : Lookup main route table.
+	 3. Priority 32767, Selector : match any, Lookup default table. 
+  3. 配置举例
+	 #+CAPTION: 基于入接口的策略路由
+	 #+ATTR_LaTeX: scale=0.75
+	 #+begin_src ditaa :file temp/policy_route.png
+          +------+
+          |      |          
+          |HostA +---+      
+          +------+   |   IF_1                 
+                     +------+------+  WAN1    
+                            |      +---------->
+                            |Router+---------->
+          +------+   +------+------+  WAN2
+          |      |   |   IF_2
+          |HostB +---+
+          +------+
+	 #+end_src
+	 #+begin_src sh
+     echo 200 T1 >> /etc/iprotue2/rt_tables
+     echo 201 T2 >> /etc/iproute2/rt_tables
 
-* TODO IP组播配置
+     ip route add default dev WAN1 table T1
+     ip rule add iif IF_1 table T1
+
+     ip route add default dev WAN2 table T2
+     ip rule add iif IF_2 table T2
+	 #+end_src
+  4. 总结
+	 Linux可以基于源地址、目的地址、TOS、OIF、IIF、fwmark进行策略路由。
+
+** 其它开源路由协议实现
+- http://bird.network.cz/
+- http://www.openbgpd.org/
+- http://www.xorp.org/
+- http://www.opensourcerouting.org
+
+* IP组播配置
+** 组播基础
+*** 介绍
+- 定义：作为IP传输三种方式之一，IP组播通信指的是IP报文从一个源发出，被转发到一组
+  特定的接收者。相较于传统的单播和广播，IP组播可以有效地节约网络带宽、降低网络负
+  载，所以被广泛应用于IPTV、实时数据传送和多媒体会议等网络业务中。
+- 基本概念
+  #+CAPTION: 组播基本概念
+  #+ATTR_LaTeX: scale=0.75
+  [[./fig/mc0.png]]
+  1. 组播源
+  2. 组播组
+  3. 组播组成员
+  4. 组播路由器
+- 服务模型
+  1. ASM：个组播组地址作为一个网络服务的集合，任何源发布到该组地址的数据得到同样
+     的服务。
+  2. SSM：SSM模型针对特定源和组的绑定数据流提供服务，接收者主机在加入组播组时，
+     可以指定只接收哪些源的数据。
+- 组播地址
+  - IPv4组播地址
+    |-------------------------------------------------------+----------------------------------------|
+    | 地址范围                                              | 含义                                   |
+    |-------------------------------------------------------+----------------------------------------|
+    | 224.0.0.0～224.0.0.255                                | 永久组地址。                           |
+    | 224.0.1.0～231.255.255.255 233.0.0.0～238.255.255.255 | ASM组播地址，全网范围内有效。          |
+    | 232.0.0.0～232.255.255.255                            | SSM组播地址，全网范围内有效。          |
+    | 239.0.0.0～239.255.255.255                            | 本地管理组地址，仅在本地管理域内有效。 |
+    |-------------------------------------------------------+----------------------------------------|
+  - IPv6组播地址
+    |---------------------+-------------|
+    | 地址范围            | 含义        |
+    |---------------------+-------------|
+    | FF0x::/32           | 保留地址    |
+    | FF1x::/32 FF2x::/32 | ASM组播地址 |
+    | FF3x::/32           | SSM组播地址 |
+    |---------------------+-------------|
+  - IPv4组播MAC地址
+  - IPv6组播MAC地址
+- IPv4组播协议
+  |---------------------------------------------+------------------------------------------------------------------------------------------|
+  | 协议                                        | 说明                                                                                     |
+  |---------------------------------------------+------------------------------------------------------------------------------------------|
+  | IGMP（Internet Group Management Protocol）  | IGMP协议在主机端实现组播组成员加入与离开，在上游的三层设备中实现组成员关系的维护与管理。 |
+  | PIM（Protocol Independent Multicast）       | 主要用于将网络中的组播数据流发送到有组播数据请求的组成员所连接的组播设备上。             |
+  | MSDP（Multicast Source Discovery Protocol） | 为了解决多个PIM-SM域之间的互连的一种域间组播协议。                                       |
+  | MBGP(Multiprotocol Broder Gateway Protocol) | MBGP实现了跨AS域的组播转发。                                                             |
+  | IGMP Snooping                               | 通过侦听上游的三层设备和用户主机之间发送的IGMP报文来建立组播数据报文的二层转发表         |
+  |---------------------------------------------+------------------------------------------------------------------------------------------|
+- 应用场景
+  - 单PIM域内组播
+	#+CAPTION: 组播应用场景1
+	#+ATTR_LaTeX: scale=0.5
+	[[./fig/mc1.png]]
+  - 跨PIM-SM域组播
+	#+CAPTION: 组播应用场景2
+	#+ATTR_LaTeX: scale=0.5
+	[[./fig/mc2.png]]
+  - 跨AS域组播
+	#+CAPTION: 组播应用场景3
+	#+ATTR_LaTeX: scale=0.5
+	[[./fig/mc3.png]]
+
+** IGMP
+*** 介绍
+- 定义：IGMP用来在接收者主机和与其直接相邻的组播路由器之间建立和维护组播组成员关
+  系。
+- 目的：
+  在组播通信模型中，发送者不关注接收者的位置信息，只是将数据发送到约定的目的组播
+  地址。要使组播报文最终能够到达接收者，需要某种机制使连接接收者网段的组播路由器
+  能够了解到该网段存在哪些组播接收者，同时保证接收者可以加入相应的组播组中。IGMP
+  就是用来在主机和最有一跳路由器间建立这种关系的协议。
+  #+CAPTION: IGMP存在的意义
+  #+ATTR_LaTeX: scale=0.75
+  [[./fig/igmp0.png]]
+- 版本：IGMPv1中定义了基本的组成员查询和报告过程，IGMPv2在此基础上添加了查询器选
+  举和组成员离开的机制，IGMPv3中增加的主要功能是成员可以指定接收或指定不接收某些
+  组播源的报文。
+- IGMPv1工作机制
+- IGMPv2增强
+- IGMPv3增强
+  
+*** 开源方案
 * TODO MPLS配置
 * TODO VPN配置
 * TODO WLAN-FAT AP配置
