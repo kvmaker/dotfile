@@ -1836,6 +1836,16 @@ ff02::2 ip6-allrouters
 	#+CAPTION: 组播应用场景3
 	#+ATTR_LaTeX: scale=0.5
 	[[./fig/mc3.png]]
+*** 开源实现
+- Linux
+  |------+----------+--------------|
+  | 项目 | AR       | Linux        |
+  |------+----------+--------------|
+  | IGMP | v1,v2,v3 | v1,v2,部分v3 |
+  | MLD  |          |              |
+  | PIM  |          |              |
+  |      |          |              |
+  1. 
 
 ** IGMP
 *** 介绍
@@ -1853,10 +1863,64 @@ ff02::2 ip6-allrouters
   举和组成员离开的机制，IGMPv3中增加的主要功能是成员可以指定接收或指定不接收某些
   组播源的报文。
 - IGMPv1工作机制
+  1. 组播网络。
+	 #+CAPTION: 组播网络拓扑
+	 #+ATTR_LaTeX: scale=0.75
+	 [[./fig/igmp1.png]]
+  2. 普遍组查询和响应机制：通过普遍组查询和响应，IGMP查询器可以了解到该网段内哪
+     些组播组存在成员。
+	 #+CAPTION: 普遍组查询与响应
+	 #+ATTR_LaTeX: scale=0.75
+	 [[./fig/igmp2.png]]
+  3. 新组成员加入。
+	 #+CAPTION: 新成员加入
+	 #+ATTR_LaTeX: scale=0.75
+	 [[./fig/igmp3.png]]
+  4. 成员离开机制：IGMPv1没有专门定义离开组的报文。主机离开组播组后，便不会再对
+	 普遍组查询报文做出回应。
 - IGMPv2增强
+  1. 新增成员离开报文，用于快速离开。
+  2. 新增特定组查询。
 - IGMPv3增强
-  
+  1. 新增了特定源组查询报文。
+  2. 报告报文不仅包含主机想要加入的组播组，而且包含主机想要接收来自哪些组播源的
+     数据。
+  3. 在IGMPv3中一个成员报告报文可以携带多个组播组信息。
+- IGMP SSM Mapping
+  #+CAPTION: SGMP SSM Mapping
+  #+ATTR_LaTeX: scale=0.75
+  [[./fig/igmp3.png]]
+  1. 解决igmpv1, igmpv2无法提供SSM的方法
+- IGMP Proxy
+  #+CAPTION: IGMP Proxy
+  #+ATTR_LaTeX: scale=0.75
+  [[./fig/igmp4.png]]
+- IGMP Snooping：
+  通过侦听三层组播设备和用户主机之间发送的组播协议报文来维护组播报文的出接口信息，
+  从而管理和控制组播数据报文在数据链路层的转发。
+  #+CAPTION: IGMP Snooping
+  #+ATTR_LaTeX: scale=0.75
+  [[./fig/igmp5.png]]
+
 *** 开源方案
+- IGMP Snooping
+  1. 架构：
+	 #+CAPTION: Linux IGMP Snooping
+	 #+ATTR_LaTeX: scale=0.75
+	 [[./fig/igmp6.png]]
+  2. 代码：
+     - Linux 3.14/net/bridge/br_multicast_ipv4_rcv.c：监听IGMP报文。
+     - Linux 3.14/net/bridge/br_mdb.c：建立GROUP-PORT数据库。
+     |-------------+------+----------------------|
+     | 项目        | AR   | Linux                |
+     |-------------+------+----------------------|
+     | IGMPv1      | 支持 | 支持                 |
+     | IGMPv2      | 支持 | 支持                 |
+     | IGMPv3      | 支持 | 部分支持， 不支持SSM |
+     | SSM Mapping | 支持 | 不支持               |
+     |-------------+------+----------------------|
+  3. 
+	 
 * TODO MPLS配置
 * TODO VPN配置
 * TODO WLAN-FAT AP配置
