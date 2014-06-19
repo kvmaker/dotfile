@@ -1,0 +1,157 @@
+#+TITLE:     OpenStack安装
+#+AUTHOR:    yubo y00186361
+#+EMAIL:     kvmaker.yubo@huawei.com
+#+DATE:      Thu Jun 19 09:25:46 2014
+#+LATEX_CLASS: cn-article
+#+OPTIONS: LaTeX:dvipng
+
+* Archiecture
+  |----------------+------------+-----------------------------------------|
+  | Service        | Project    | Des                                     |
+  |----------------+------------+-----------------------------------------|
+  | Dashboard      | Horizon    | A web ui for manpulate openstack.       |
+  | Compute        | Nova       | Manage lifecyle of compute instance.    |
+  | Networking     | Neturon    | Provade networking as a service.        |
+  |----------------+------------+-----------------------------------------|
+  | Object Storage | Swift      |                                         |
+  | Block Storage  | Cinder     |                                         |
+  |----------------+------------+-----------------------------------------|
+  | ID Service     | Keystone   | Provade authentication && authorization |
+  | Image          | Glance     | Stroe and retrieves virtual machine     |
+  | Telemetry      | Ceilometer | Billing, benchmarking...                |
+  |----------------+------------+-----------------------------------------|
+  | Orchestration  | Heat       |                                         |
+  |----------------+------------+-----------------------------------------|
+** Conceptual Archiecture
+   #+CAPTION: Archiecture
+   #+ATTR_LaTeX: scale=0.75
+   [[./fig/archiecture0.bmp]]
+** Logical Archiecture
+   #+CAPTION: Archiecture
+   #+ATTR_LaTeX: scale=0.75
+   [[./fig/archiecture1.bmp]]
+
+* Basic
+** Networking
+   #+CAPTION: Basic Networking With 2 Nodes
+   #+ATTR_LaTeX: scale=0.75
+   #+begin_src ditaa :file fig/networking
+        
+        +------+  Extern     +------+
+        |      +-------------+      |
+        |   .1 +-------------+.100  |
+        +------+  Intern     +------+
+       controler 192.168.1.0/24 compute1
+   #+end_src
+
+** ntp
+** password
+- pwgen
+- openssl
+- myconfig
+  |-----------------+------|
+  | NAME            | PASS |
+  |-----------------+------|
+  | DB_PASS         | pass |
+  | RABBIT_PASS     | pass |
+  | KEYSTONE_DBPASS | pass |
+  | ADMIN_PASS      | pass |
+
+  
+** MySql
+*** Controler
+#+begin_src sh
+# apt-get install python-mysqldb mysql-server
+# emacs /etc/mysql/my.cnf
+...
+[mysqld]
+...
+bind-address = 0.0.0.0
+...
+# service mysql restart
+# mysql_install_db
+# mysql_secure_installation
+#+end_src
+
+*** Other Nodes
+#+begin_src sh
+# apt-get install python-mysqldb
+#+end_src
+
+** Openstack package
+#+begin_src sh
+# apt-get install python-software-properties
+# add-apt-repository cloud-archive:havana
+# apt-get update 
+# apt-get dist-upgrade
+# reboot
+#+end_src
+
+** Messaging server
+#+begin_src sh
+# apt-get install rabbitmq-server
+# rabbitmqctl change_password guest /RABBIT_PASS/
+#+end_src
+
+* ID service
+** Concepts
+   |----------------+------------------------------------------------------------------------|
+   | Conecpts       | Des.                                                                   |
+   |----------------+------------------------------------------------------------------------|
+   | User           | persion service, system,                                               |
+   | Credentials    | Data that is known only by a user that proves who they are             |
+   | Authentication | The act of confirming the identity of a user                           |
+   | Token          | An arbitrary bit of text that is used to access resources              |
+   | Tenant         | A container used to group or isolate resources and/or identity objects |
+   | Service        | Nova, Swift...                                                         |
+   | Endpoint       | A network-accessible address, usually described by a URL, from where   |
+   |                | you access a service.                                                  |
+   | Role           | A personality that a user assumes that enables them to perform a       |
+   |                | specific set of operations                                             |
+   |----------------+------------------------------------------------------------------------|
+   #+CAPTION: id service profess flow
+   #+ATTR_LaTeX: scale=0.75
+   [[./fig/id.bmp]]
+** Install
+#+begin_src sh
+# apt-get install keystone
+
+# emacs /etc/keystone/keystone.conf
+...
+[sql]
+# The SQLAlchemy connection string used to connect to the database
+connection = mysql://keystone:KEYSTONE_DBPASS@controller/keystone
+...
+
+# rm /var/lib/keystone/keystone.db
+# mysql -u root -p
+mysql> CREATE DATABASE keystone;
+mysql> GRANT ALL PRIVILEGES ON keystone.* TO 'keystone'@'localhost' \
+IDENTIFIED BY 'KEYSTONE_DBPASS';
+mysql> GRANT ALL PRIVILEGES ON keystone.* TO 'keystone'@'%' \
+IDENTIFIED BY 'KEYSTONE_DBPASS';
+
+# keystone-manage db_sync
+# openssl rand -hex 10
+# emacs /etc/keystone/keystone.conf
+[DEFAULT]
+# A "shared secret" between keystone and other openstack services
+admin_token = ADMIN_TOKEN
+...
+# service keystone restart
+
+#+end_src
+
+** Define user, tenants, and roles
+#+begin_src sh
+# export OS_SERVICE_TOKEN=ADMIN_TOKEN
+# export OS_SERVICE_ENDPOINT=http://controller:35357/v2.0
+# keystone tenant-create --name=admin --description="Admin Tenant"
+# keystone tenant-create --name=service --description="Service Tenant"
+# keystone user-create --name=admin --pass=ADMIN_PASS \
+--email=admin@example.com
+# keystone role-create --name=admin
+# keystone user-role-add --user=admin --tenant=admin --role=admin
+#+end_src
+
+** Define services and API endpoint

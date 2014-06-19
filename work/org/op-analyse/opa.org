@@ -6,6 +6,7 @@
 #+BEAMER_FRAME_LEVEL: 2
 #+LaTeX_CLASS_OPTIONS: [xcolor=svgnames,bigger,presentation]
 #+OPTIONS: LaTeX:dvipng
+#+STARTUP: showall
 
 * 设备管理配置
 ** NTP
@@ -1838,14 +1839,83 @@ ff02::2 ip6-allrouters
 	[[./fig/mc3.png]]
 *** 开源实现
 - Linux
-  |------+----------+--------------|
-  | 项目 | AR       | Linux        |
-  |------+----------+--------------|
-  | IGMP | v1,v2,v3 | v1,v2,部分v3 |
-  | MLD  |          |              |
-  | PIM  |          |              |
-  |      |          |              |
-  1. 
+  1. 组播地址和组播路由管理
+	 #+begin_src sh
+     ip maddr [ add | del ] MULTIADDR dev STRING
+     ip mroute show [ dev STRING ]
+	 #+end_src
+  2. 配置IGMP版本
+	 #+begin_src sh
+     echo 2 > /proc/sys/net/ipv4/conf/eth0/force_igmp_version
+	 #+end_src
+  3. 配置响应ICMP Broadcast ECHO
+	 #+begin_src sh
+     echo 0 > /proc/sys/net/ipv4/icmp_echo_ignore_broadcasts
+	 #+end_src
+- SMCRoute
+  1. https://github.com/troglobit/smcroute
+  2. 说明：SMCRoute是一个用来维护内核组播路由的工具，支持IPv4和IPv6路由。
+     SMCRoute可在小型的组播网络中用来代替mrouted或pimd等动态组播路由工具。
+  3. 使用方法
+	 #+begin_src sh
+     smcroute < options > < commands >
+
+     options
+            -d  -  start daemon
+            -v  -  verbose output
+            -D  -  enable debug logging
+
+     commands - common
+            -h  -  print help
+            -k  -  kill daemon
+
+     commands - multicast routing related
+            -a <InputIntf> <OriginIpAdr> <McGroupAdr> <OutputIntf> [<OutputIntf>] ...
+               -  add route
+            -r <InputIntf> <OriginIpAdr> <McGroupAdr>
+               -  remove route
+
+     commands - multicast signaling related
+            -j <InputIntf> <McGroupAdr>  - join MC group
+            -l <InputIntf> <McGroupAdr>  - leave MC group
+	 #+end_src
+  4. 举例
+	 #+begin_src ditaa :file temp/smcroute0.png
+          u0                       u1                     u2
+          +-------+               +--------+              +--------+
+          |       |192.168.10.0/24|ipip    |192.168.1.0/24|eth0    |
+          |   .100+-----=---------+.101.100+--------------+.200    |
+          |   ipip|               |    eth1|              |        |
+          +-------+               +--------+              +--------+          
+                                                         maddr:239.100.100.100
+              
+	 #+end_src
+	 - u0
+	   #+begin_src sh
+       ping 239.100.100.100 -I ipip -t 2
+	   #+end_src
+	 - u1
+	   #+begin_src sh
+       smcroute -a ipip 192.168.10.100 239.100.100.100 eth1
+	   #+end_src
+	 - u2
+	   #+begin_src sh
+       smcroute -j eth0 239.100.100.100
+	   #+end_src
+- 对比
+  |-------------------+------+--------------------|
+  | 特性              | AR   | Linux              |
+  |-------------------+------+--------------------|
+  | ASM               | 支持 | 支持               |
+  | SSM               | 支持 | 不完整             |
+  | IPv4组播          | 支持 | 支持               |
+  | IPv6组播          | 支持 | 支持               |
+  | IGMP              | 支持 | 不完整，v3部分支持 |
+  | PIM               | 支持 | 支持               |
+  | MSDP              | 支持 | 不确定             |
+  | MBGP              | 支持 | 不确定             |
+  | IGMP/MLD Snooping | 支持 | 支持               |
+  |-------------------+------+--------------------|
 
 ** IGMP
 *** 介绍
@@ -1903,13 +1973,29 @@ ff02::2 ip6-allrouters
   [[./fig/igmp5.png]]
 
 *** 开源方案
+- IGMP
+  1. 代码
+	 - Linux 3.14/net/ipv4/igmp.c
+	 - Linux 3.14/net/mcast.c
+  2. 加入组播组：使用setsockopt()函数设置socket的属性，来实现加入或离开组播组。
+	 #+begin_src sh
+	 IP_ADD_MEMBERSHIP
+	 IP_DROP_MEMBERSHIPIP_DROP_MEMBERSHIP
+	 IP_MULTICAST_IF
+	 IP_MULTICAST_TTL
+	 IP_MULTICAST_LOOP
+	 #+end_src
+  3. 查看组播组信息
+	 #+begin_src sh
+     cat /proc/net/igmp
+	 #+end_src
 - IGMP Snooping
   1. 架构：
 	 #+CAPTION: Linux IGMP Snooping
 	 #+ATTR_LaTeX: scale=0.75
 	 [[./fig/igmp6.png]]
   2. 代码：
-     - Linux 3.14/net/bridge/br_multicast_ipv4_rcv.c：监听IGMP报文。
+     - Linux 3.14/net/bridge/br_multicast.c：监听IGMP/MLD报文。
      - Linux 3.14/net/bridge/br_mdb.c：建立GROUP-PORT数据库。
      |-------------+------+----------------------|
      | 项目        | AR   | Linux                |
@@ -1919,8 +2005,154 @@ ff02::2 ip6-allrouters
      | IGMPv3      | 支持 | 部分支持， 不支持SSM |
      | SSM Mapping | 支持 | 不支持               |
      |-------------+------+----------------------|
-  3. 
-	 
+  3. 相关配置
+     |--------------------------------------+------------------------|
+     | 参数                                 | 说明                   |
+     |--------------------------------------+------------------------|
+     | /sys/devices/virtual/net/br0/bridge/ |                        |
+     | multicast_snooping                   | igmp/mld snooping 开关 |
+     | multicast_querier                    | 是否发送query报文      |
+     | multicast_querier_*                  | query相关参数          |
+     |--------------------------------------+------------------------|
+- Mcproxy
+  1. 代码
+	 https://github.com/mcproxy/mcproxy
+- 对比
+  |-------------+----+--------|
+  | 特性        | AR | Linux  |
+  |-------------+----+--------|
+  | v1          | Y  | Y      |
+  | v2          | Y  | Y      |
+  | v3          | Y  | 不完整 |
+  | SSM Mapping | Y  | N      |
+  | Proxy       | Y  | Y      |
+  | Snooping    | Y  | Y      |
+  |-------------+----+--------|
+
+** PIM
+*** 介绍
+- 定义：直接利用单播路由表的路由信息，对组播报文执行RPF（Reverse Path Forwarding，
+  逆向路径转发）检查，检查通过后创建组播路由表项，从而转发组播报文。
+- 基本概念：
+  #+CAPTION: PIM基本概念
+  #+ATTR_LaTeX: scale=0.75
+  [[./fig/pim0.png]]
+  1. 组播分发树：PIM网络以组播组为单位在路由器上建立一点到多点的组播转发路径。
+  2. PIM路由器：在接口上使能了PIM协议的路由器即为PIM路由器。
+  3. PIM路由表项：PIM路由表项即通过PIM协议建立的组播路由表项。
+- PIM-DM
+  1. 原理：在实现过程中，它会假设网络中的组成员分布非常稠密，每个网段都可能存在
+     组成员。当有活跃的组播源出现时，PIM-DM会将组播源发来的组播报文扩散到整个网
+     络的PIM路由器上，再裁剪掉不存在组成员的分支。
+  2. 邻居发现（Neighbor Discovery）
+  3. 扩散（Flooding）
+	 #+CAPTION: PIM-DM 扩散
+	 #+ATTR_LaTeX: scale=0.75
+  4. 剪枝（Prune）
+- PIM-SM（ASM模型）
+- PIM-SM（SSM模型）
+
+*** 开源方案
+- pimd
+  1. 代码：https://github.com/troglobit/pimd
+  2. 特性对比
+     |-----------------+------+--------|
+     | 特性            | AR   | pimd   |
+     |-----------------+------+--------|
+     | PIM-SM(ASM模型) | 支持 | 支持   |
+     | PIM-SM(SSM模型) | 支持 | 不支持 |
+     | DR竞选          | 支持 | 支持   |
+     | DR发现          | 支持 | 支持   |
+     | RPT构建         | 支持 | 支持   |
+     | 组播源注册      | 支持 | 支持   |
+     | SPT切换         | 支持 | 不支持 |
+     | BSR管理域       | 支持 | 不支持 |
+     |-----------------+------+--------|
+  3. 配置文件
+	 #+begin_src sh
+     default_source_preference <preference>
+     default_source_metric <metric>
+
+     phyint <local-addr|ifname> [disable|enable]
+     [altnet <network> masklen <masklen>]
+     [scoped <network> masklen <masklen>]
+     [threshold thr] [preference pref] [metric cost]
+
+     cand_rp [<local-addr>] [priority <number>] [time <number>]
+     cand_bootstrap_router [<local-addr>] [priority <number>]
+
+     rp_address <rp-addr> [<group-addr> [masklen <masklen] [priority <number>]]
+
+     group_prefix <group-addr> [masklen <masklen>] [priority <number>]
+
+     switch_data_threshold [rate <number> interval <number>]
+     switch_register_threshold [rate <number> interval <number>]
+	 #+end_src
+  4. 举例
+	 #+begin_src ditaa :file temp/smcroute0.png
+          u0                       u1                     u2
+          +-------+               +--------+              +--------+
+          |       |192.168.10.0/24|ipip    |192.168.1.0/24|eth0    |
+          |   .100+-----=---------+.101.100+--------------+.200    |
+          |   ipip|               |    eth1|              |        |
+          +-------+               +--------+              +--------+          
+                                                         maddr:239.100.100.100
+	 #+end_src
+	 - u0
+	   #+begin_src sh
+       ping 239.100.100.100 -I ipip -t 2
+	   #+end_src
+	 - u1
+	   #+begin_src sh
+       /etc/pimd.conf
+       phyint ipip enable
+       phyint br0  enable
+       rp_address 192.168.10.101 224.0.0.0 masklen 4 priority 5
+       group_prefix 224.0.0.0 masklen 4
+
+       pimd -N
+	   #+end_src
+     - u2
+	   #+begin_src sh
+       /etc/pimd.conf
+       phyint eth0 enable
+       rp_address 192.168.10.101 224.0.0.0 maskeln 4 priority 5
+       group_prefix 224.0.0.0 masklen 4
+
+       pimd -N
+       iperf -s -u -B 239.100.100.100
+	   #+end_src
+- pim-dm
+  1. http://antc.uoregon.edu/PIMDM/pimd-dense.html
+- pim from xorg
+  1. https://github.com/greearb/xorp.ct/tree/master/xorp/pim
+- mrd6
+  1. http://fivebits.net/proj/mrd6/
+- PIM Daemon for Quagga
+  1. https://savannah.nongnu.org/projects/qpimd
+
+** TODO MSDP
+** 组播路由管理
+*** 介绍
+*** 开源方案
+- 对比
+    |----------------+------+--------|
+    | 特性           | AR   | Linux  |
+    |----------------+------+--------|
+    | 组播路由和转发 | 支持 | 支持   |
+    | RPF检查        | 支持 | 支持   |
+    | 组播静态路由   | 支持 | 支持   |
+    | 改变RPF路由    | 支持 | 不支持 |
+    | 衔接RPF路由    | 支持 | 不支持 |
+    | 组播负载分担   | 支持 | 不确定 |
+    | 组播Over GRE   | 支持 | 支持   |
+    | MPing          | 支持 | 支持   |
+    | MTrace         | 支持 | 不支持 |
+    | 组播多实例     | 支持 | 不确定 |
+    |----------------+------+--------|
+
+** TODO 组播网管
+   
 * TODO MPLS配置
 * TODO VPN配置
 * TODO WLAN-FAT AP配置
@@ -1957,3 +2189,5 @@ ff02::2 ip6-allrouters
 - Linux Manual: ip(8)
 - Linux Manual: route(8)
 - http://www.nongnu.org/quagga/docs/docs-info.html
+- Linux Manual: smcroute(8)
+- Linux Manual: pimd(8)
