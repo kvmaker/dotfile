@@ -5,7 +5,7 @@
 #+LATEX_CLASS: cn-article
 #+OPTIONS: LaTeX:dvipng
 
-* Archiecture
+* Architecture
   |----------------+------------+-----------------------------------------|
   | Service        | Project    | Des                                     |
   |----------------+------------+-----------------------------------------|
@@ -22,14 +22,14 @@
   |----------------+------------+-----------------------------------------|
   | Orchestration  | Heat       |                                         |
   |----------------+------------+-----------------------------------------|
-** Conceptual Archiecture
-   #+CAPTION: Archiecture
+** Conceptual Architecture
+   #+CAPTION: Architecture
    #+ATTR_LaTeX: scale=0.75
-   [[./fig/archiecture0.bmp]]
-** Logical Archiecture
-   #+CAPTION: Archiecture
+   [[./fig/architecture0.bmp]]
+** Logical Architecture
+   #+CAPTION: Architecture
    #+ATTR_LaTeX: scale=0.75
-   [[./fig/archiecture1.bmp]]
+   [[./fig/architecture1.bmp]]
 
 * Basic
 ** Networking
