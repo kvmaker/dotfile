@@ -17,7 +17,7 @@
 (setq linum-format "%4d ")
 (show-paren-mode 1)
 (setq show-paren-delay 1)
-(setq tab-width 4)
+;;(setq tab-width 4)
 (setq user-full-name "Yu Bo")
 (setq user-mail-address "kvmaker.yubo@huawei.com")
 (setq default-major-mode 'text-mode)
@@ -276,6 +276,13 @@ Emacs buffer are those starting with “*”."
 			 (turn-on-haskell-doc-mode)
 			 (turn-on-haskell-indent)
 			 (turn-on-haskell-simple-indent)))
+;; lisp-mode
+(add-hook 'lisp-mode-hook
+		  '(lambda ()
+			 (setq indent-tabs-mode nil)))
+(add-hook 'emacs-lisp-mode-hook
+		  '(lambda ()
+			 (setq indent-tabs-mode nil)))
 
 ;; org-mode
 (require 'org-install)

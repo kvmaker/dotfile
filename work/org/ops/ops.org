@@ -49,15 +49,19 @@
 - pwgen
 - openssl
 - myconfig
-  |-----------------+------|
-  | NAME            | PASS |
-  |-----------------+------|
-  | DB_PASS         | pass |
-  | RABBIT_PASS     | pass |
-  | KEYSTONE_DBPASS | pass |
-  | ADMIN_PASS      | pass |
+  |-----------------+----------------------|
+  | NAME            | PASS                 |
+  |-----------------+----------------------|
+  | DB_PASS         | pass                 |
+  | RABBIT_PASS     | pass                 |
+  | KEYSTONE_DBPASS | pass                 |
+  | ADMIN_TOKEN     | 24452c63c3a81141bf5a |
+  | ADMIN_PASS      | pass                 |
+  | GLANCE_DBPASS   | pass                 |
+  | NOVA_DBPASS     | pass                 |
+  | NOVA_PASS       | pass                 |
+  |-----------------+----------------------|
 
-  
 ** MySql
 *** Controler
 #+begin_src sh
@@ -147,11 +151,264 @@ admin_token = ADMIN_TOKEN
 # export OS_SERVICE_TOKEN=ADMIN_TOKEN
 # export OS_SERVICE_ENDPOINT=http://controller:35357/v2.0
 # keystone tenant-create --name=admin --description="Admin Tenant"
++-------------+----------------------------------+
+|   Property  |              Value               |
++-------------+----------------------------------+
+| description |           Admin Tenant           |
+|   enabled   |               True               |
+|      id     | 3aefb4adc0d04a9ea7e40b8f7b439cf4 |
+|     name    |              admin               |
++-------------+----------------------------------+
+
 # keystone tenant-create --name=service --description="Service Tenant"
++-------------+----------------------------------+
+|   Property  |              Value               |
++-------------+----------------------------------+
+| description |          Service Tenant          |
+|   enabled   |               True               |
+|      id     | 7ec17b218c644e9083306dd2a5ab7438 |
+|     name    |             service              |
++-------------+----------------------------------+
+
 # keystone user-create --name=admin --pass=ADMIN_PASS \
 --email=admin@example.com
++----------+----------------------------------+
+| Property |              Value               |
++----------+----------------------------------+
+|  email   |        admin@example.com         |
+| enabled  |               True               |
+|    id    | b1133a12e95b4cd6832e3c11bff7cd7b |
+|   name   |              admin               |
++----------+----------------------------------+
+
 # keystone role-create --name=admin
++----------+----------------------------------+
+| Property |              Value               |
++----------+----------------------------------+
+|    id    | 1a386130bcfc4c7982127c6035c151a4 |
+|   name   |              admin               |
++----------+----------------------------------+
+
 # keystone user-role-add --user=admin --tenant=admin --role=admin
 #+end_src
 
 ** Define services and API endpoint
+#+begin_src sh
+root@controller:~# keystone service-create --name=keystone --type=identity \
+> --description="Keystone Identity Service"
++-------------+----------------------------------+
+|   Property  |              Value               |
++-------------+----------------------------------+
+| description |    Keystone Identity Service     |
+|      id     | 288dde8aa8f548119514a0a6fb35740b |
+|     name    |             keystone             |
+|     type    |             identity             |
++-------------+----------------------------------+
+
+root@controller:~# keystone endpoint-create \
+> --service-id=288dde8aa8f548119514a0a6fb35740b \
+> --publicurl=http://controller:5000/v2.0 \
+> --internalurl=http://controller:5000/v2.0 \
+> --adminurl=http://controller:35357/v2.0
++-------------+----------------------------------+
+|   Property  |              Value               |
++-------------+----------------------------------+
+|   adminurl  |   http://controller:35357/v2.0   |
+|      id     | 39b9a7b124524bc584e0f59f8c149a74 |
+| internalurl |   http://controller:5000/v2.0    |
+|  publicurl  |   http://controller:5000/v2.0    |
+|    region   |            regionOne             |
+|  service_id | 288dde8aa8f548119514a0a6fb35740b |
++-------------+----------------------------------+
+
+#+end_src
+
+** Verify the Identity Service installation
+#+begin_src sh
+# unset OS_SERVICE_TOKEN OS_SERVICE_ENDPOINT
+# keystone --os-username=admin --os-password=pass \
+--os-auth-url=http://controller:35357/v2.0 token-get
+# keystone --os-username=admin --os-password=pass \
+--os-tenant-name=admin --os-auth-url=http://controller:35357/v2.0 token-get
+
+# emacs keystonerc
+export OS_USERNAME=admin
+export OS_PASSWORD=ADMIN_PASS
+export OS_TENANT_NAME=admin
+export OS_AUTH_URL=http://controller:35357/v2.0
+
+# keystone token-get
++----------------------------------+-------+---------+-------------------+
+|                id                |  name | enabled |       email       |
++----------------------------------+-------+---------+-------------------+
+| b1133a12e95b4cd6832e3c11bff7cd7b | admin |   True  | admin@example.com |
++----------------------------------+-------+---------+-------------------+
+#+end_src
+
+* Image Service
+** Overview
+- glance-api
+- glance-registery
+- Database
+- Storage repository for image files
+
+** Install
+#+begin_src sh
+# apt-get install glance python-glanceclient
+# emacs /etc/glance/glance-api.conf
+...
+[DEFAULT]
+...
+# SQLAlchemy connection string for the reference implementation
+# registry server. Any valid SQLAlchemy connection string is fine.
+# See: http://www.sqlalchemy.org/docs/05/reference/sqlalchemy/connections.
+html#sqlalchemy.create_engine
+sql_connection = mysql://glance:GLANCE_DBPASS@controller/glance
+...
+
+# emacs /etc/glance/glance-registry.conf
+...
+[DEFAULT]
+...
+# SQLAlchemy connection string for the reference implementation
+# registry server. Any valid SQLAlchemy connection string is fine.
+# See: http://www.sqlalchemy.org/docs/05/reference/sqlalchemy/connections.
+html#sqlalchemy.create_engine
+sql_connection = mysql://glance:GLANCE_DBPASS@controller/glance
+...
+
+# rm  /var/lib/glance/glance.sqlite
+# mysql -u root -p
+mysql> CREATE DATABASE glance;
+mysql> GRANT ALL PRIVILEGES ON glance.* TO 'glance'@'localhost' \
+IDENTIFIED BY 'GLANCE_DBPASS';
+mysql> GRANT ALL PRIVILEGES ON glance.* TO 'glance'@'%' \
+IDENTIFIED BY 'GLANCE_DBPASS';
+# glance-manage db_sync
+# keystone user-create --name=glance --pass=pass \
+> --email=glance@example.com
++----------+----------------------------------+
+| Property |              Value               |
++----------+----------------------------------+
+|  email   |        glance@example.com        |
+| enabled  |               True               |
+|    id    | 0a2751ae3117459faf7a09be2a4e39cb |
+|   name   |              glance              |
++----------+----------------------------------+
+
+# keystone service-create --name=glance --type=image \
+> --description="Glance Image Service"
++-------------+----------------------------------+
+|   Property  |              Value               |
++-------------+----------------------------------+
+| description |       Glance Image Service       |
+|      id     | ba2b8708827c48668e3d7b0d11a63fd0 |
+|     name    |              glance              |
+|     type    |              image               |
++-------------+----------------------------------+
+
+# keystone endpoint-create \
+> --service-id=ba2b8708827c48668e3d7b0d11a63fd0 \
+> --publicurl=http://controller:9292 \
+> --internalurl=http://controller:9292 \
+> --adminurl=http://controller:9292
++-------------+----------------------------------+
+|   Property  |              Value               |
++-------------+----------------------------------+
+|   adminurl  |      http://controller:9292      |
+|      id     | 8a81a486c7534af5b2e530c18844502f |
+| internalurl |      http://controller:9292      |
+|  publicurl  |      http://controller:9292      |
+|    region   |            regionOne             |
+|  service_id | ba2b8708827c48668e3d7b0d11a63fd0 |
++-------------+----------------------------------+
+
+# emacs /etc/glance/glance-api.conf /etc/glance/glance-registry.conf
+[keystone_authtoken]
+...
+auth_uri = http://controller:5000
+auth_host = controller
+auth_port = 35357
+auth_protocol = http
+admin_tenant_name = service
+admin_user = glance
+admin_password = GLANCE_PASS
+
+[paste_deploy]
+...
+flavor = keystone
+
+# emacs /etc/glance/glance-api-paste.ini
+[filter:authtoken]
+paste.filter_factory=keystoneclient.middleware.auth_token:filter_factory
+auth_host=controller
+admin_user=glance
+admin_tenant_name=service
+admin_password=GLANCE_PASS
+
+# keystone service-create --name=glance --type=image \
+--description="Glance Image Service"
+
+# keystone endpoint-create \
+--service-id=ba2b8708827c48668e3d7b0d11a63fd0 \
+--publicurl=http://controller:9292 \
+--internalurl=http://controller:9292 \
+--adminurl=http://controller:9292
+
+# service glance-registry restart
+# service glance-api restart
+
+#+end_src
+
+** Verify
+#+begin_src sh
+root@controller:~# glance image-create --name=cirros-64 --disk-format=qcow2 \
+>  --container-format=bare --is-public=true <
+/home/yubo/images/cirros-0.3.1-x86_64-disk.img
++------------------+--------------------------------------+
+| Property         | Value                                |
++------------------+--------------------------------------+
+| checksum         | d972013792949d0d3ba628fbe8685bce     |
+| container_format | bare                                 |
+| created_at       | 2014-06-19T09:31:48                  |
+| deleted          | False                                |
+| deleted_at       | None                                 |
+| disk_format      | qcow2                                |
+| id               | b07c66e4-79cc-4cbe-9899-f5106ac38c28 |
+| is_public        | True                                 |
+| min_disk         | 0                                    |
+| min_ram          | 0                                    |
+| name             | cirros-64                            |
+| owner            | 3aefb4adc0d04a9ea7e40b8f7b439cf4     |
+| protected        | False                                |
+| size             | 13147648                             |
+| status           | active                               |
+| updated_at       | 2014-06-19T09:31:49                  |
++------------------+--------------------------------------+
+
+root@controller:~# glance image-list
++--------------------------------------+-----------+-------------+------------------+----------+--------+
+| ID                                   | Name      | Disk Format | Container Format | Size     | Status |
++--------------------------------------+-----------+-------------+------------------+----------+--------+
+| b07c66e4-79cc-4cbe-9899-f5106ac38c28 | cirros-64 | qcow2       | bare             | 13147648 | active |
++--------------------------------------+-----------+-------------+------------------+----------+--------+
+
+#+end_src
+
+* Compute services
+** Install Computer controller service
+#+begin_src sh
+root@controller:~# keystone user-create --name=nova --pass=pass --email=nova@example.com
++----------+----------------------------------+
+| Property |              Value               |
++----------+----------------------------------+
+|  email   |         nova@example.com         |
+| enabled  |               True               |
+|    id    | 71a7c9549fca4327b311498b73b869f4 |
+|   name   |               nova               |
++----------+----------------------------------+
+
+#+end_src
+
+** Configure a Computer node
+

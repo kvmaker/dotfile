@@ -282,14 +282,14 @@
   2. Sticky MAC地址：使能端口安全后又使能Sticky MAC功能后学习到的MAC地址。Sticky MAC
 	 地址不会被老化，保存配置后重启设备，Sticky MAC地址不会丢失，无需重新学习。
 - MAC地址漂移
-  #+CAPTION: MAC地址漂移
-  #+ATTR_LaTeX: widht=.6\textwidth
-  [[./fig/mac_table0.png]]
   若SwitchB和SwitchC之间误接网线，则Router、SwitchB、SwitchC之间形成环路。当
   SwitchA上Port1接口从网络中收到一个广播报文后转发给Router，该报文经过环路，会被
   SwitchA上Port2接口收到。在接口Port2上配置MAC地址漂移检测，此时SwitchA会感知到
   MAC地址学习接口跳变的现象。若连续出现此现象，则在SwitchA上可以判断出现了MAC地
   址漂移。
+  #+CAPTION: MAC地址漂移
+  #+ATTR_LaTeX: widht=.6\textwidth
+  [[./fig/mac_table0.png]]
 
 ** 以太网链路聚合
 *** 介绍
