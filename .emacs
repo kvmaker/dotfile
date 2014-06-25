@@ -191,6 +191,7 @@ Emacs buffer are those starting with “*”."
 						(base64-encode-string "y00186361:cavendish#2014q2")))))
 
 ;; youdao translate
+(add-to-list 'load-path "~/.emacs.d/my/youdao")
 (require 'youdao)
 (setf keyfrom "JustDoDDD")
 (setf key     "486401619")
