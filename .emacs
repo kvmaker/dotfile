@@ -37,7 +37,7 @@
 
 ;; fill-column
 (require 'fill-column-indicator)
-(setq-default fill-column 80)
+(setq-default fill-column 79)
 ;;(add-hook 'after-change-major-mode-hook 'fci-mode)
 
 ;; high light current line
@@ -422,5 +422,11 @@ Emacs buffer are those starting with “*”."
 	  (cons '("/rfc[0-9]+\\.txt\\(\\.gz\\)?\\'" . rfcview-mode)
 			auto-mode-alist))
 (autoload 'rfcview-mode "rfcview" nil t)
+
+;; python-mode
+(add-hook 'python-mode-hook
+		  '(lambda()
+			 (linum-mode t)
+			 (fci-mode t)))
 
 (desktop-read)
