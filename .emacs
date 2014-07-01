@@ -105,7 +105,7 @@
                     :box '(:line-width 1 :color "gray30"))
 (set-face-attribute 'tabbar-selected nil
                     :inherit 'tabbar-default
-                    :foreground "DarkGreen"
+                    :foreground "DarkRed"
                     :background "LightGoldenrod"
                     :box '(:line-width 2 :color "DarkGoldenrod")
 					:overline "black"
