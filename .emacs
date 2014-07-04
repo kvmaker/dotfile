@@ -126,6 +126,7 @@ Emacs buffer are those starting with “*”."
     ((eq major-mode 'c-mode) "c")
 	((eq major-mode 'org-mode) "org")
 	((eq major-mode 'makefile-mode) "makefile")
+    ((eq major-mode 'python-mode) "python")
     (t "User Buffer"))))
 
 ;; slime
