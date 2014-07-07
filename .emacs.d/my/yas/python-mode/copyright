@@ -1,0 +1,14 @@
+# -*- mode: snippet -*-
+# name: copyright
+# key: cpy
+# binding: C-c y c
+# expand-env: ((yas/indent-line 'fixed))
+# --
+#  Copyright (C), 2013-2014, HUAWEI
+# 
+#  Filename   : `(buffer-name)`
+#  Version    : 1.0
+#  Author     : yubo 00186361
+#  Creation   : `(current-time-string)`
+#  Description: ${1:Description}
+$0
