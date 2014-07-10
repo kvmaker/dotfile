@@ -429,5 +429,8 @@ Emacs buffer are those starting with “*”."
 		  '(lambda()
 			 (linum-mode t)
 			 (fci-mode t)))
+;; puppet-mode
+(autoload 'puppet-mode "puppet-mode" "Major mode for editing puppet manifests")
+(add-to-list 'auto-mode-alist '("\\.pp$" . puppet-mode))
 
 (desktop-read)
