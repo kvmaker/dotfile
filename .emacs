@@ -284,10 +284,10 @@ Emacs buffer are those starting with “*”."
 			 (setq indent-tabs-mode nil)))
 
 ;; org-blog
-(require 'htmlize)
-(require 'org-publish)
 (setq org-src-fontify-natively t)
 ;;(setq org-export-htmlize-output-type 'css)
+(require 'htmlize)
+(require 'org-publish)
 (setq org-publish-project-alist
       '(
         ("blog-notes"
