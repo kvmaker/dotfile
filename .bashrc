@@ -124,21 +124,25 @@ function gitdiff ()
 
 export SVN_EDITOR="cat ~/.svn-log.tmpl >> svn-commit.tmp2 && cat svn-commit.tmp >> svn-commit.tmp2 && mv svn-commit.tmp2 svn-commit.tmp && emacs svn-commit.tmp"
 
-# proxy setting
-user=y00186361
-passwd=cavendish#2014q2
-export http_proxy=http://$user:$passwd@proxy.huawei.com:8080/
-export ftp_proxy=ftp://$user:$passwd@proxy.huawei.com:8080/
-export socks_proxy=socks://$user:$passwd@proxy.huawei.com:8080/
-export https_proxy=https://$user:$passwd@proxy.huawei.com:8080/
-export no_proxy=localhost,10.0.0.0/8,rnd-git.huawei.com
-
 # use xterm in screen
 export TERM="xterm"
 export CLICOLOR=1
 
-# add path
-export PATH=$PATH:~/work/bin
-export PATH=$PATH:~/v2r9/build/toolchains/arm-wap-linux-uclibcgnueabi/bin/
-export PATH=$PATH:/usr/local/go/bin
+# proxy setting
+function setproxy ()
+{
+    user=y00186361
+    passwd=cavendish#2014q2
+ 
+    export http_proxy=http://$user:$passwd@proxy.huawei.com:8080/
+    export ftp_proxy=ftp://$user:$passwd@proxy.huawei.com:8080/
+    export socks_proxy=socks://$user:$passwd@proxy.huawei.com:8080/
+    export https_proxy=https://$user:$passwd@proxy.huawei.com:8080/
+    export no_proxy=localhost,10.0.0.0/8,rnd-git.huawei.com
+}
 
+if [ `uname` != "Darwin" ]; then
+    setproxy
+else
+    alias emacs="/Applications/Emacs.app/Contents/MacOS/Emacs -nw"
+fi

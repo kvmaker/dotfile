@@ -293,7 +293,7 @@ Emacs buffer are those starting with “*”."
         ("blog-notes"
          :base-directory "~/org/blog/"
          :base-extension "org"
-         :publishing-directory "~/org/kvmaker.github.com/"
+         :publishing-directory "~/org/kvmaker.github.io/"
          :recursive t
          :publishing-function org-publish-org-to-html
          :headline-levels 4
