@@ -283,9 +283,11 @@ Emacs buffer are those starting with “*”."
 		  '(lambda ()
 			 (setq indent-tabs-mode nil)))
 
-
 ;; org-blog
+(require 'htmlize)
 (require 'org-publish)
+(setq org-src-fontify-natively t)
+;;(setq org-export-htmlize-output-type 'css)
 (setq org-publish-project-alist
       '(
         ("blog-notes"
@@ -295,19 +297,19 @@ Emacs buffer are those starting with “*”."
          :recursive t
          :publishing-function org-publish-org-to-html
          :headline-levels 4
-         :section-numbers nil
+         :section-numbers t
          :auto-preamble t
-         :with-toc nil
-         :auto-sitemap t                  ; Generate sitemap.org automagically...
-         :sitemap-filename "index.org"    ; ... call it sitemap.org (it's the default)...
-         :sitemap-title "index"           ; ... with title 'Sitemap'.
+         :with-toc t
+         :auto-sitemap t
+         :sitemap-filename "index.org"
+         :sitemap-title "index"
          :author "kvmaker"
          :email "kvmaker@gmail.com"
          :style    "<link rel=\"stylesheet\" type=\"text/css\" href=\"css/solarized-light.css\"/>"
          )
         ("blog-static"
          :base-directory "~/org/blog/"
-         :base-extension "css\\|js\\|png\\|jpg\\|gif\\|pdf\\|mp3\\|ogg\\|swf"
+         :base-extension "css\\|js\\|png\\|bmp\\|jpg\\|gif\\|pdf\\|mp3\\|ogg\\|swf"
          :publishing-directory "~/org/kvmaker.github.com/"
          :recursive t
          :publishing-function org-publish-attachment
