@@ -206,6 +206,13 @@ Emacs buffer are those starting with “*”."
  ;; If there is more than one, they won't work right.
  '(org-agenda-files nil)
  '(org-beamer-frame-default-options "[allowframebreaks=0.8]")
+ '(org-export-html-inline-image-extensions (quote ("png" "jpeg" "jpg" "gif" "svg" "bmp")))
+ '(org-export-html-link-home "index.html")
+ '(org-export-html-postamble t)
+ '(org-export-html-postamble-format (quote (("en" 
+                                             "<p class=\"creator\">Created by %c</p>
+                                              <p author=\"author\">Copyright © 2012 - 2014 <a href=\"mailto:kvmaker@gmail.com\">kvmaker</a></p>"))))
+ '(org-export-html-table-tag "<table align=\"center\" border=\"2\" cellspacing=\"0\" cellpadding=\"6\" rules=\"groups\" frame=\"hsides\">")
  '(semantic-c-dependency-system-include-path (quote ("/usr/include" ".")))
  '(session-use-package t nil (session))
  '(uniquify-buffer-name-style (quote forward) nil (uniquify))
@@ -284,10 +291,9 @@ Emacs buffer are those starting with “*”."
 			 (setq indent-tabs-mode nil)))
 
 ;; org-blog
-(setq org-src-fontify-natively t)
-;;(setq org-export-htmlize-output-type 'css)
 (require 'htmlize)
 (require 'org-publish)
+(setq org-src-fontify-natively t)
 (setq org-publish-project-alist
       '(
         ("blog-notes"
@@ -298,14 +304,13 @@ Emacs buffer are those starting with “*”."
          :publishing-function org-publish-org-to-html
          :headline-levels 4
          :section-numbers t
-         :auto-preamble t
-         :with-toc t
          :auto-sitemap t
          :sitemap-filename "index.org"
-         :sitemap-title "index"
+         :table-of-contents nil
+         :sitemap-title "金刚鱼"
          :author "kvmaker"
          :email "kvmaker@gmail.com"
-         :style    "<link rel=\"stylesheet\" type=\"text/css\" href=\"css/solarized-light.css\"/>"
+         :style "<link rel=\"stylesheet\" type=\"text/css\" href=\"css/solarized-light.css\"/>"
          )
         ("blog-static"
          :base-directory "~/org/blog/"
