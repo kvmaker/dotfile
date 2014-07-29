@@ -199,11 +199,11 @@ Emacs buffer are those starting with “*”."
 (global-set-key (kbd "C-c t t") 'translate)
 
 ;; inf-ruby
-(add-to-list 'load-path "~/download/inf-ruby")
+(add-to-list 'load-path "~/.emacs.d/3rd/inf-ruby")
 (require 'inf-ruby)
 
 ;; robe
-(add-to-list 'load-path "~/download/robe")
+(add-to-list 'load-path "~/.emacs.d/3rd/robe")
 (require 'robe)
 (require 'ac-robe)
 
