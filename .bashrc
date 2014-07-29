@@ -133,6 +133,7 @@ export socks_proxy=socks://$user:$passwd@proxy.huawei.com:8080/
 export https_proxy=https://$user:$passwd@proxy.huawei.com:8080/
 export no_proxy=localhost,10.0.0.0/8,rnd-git.huawei.com
 
+
 # use xterm in screen
 export TERM="xterm"
 export CLICOLOR=1
@@ -142,3 +143,4 @@ export PATH=$PATH:~/work/bin
 export PATH=$PATH:~/v2r9/build/toolchains/arm-wap-linux-uclibcgnueabi/bin/
 export PATH=$PATH:/usr/local/go/bin
 
+export RUBYOPT='rubygems'
