@@ -132,7 +132,7 @@ export CLICOLOR=1
 function setproxy ()
 {
     user=y00186361
-    passwd=cavendish#2014q2
+    passwd=cavendish%232014q2
  
     export http_proxy=http://$user:$passwd@proxy.huawei.com:8080/
     export ftp_proxy=ftp://$user:$passwd@proxy.huawei.com:8080/
