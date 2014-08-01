@@ -146,3 +146,5 @@ if [ `uname` != "Darwin" ]; then
 else
     alias emacs="/Applications/Emacs.app/Contents/MacOS/Emacs -nw"
 fi
+
+export RUBYOPT='rubygems'

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html>
+<head>
+  <title>scan (Robe::Scanner)</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <link rel="stylesheet" href="../../.././rdoc-style.css" type="text/css" media="screen" />
+</head>
+<body class="standalone-code">
+  <pre><span class="ruby-comment cmt"># File lib/robe/scanners.rb, line 12</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">scan</span>(<span class="ruby-identifier">modules</span>, <span class="ruby-identifier">check_instance</span>, <span class="ruby-identifier">check_module</span>)
+      <span class="ruby-identifier">modules</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">m</span><span class="ruby-operator">|</span>
+        <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">check_module</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">m</span>.<span class="ruby-identifier">respond_to?</span>(<span class="ruby-identifier">:singleton_class</span>)
+          <span class="ruby-identifier">sc</span> = <span class="ruby-identifier">m</span>.<span class="ruby-identifier">singleton_class</span>
+          <span class="ruby-identifier">scan_methods</span>(<span class="ruby-identifier">sc</span>, <span class="ruby-identifier">:instance_methods</span>)
+          <span class="ruby-identifier">scan_methods</span>(<span class="ruby-identifier">sc</span>, <span class="ruby-identifier">:private_instance_methods</span>) <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">check_private</span>
+        <span class="ruby-keyword kw">end</span>
+        <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">check_instance</span>
+          <span class="ruby-identifier">scan_methods</span>(<span class="ruby-identifier">m</span>, <span class="ruby-identifier">:instance_methods</span>)
+          <span class="ruby-identifier">scan_methods</span>(<span class="ruby-identifier">m</span>, <span class="ruby-identifier">:private_instance_methods</span>) <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">check_private</span>
+        <span class="ruby-keyword kw">end</span>
+      <span class="ruby-keyword kw">end</span>
+    <span class="ruby-keyword kw">end</span></pre>
+</body>
+</html>

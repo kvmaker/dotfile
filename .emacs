@@ -198,6 +198,20 @@ Emacs buffer are those starting with “*”."
 (setf key     "486401619")
 (global-set-key (kbd "C-c t t") 'translate)
 
+;; inf-ruby
+(add-to-list 'load-path "~/.emacs.d/3rd/inf-ruby")
+(require 'inf-ruby)
+
+;; robe
+(add-to-list 'load-path "~/.emacs.d/3rd/robe")
+(require 'robe)
+(require 'ac-robe)
+
+;; flymake
+(add-to-list 'load-path "~/.emacs.d/3rd/flymake")
+(require 'flymake-ruby)
+(require 'flymake-cursor)
+
 ;; custom-set-variable
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
@@ -206,13 +220,20 @@ Emacs buffer are those starting with “*”."
  ;; If there is more than one, they won't work right.
  '(org-agenda-files nil)
  '(org-beamer-frame-default-options "[allowframebreaks=0.8]")
+ '(org-completion-use-ido t)
+ '(org-confirm-babel-evaluate nil)
+ '(org-ditaa-jar-path "~/.emacs.d/3rd/ditaa/ditaa0_9.jar")
  '(org-export-html-inline-image-extensions (quote ("png" "jpeg" "jpg" "gif" "svg" "bmp")))
  '(org-export-html-link-home "index.html")
  '(org-export-html-postamble t)
- '(org-export-html-postamble-format (quote (("en" 
-                                             "<p class=\"creator\">Created by %c</p>
+ '(org-export-html-postamble-format (quote (("en" "<p class=\"creator\">Created by %c</p>
                                               <p author=\"author\">Copyright © 2012 - 2014 <a href=\"mailto:kvmaker@gmail.com\">kvmaker</a></p>"))))
  '(org-export-html-table-tag "<table align=\"center\" border=\"2\" cellspacing=\"0\" cellpadding=\"6\" rules=\"groups\" frame=\"hsides\">")
+ '(org-export-latex-inline-image-extensions (quote ("pdf" "jpeg" "jpg" "png" "ps" "bmp" "eps")))
+ '(org-export-latex-listings (quote listings))
+ '(org-latex-to-pdf-process (quote ("xelatex -interaction nonstopmode %f" "xelatex -interaction nonstopmode %f")))
+ '(org-log-done t)
+ '(org-src-fontify-natively t)
  '(semantic-c-dependency-system-include-path (quote ("/usr/include" ".")))
  '(session-use-package t nil (session))
  '(uniquify-buffer-name-style (quote forward) nil (uniquify))
@@ -306,8 +327,8 @@ Emacs buffer are those starting with “*”."
          :section-numbers t
          :auto-sitemap t
          :sitemap-filename "index.org"
-         :table-of-contents nil
-         :sitemap-title "金刚鱼"
+         :table-of-contents t
+         :sitemap-title "kvmaker's blog"
          :author "kvmaker"
          :email "kvmaker@gmail.com"
          :style "<link rel=\"stylesheet\" type=\"text/css\" href=\"css/solarized-light.css\"/>"
@@ -315,7 +336,7 @@ Emacs buffer are those starting with “*”."
         ("blog-static"
          :base-directory "~/org/blog/"
          :base-extension "css\\|js\\|png\\|bmp\\|jpg\\|gif\\|pdf\\|mp3\\|ogg\\|swf"
-         :publishing-directory "~/org/kvmaker.github.com/"
+         :publishing-directory "~/org/kvmaker.github.io/"
          :recursive t
          :publishing-function org-publish-attachment
          )
@@ -351,6 +372,7 @@ Emacs buffer are those starting with “*”."
    (dot . t)
    (latex . t)
    (js . t)
+   (ruby . t)
    ))
 
 (setq org-latex-to-pdf-process
@@ -473,4 +495,14 @@ Emacs buffer are those starting with “*”."
 (autoload 'puppet-mode "puppet-mode" "Major mode for editing puppet manifests")
 (add-to-list 'auto-mode-alist '("\\.pp$" . puppet-mode))
 
+;; ruby-mode
+(add-hook 'ruby-mode-hook 
+		  '(lambda()
+			 (linum-mode t)
+             (fci-mode t)
+;;             (robe-mode t)
+             (ac-robe-setup)
+             (flymake-ruby-load)))
+
 (desktop-read)
+
