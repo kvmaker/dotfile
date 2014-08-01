@@ -87,6 +87,10 @@
 (setq ac-comphist-file (expand-file-name "~/.emacs.d/ac-comphist.dat"))
 (ac-config-default)
 (setq ac-auto-start nil)
+(setq ac-ignore-case nil)
+(add-to-list 'ac-modes 'ruby-mode)
+(add-to-list 'ac-modes 'enh-ruby-mode)
+(add-to-list 'ac-modes 'web-mode)
 (ac-set-trigger-key "TAB")
 
 ;; tabbar
@@ -203,14 +207,27 @@ Emacs buffer are those starting with “*”."
 (require 'inf-ruby)
 
 ;; robe
-(add-to-list 'load-path "~/.emacs.d/3rd/robe")
-(require 'robe)
-(require 'ac-robe)
+;;(add-to-list 'load-path "~/.emacs.d/3rd/robe")
+;;(require 'robe)
+;;(require 'ac-robe)
+
+;; ac-inf-ruby
+(add-to-list 'load-path "~/.emacs.d/3rd/ac-inf-ruby")
+(require 'ac-inf-ruby)
+(eval-after-load 'auto-complete
+  '(add-to-list 'ac-modes 'inf-ruby-mode))
+(add-hook 'inf-ruby-mode-hook 'ac-inf-ruby-enable)
+(eval-after-load 'inf-ruby '
+  '(define-key inf-ruby-mode-map (kbd "TAB") 'auto-complete))
 
 ;; flymake
 (add-to-list 'load-path "~/.emacs.d/3rd/flymake")
 (require 'flymake-ruby)
 (require 'flymake-cursor)
+
+;; yaml
+(require 'yaml-mode)
+(add-to-list 'auto-mode-alist '("\\.yml$" . yaml-mode))
 
 ;; custom-set-variable
 (custom-set-variables
@@ -501,8 +518,14 @@ Emacs buffer are those starting with “*”."
 			 (linum-mode t)
              (fci-mode t)
 ;;             (robe-mode t)
-             (ac-robe-setup)
+;;             (ac-robe-setup)
              (flymake-ruby-load)))
+(add-to-list 'inf-ruby-implementations '("pry" . "pry"))
+
+;; yaml-mode
+(add-hook 'yaml-mode-hook
+      '(lambda ()
+         (define-key yaml-mode-map "\C-m" 'newline-and-indent)))
 
 (desktop-read)
 

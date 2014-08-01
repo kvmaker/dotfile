@@ -126,7 +126,7 @@ export SVN_EDITOR="cat ~/.svn-log.tmpl >> svn-commit.tmp2 && cat svn-commit.tmp 
 
 # proxy setting
 user=y00186361
-passwd=cavendish#2014q2
+passwd=cavendish%232014q2
 export http_proxy=http://$user:$passwd@proxy.huawei.com:8080/
 export ftp_proxy=ftp://$user:$passwd@proxy.huawei.com:8080/
 export socks_proxy=socks://$user:$passwd@proxy.huawei.com:8080/
