@@ -206,12 +206,7 @@ Emacs buffer are those starting with “*”."
 ;; inf-ruby
 (add-to-list 'load-path "~/.emacs.d/3rd/inf-ruby")
 (require 'inf-ruby)
-
-;; robe
-;;(add-to-list 'load-path "~/.emacs.d/3rd/robe")
-;;(require 'robe)
-;;(require 'ac-robe)
-
+(add-to-list 'inf-ruby-implementations '("pry" . "pry"))
 ;; ac-inf-ruby
 (add-to-list 'load-path "~/.emacs.d/3rd/ac-inf-ruby")
 (require 'ac-inf-ruby)
@@ -220,6 +215,16 @@ Emacs buffer are those starting with “*”."
 (add-hook 'inf-ruby-mode-hook 'ac-inf-ruby-enable)
 (eval-after-load 'inf-ruby '
   '(define-key inf-ruby-mode-map (kbd "TAB") 'auto-complete))
+
+;; robe
+;;(add-to-list 'load-path "~/.emacs.d/3rd/robe")
+;;(require 'robe)
+;;(require 'ac-robe)
+
+;; Rsense
+(setq rsense-home "/Users/yubo/.emacs.d/3rd/rsense-0.3")
+(add-to-list 'load-path (concat rsense-home "/etc"))
+(require 'rsense)
 
 ;; flymake
 (add-to-list 'load-path "~/.emacs.d/3rd/flymake")
@@ -270,6 +275,10 @@ Emacs buffer are those starting with “*”."
 (global-set-key (kbd "C-t") 'copy-region-as-kill)
 (global-set-key (kbd "C-w") 'kill-region)
 (global-set-key (kbd "C-c d s") 'desktop-save-mode)
+(global-set-key (kbd "C-c .") 'ac-complete-rsense)
+(global-set-key (kbd "C-c h") 'rsense-type-help)
+(global-set-key (kbd "C-c j") 'rsense-jump-to-definition)
+(global-set-key (kbd "C-c w") 'rsense-where-is)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;                               MODE                                         ;;
@@ -514,16 +523,17 @@ Emacs buffer are those starting with “*”."
 (add-to-list 'auto-mode-alist '("\\.pp$" . puppet-mode))
 
 ;; ruby-mode
-(add-hook 'ruby-mode-hook 
+(add-hook 'ruby-mode-hook
 		  '(lambda()
-			 (linum-mode t)
-             (fci-mode t)
-			 (semantic-mode t)
-			 (semantic-idle-summary-mode)
-;;             (robe-mode t)
-;;             (ac-robe-setup)
-             (flymake-ruby-load)))
-(add-to-list 'inf-ruby-implementations '("pry" . "pry"))
+		     (linum-mode t)
+		     (fci-mode t)
+             ;; (semantic-mode t)
+             ;; (semantic-idle-summary-mode)
+             ;; (robe-mode t)
+             ;; (ac-robe-setup)
+		     (flymake-ruby-load)
+		     (add-to-list 'ac-sources 'ac-source-rsense-method)
+		     (add-to-list 'ac-sources 'ac-source-rsense-constant)))
 
 ;; yaml-mode
 (add-hook 'yaml-mode-hook
