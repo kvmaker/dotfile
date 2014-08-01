@@ -131,6 +131,7 @@ Emacs buffer are those starting with “*”."
 	((eq major-mode 'org-mode) "org")
 	((eq major-mode 'makefile-mode) "makefile")
     ((eq major-mode 'python-mode) "python")
+    ((eq major-mode 'ruby-mode) "ruby")
     (t "User Buffer"))))
 
 ;; slime
@@ -517,6 +518,8 @@ Emacs buffer are those starting with “*”."
 		  '(lambda()
 			 (linum-mode t)
              (fci-mode t)
+			 (semantic-mode t)
+			 (semantic-idle-summary-mode)
 ;;             (robe-mode t)
 ;;             (ac-robe-setup)
              (flymake-ruby-load)))
