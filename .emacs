@@ -222,7 +222,7 @@ Emacs buffer are those starting with “*”."
 ;;(require 'ac-robe)
 
 ;; Rsense
-(setq rsense-home "/Users/yubo/.emacs.d/3rd/rsense-0.3")
+(setq rsense-home "/home/yubo/.emacs.d/3rd/rsense-0.3")
 (add-to-list 'load-path (concat rsense-home "/etc"))
 (require 'rsense)
 
@@ -259,6 +259,9 @@ Emacs buffer are those starting with “*”."
  '(org-src-fontify-natively t)
  '(semantic-c-dependency-system-include-path (quote ("/usr/include" ".")))
  '(session-use-package t nil (session))
+ '(tabbar-mode t nil (tabbar))
+ '(tabbar-mwheel-mode t nil (tabbar))
+ '(tabbar-separator (quote (2.0)))
  '(uniquify-buffer-name-style (quote forward) nil (uniquify))
  '(url-cookie-file "/home/yubo/.emacs.d/url/cookies")
  '(url-history-file "/home/yubo/.emacs.d/url/history")
@@ -268,7 +271,9 @@ Emacs buffer are those starting with “*”."
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(custom-comment ((t (:background "gray85" :slant normal)))))
+ '(custom-comment ((t (:background "gray85" :slant normal))))
+ '(rfcview-headlink-face ((t (:foreground "blue"))))
+ '(rfcview-headname-face ((t (:underline (:color "blue" :style wave) :weight bold)))))
 
 ;;Quick key
 (global-set-key (kbd "C-q") 'set-mark-command)
@@ -358,7 +363,7 @@ Emacs buffer are those starting with “*”."
          :sitemap-title "kvmaker's blog"
          :author "kvmaker"
          :email "kvmaker@gmail.com"
-         :style "<link rel=\"stylesheet\" type=\"text/css\" href=\"css/solarized-light.css\"/>"
+         :style "<link rel=\"stylesheet\" type=\"text/css\" href=\"css/org-manual.css\"/>"
          )
         ("blog-static"
          :base-directory "~/org/blog/"
@@ -539,6 +544,50 @@ Emacs buffer are those starting with “*”."
 (add-hook 'yaml-mode-hook
       '(lambda ()
          (define-key yaml-mode-map "\C-m" 'newline-and-indent)))
+
+;; graphviz-dot mode
+(load-file "~/.emacs.d/3rd/graphviz-dot-mode.el")
+
+;; yang-mode
+(autoload 'yang-mode "yang-mode" "Major mode for editing YANG modules." t)
+(add-to-list 'auto-mode-alist '("\\.yang$" . yang-mode))
+
+(defun show-onelevel ()
+  "show entry and children in outline mode"
+  (interactive)
+  (show-entry)
+  (show-children))
+
+(defun my-outline-bindings ()
+  "sets shortcut bindings for outline minor mode"
+  (interactive)
+  (local-set-key [?\C-,] 'hide-body)
+  (local-set-key [?\C-.] 'show-all)
+  (local-set-key [C-up] 'outline-previous-visible-heading)
+  (local-set-key [C-down] 'outline-next-visible-heading)
+  (local-set-key [C-left] 'hide-subtree)
+  (local-set-key [C-right] 'show-onelevel)
+  (local-set-key [M-up] 'outline-backward-same-level)
+  (local-set-key [M-down] 'outline-forward-same-level)
+  (local-set-key [M-left] 'hide-subtree)
+  (local-set-key [M-right] 'show-subtree))
+
+(add-hook
+ 'outline-minor-mode-hook
+ 'my-outline-bindings) 
+
+(defconst sort-of-yang-identifier-regexp "[-a-zA-Z0-9_\\.:]*")
+
+(add-hook
+ 'yang-mode-hook
+ '(lambda ()
+    (linum-mode t)
+    (fci-mode t)
+    (outline-minor-mode)
+    (setq outline-regexp
+          (concat "^ *" sort-of-yang-identifier-regexp " *" 
+                  sort-of-yang-identifier-regexp
+                  " *{"))))
 
 (desktop-read)
 

@@ -1,5 +1,5 @@
 escape ^]^]
-vbell on
+vbell off
 startup_message off
 altscreen on
 shelltitle "$|bash"
