@@ -194,7 +194,7 @@ Emacs buffer are those starting with “*”."
 (setq url-http-proxy-basic-auth-storage
 	  (list (list "proxy.huawei.com:8080"
 				  (cons "Input your LDAP UID !"
-						(base64-encode-string "y00186361:cavendish#2014q2")))))
+						(base64-encode-string "y00186361:cavendish#2014q3")))))
 
 ;; youdao translate
 (add-to-list 'load-path "~/.emacs.d/my/youdao")
