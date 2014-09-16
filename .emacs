@@ -284,6 +284,7 @@ Emacs buffer are those starting with “*”."
 (global-set-key (kbd "C-c h") 'rsense-type-help)
 (global-set-key (kbd "C-c j") 'rsense-jump-to-definition)
 (global-set-key (kbd "C-c w") 'rsense-where-is)
+(global-set-key (kbd "M-/")   'hippie-expand)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;                               MODE                                         ;;
