@@ -235,6 +235,16 @@ Emacs buffer are those starting with “*”."
 (require 'yaml-mode)
 (add-to-list 'auto-mode-alist '("\\.yml$" . yaml-mode))
 
+;; heml
+;;(add-to-list 'load-path "~/.emacs.d/3rd/helm")
+;;(require 'helm-config)
+;;(helm-mode 1)
+
+;; function-args
+(add-to-list 'load-path "~/.emacs.d/3rd/function-args")
+(require 'function-args)
+(fa-config-default)
+
 ;; custom-set-variable
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
@@ -257,7 +267,7 @@ Emacs buffer are those starting with “*”."
  '(org-latex-to-pdf-process (quote ("xelatex -interaction nonstopmode %f" "xelatex -interaction nonstopmode %f")))
  '(org-log-done t)
  '(org-src-fontify-natively t)
- '(semantic-c-dependency-system-include-path (quote ("/usr/include" ".")))
+ '(semantic-c-dependency-system-include-path (quote ("/usr/include" "/usr/include/c++/4.6.3" ".")))
  '(session-use-package t nil (session))
  '(tabbar-mode t nil (tabbar))
  '(tabbar-mwheel-mode t nil (tabbar))
