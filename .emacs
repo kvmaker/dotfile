@@ -17,7 +17,7 @@
 (setq linum-format "%4d ")
 (show-paren-mode 1)
 (setq show-paren-delay 1)
-;;(setq tab-width 4)
+(setq tab-width 4)
 (setq user-full-name "Yu Bo")
 (setq user-mail-address "kvmaker.yubo@huawei.com")
 (setq default-major-mode 'text-mode)
@@ -149,15 +149,6 @@ Emacs buffer are those starting with “*”."
 ;; ediff
 (setq ediff-split-window-function 'split-window-horizontally)
 
-;; chinese code
-;;(set-language-environment 'Chinese-GB)
-;;(setq-default pathname-coding-system 'euc-cn)
-;;(setq file-name-coding-system 'euc-cn)
-
-;; use italic for comment
-(require 'font-lock)
-(copy-face 'italic 'font-lock-comment-face)
-
 ;; session
 (require 'session)
 (add-hook 'after-init-hook 'session-initialize)
@@ -204,34 +195,6 @@ Emacs buffer are those starting with “*”."
 (setf keyfrom "JustDoDDD")
 (setf key     "486401619")
 (global-set-key (kbd "C-c t t") 'translate)
-
-;; inf-ruby
-(add-to-list 'load-path "~/.emacs.d/3rd/inf-ruby")
-(require 'inf-ruby)
-(add-to-list 'inf-ruby-implementations '("pry" . "pry"))
-;; ac-inf-ruby
-(add-to-list 'load-path "~/.emacs.d/3rd/ac-inf-ruby")
-(require 'ac-inf-ruby)
-(eval-after-load 'auto-complete
-  '(add-to-list 'ac-modes 'inf-ruby-mode))
-(add-hook 'inf-ruby-mode-hook 'ac-inf-ruby-enable)
-(eval-after-load 'inf-ruby '
-  '(define-key inf-ruby-mode-map (kbd "TAB") 'auto-complete))
-
-;; robe
-;;(add-to-list 'load-path "~/.emacs.d/3rd/robe")
-;;(require 'robe)
-;;(require 'ac-robe)
-
-;; Rsense
-(setq rsense-home "/home/yubo/.emacs.d/3rd/rsense-0.3")
-(add-to-list 'load-path (concat rsense-home "/etc"))
-(require 'rsense)
-
-;; flymake
-(add-to-list 'load-path "~/.emacs.d/3rd/flymake")
-(require 'flymake-ruby)
-(require 'flymake-cursor)
 
 ;; yaml
 (require 'yaml-mode)
@@ -287,10 +250,6 @@ Emacs buffer are those starting with “*”."
 (global-set-key (kbd "C-t") 'copy-region-as-kill)
 (global-set-key (kbd "C-w") 'kill-region)
 (global-set-key (kbd "C-c d s") 'desktop-save-mode)
-(global-set-key (kbd "C-c .") 'ac-complete-rsense)
-(global-set-key (kbd "C-c h") 'rsense-type-help)
-(global-set-key (kbd "C-c j") 'rsense-jump-to-definition)
-(global-set-key (kbd "C-c w") 'rsense-where-is)
 (global-set-key (kbd "M-/")   'hippie-expand)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -539,14 +498,7 @@ Emacs buffer are those starting with “*”."
 (add-hook 'ruby-mode-hook
 		  '(lambda()
 		     (linum-mode t)
-		     (fci-mode t)
-             ;; (semantic-mode t)
-             ;; (semantic-idle-summary-mode)
-             ;; (robe-mode t)
-             ;; (ac-robe-setup)
-		     (flymake-ruby-load)
-		     (add-to-list 'ac-sources 'ac-source-rsense-method)
-		     (add-to-list 'ac-sources 'ac-source-rsense-constant)))
+		     (fci-mode t)))
 
 ;; yaml-mode
 (add-hook 'yaml-mode-hook
