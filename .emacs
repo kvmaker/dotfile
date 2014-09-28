@@ -88,9 +88,6 @@
 (ac-config-default)
 (setq ac-auto-start nil)
 (setq ac-ignore-case nil)
-(add-to-list 'ac-modes 'ruby-mode)
-(add-to-list 'ac-modes 'enh-ruby-mode)
-(add-to-list 'ac-modes 'web-mode)
 (ac-set-trigger-key "TAB")
 
 ;; tabbar
@@ -201,9 +198,9 @@ Emacs buffer are those starting with “*”."
 (add-to-list 'auto-mode-alist '("\\.yml$" . yaml-mode))
 
 ;; function-args
-;; (add-to-list 'load-path "~/.emacs.d/3rd/function-args")
-;; (require 'function-args)
-;; (fa-config-default)
+(add-to-list 'load-path "~/.emacs.d/3rd/function-args")
+(require 'function-args)
+(fa-config-default)
 
 ;; custom-set-variable
 (custom-set-variables
@@ -211,7 +208,7 @@ Emacs buffer are those starting with “*”."
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(org-agenda-files nil)
+ '(org-agenda-files (quote ("~/work/org/test.org")))
  '(org-beamer-frame-default-options "[allowframebreaks=0.8]")
  '(org-completion-use-ido t)
  '(org-confirm-babel-evaluate nil)
@@ -251,6 +248,7 @@ Emacs buffer are those starting with “*”."
 (global-set-key (kbd "C-w") 'kill-region)
 (global-set-key (kbd "C-c d s") 'desktop-save-mode)
 (global-set-key (kbd "M-/")   'hippie-expand)
+(global-set-key (kbd "M-p")  'fa-show)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;                               MODE                                         ;;
@@ -330,7 +328,8 @@ Emacs buffer are those starting with “*”."
          :sitemap-title "kvmaker's blog"
          :author "kvmaker"
          :email "kvmaker@gmail.com"
-         :style "<link rel=\"stylesheet\" type=\"text/css\" href=\"css/org-manual.css\"/>"
+;         :style "<link rel=\"stylesheet\" type=\"text/css\" href=\"css/org-manual.css\"/>"
+         :style "<link rel=\"stylesheet\" type=\"text/css\" href=\"css/solarized-light.css\"/>"
          )
         ("blog-static"
          :base-directory "~/org/blog/"
@@ -372,7 +371,11 @@ Emacs buffer are those starting with “*”."
    (latex . t)
    (js . t)
    (ruby . t)
+   (plantuml . t)
    ))
+
+(setq org-plantuml-jar-path
+      (expand-file-name "~/.emacs.d/3rd/plantuml.jar"))
 
 (setq org-latex-to-pdf-process
 	  '("xelatex -interaction nonstopmode %f"
@@ -551,3 +554,6 @@ Emacs buffer are those starting with “*”."
 
 (desktop-read)
 
+;; plantuml-mode
+;;(require 'plantuml-mode)
+(add-to-list 'auto-mode-alist '("\\.uml\\'" . plantuml-mode))
