@@ -131,14 +131,11 @@ export CLICOLOR=1
 # proxy setting
 function setproxy ()
 {
-    user=y00186361
-    passwd=cavendish%232014q3
- 
-    export http_proxy=http://$user:$passwd@proxy.huawei.com:8080/
-    export ftp_proxy=ftp://$user:$passwd@proxy.huawei.com:8080/
-    export socks_proxy=socks://$user:$passwd@proxy.huawei.com:8080/
-    export https_proxy=https://$user:$passwd@proxy.huawei.com:8080/
-    export no_proxy=localhost,10.0.0.0/8,rnd-git.huawei.com
+    export http_proxy=http://proxy.tencent.com:8080/
+    export ftp_proxy=ftp://proxy.tencent.com:8080/
+    export socks_proxy=socks://proxy.tencent.com:8080/
+    export https_proxy=https://proxy.tencent.com:8080/
+    export no_proxy=localhost,10.0.0.0/8
 }
 
 if [ `uname` != "Darwin" ]; then
@@ -149,3 +146,7 @@ fi
 
 export RUBYOPT='rubygems'
 export PYTHONSTARTUP=~/.pythonstartup
+
+export PATH_QZONE_MOBILE_FRAMEWORK_PRJ=~/src/trunk/
+export ARCH=32
+
