@@ -138,9 +138,7 @@ function setproxy ()
     export no_proxy=localhost,10.0.0.0/8
 }
 
-if [ `uname` != "Darwin" ]; then
-    setproxy
-else
+if [ `uname` = "Darwin" ]; then
     alias emacs="/Applications/Emacs.app/Contents/MacOS/Emacs -nw"
 fi
 

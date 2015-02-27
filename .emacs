@@ -557,3 +557,6 @@ Emacs buffer are those starting with “*”."
 ;; plantuml-mode
 ;;(require 'plantuml-mode)
 (add-to-list 'auto-mode-alist '("\\.uml\\'" . plantuml-mode))
+
+;; thrift-mode
+(require 'thrift-mode)
