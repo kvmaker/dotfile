@@ -14,13 +14,13 @@
 
 ;; misc config
 (setq make-backup-files nil)
-;;(global-linum-mode t)
+(global-linum-mode t)
 (setq linum-format "%4d ")
 (show-paren-mode 1)
 (setq show-paren-delay 1)
 (setq tab-width 4)
-(setq user-full-name "Yu Bo")
-(setq user-mail-address "kvmaker.yubo@huawei.com")
+(setq user-full-name "kvmaker")
+(setq user-mail-address "kvmaker@gmail.com")
 (setq default-major-mode 'text-mode)
 (add-hook 'text-mode-hook 'turn-on-auto-fill)
 (setq inhibit-startup-message t)
@@ -38,13 +38,8 @@
 
 ;; fill-column
 (require 'fill-column-indicator)
-(setq-default fill-column 79)
-;;(add-hook 'after-change-major-mode-hook 'fci-mode)
-
-;; high light current line
-(global-hl-line-mode 1)
-(set-face-background 'hl-line "#3e4446")
-(set-face-foreground 'highlight nil)
+(setq-default fill-column 100)
+(add-hook 'after-change-major-mode-hook 'fci-mode)
 
 ;; yasnapt
 (add-to-list 'load-path "~/.emacs.d/3rd/yasnippet")
@@ -147,7 +142,7 @@ Emacs buffer are those starting with “*”."
 
 ;; desktop
 (load "desktop")
-(desktop-load-default) 
+(desktop-load-default)
 
 ;; ibuffer
 (require 'ibuffer)
@@ -181,7 +176,6 @@ Emacs buffer are those starting with “*”."
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(semantic-c-dependency-system-include-path (quote ("/usr/include" "/usr/include/c++/4.6.3" ".")))
  '(session-use-package t nil (session))
  '(tabbar-mode t nil (tabbar))
  '(tabbar-mwheel-mode t nil (tabbar))
@@ -217,11 +211,8 @@ Emacs buffer are those starting with “*”."
 			 (c-set-style "k&r")
 			 (setq c-basic-offset 4)
 			 (setq indent-tabs-mode nil)
-			 (setq ac-sources (append '(ac-source-semantic)  ac-sources))
 			 (linum-mode t)
 			 (fci-mode t)
-			 (semantic-mode t)
-			 (semantic-idle-summary-mode)
 			 (abbrev-mode -1)))
 
 (add-hook 'c++-mode-hook
@@ -229,11 +220,8 @@ Emacs buffer are those starting with “*”."
 			 (c-set-style "k&r")
 			 (setq c-basic-offset 4)
 			 (setq indent-tabs-mode nil)
-			 (setq ac-sources (append '(ac-source-semantic)  ac-sources))
 			 (linum-mode t)
 			 (fci-mode t)
-			 (semantic-mode t)
-			 (semantic-idle-summary-mode)
 			 (abbrev-mode -1)))
 
 ;; makefile mode

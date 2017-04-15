@@ -122,29 +122,14 @@ function gitdiff ()
 	git diff $@ | colordiff | less -R;
 }
 
-export SVN_EDITOR="cat ~/.svn-log.tmpl >> svn-commit.tmp2 && cat svn-commit.tmp >> svn-commit.tmp2 && mv svn-commit.tmp2 svn-commit.tmp && emacs svn-commit.tmp"
-
 # use xterm in screen
 export TERM="xterm"
 export CLICOLOR=1
 
-# proxy setting
-function setproxy ()
+alias go-gz="ssh m_maxyu@183.60.82.9 -p 36000"
+alias go-sz="ssh maxyu@sng.mnet2.com -p 36000"
+
+function scp-gz ()
 {
-    export http_proxy=http://proxy.tencent.com:8080/
-    export ftp_proxy=ftp://proxy.tencent.com:8080/
-    export socks_proxy=socks://proxy.tencent.com:8080/
-    export https_proxy=https://proxy.tencent.com:8080/
-    export no_proxy=localhost,10.0.0.0/8
+	scp -P 36000 $1 m_maxyu@183.60.82.9:./
 }
-
-if [ `uname` = "Darwin" ]; then
-    alias emacs="/Applications/Emacs.app/Contents/MacOS/Emacs -nw"
-fi
-
-export RUBYOPT='rubygems'
-export PYTHONSTARTUP=~/.pythonstartup
-
-export PATH_QZONE_MOBILE_FRAMEWORK_PRJ=~/src/trunk/
-export ARCH=32
-
