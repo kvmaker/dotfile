@@ -12,6 +12,12 @@
 (add-to-list 'load-path "~/.emacs.d/my")
 (add-to-list 'load-path "~/.emacs.d/3rd")
 
+;; proxy config
+(setq url-proxy-services
+	  '(("no_proxy" . "^\\(localhost\\|10.*\\)")
+		("http" . "dev-proxy.oa.com:8080")
+		("https" . "dev-proxy.oa.com:8080")))
+
 ;; misc config
 (setq make-backup-files nil)
 (global-linum-mode t)
@@ -37,54 +43,45 @@
 (require 'xcscope)
 
 ;; fill-column
-(require 'fill-column-indicator)
-(setq-default fill-column 100)
-(add-hook 'after-change-major-mode-hook 'fci-mode)
+;; (require 'fill-column-indicator)
+;; (setq-default fill-column 100)
+;; (add-hook 'after-change-major-mode-hook 'fci-mode)
 
 ;; yasnapt
-(add-to-list 'load-path "~/.emacs.d/3rd/yasnippet")
-(require 'yasnippet)
-(setq yas-snippet-dirs '("~/.emacs.d/3rd/yasnippet/yasmate"
-						 "~/.emacs.d/my/yas"))
-(defalias 'yas/current-snippet-table 'yas--get-snippet-tables)
-(yas/global-mode 1)
-(yas/minor-mode-on)
+;; (add-to-list 'load-path "~/.emacs.d/3rd/yasnippet")
+;; (require 'yasnippet)
+;; (setq yas-snippet-dirs '("~/.emacs.d/3rd/yasnippet/yasmate"
+;; 						 "~/.emacs.d/my/yas"))
+;; (defalias 'yas/current-snippet-table 'yas--get-snippet-tables)
+;; (yas/global-mode 1)
+;; (yas/minor-mode-on)
 
 ;; popup for yas
-(add-to-list 'load-path "~/.emacs.d/3rd/ac")
-(require 'popup)
-(define-key popup-menu-keymap (kbd "M-n") 'popup-next)
-(define-key popup-menu-keymap (kbd "TAB") 'popup-next)
-(define-key popup-menu-keymap (kbd "<tab>") 'popup-next)
-(define-key popup-menu-keymap (kbd "<backtab>") 'popup-previous)
-(define-key popup-menu-keymap (kbd "M-p") 'popup-previous)
+;; (add-to-list 'load-path "~/.emacs.d/3rd/ac")
+;; (require 'popup)
+;; (define-key popup-menu-keymap (kbd "M-n") 'popup-next)
+;; (define-key popup-menu-keymap (kbd "TAB") 'popup-next)
+;; (define-key popup-menu-keymap (kbd "<tab>") 'popup-next)
+;; (define-key popup-menu-keymap (kbd "<backtab>") 'popup-previous)
+;; (define-key popup-menu-keymap (kbd "M-p") 'popup-previous)
 
-(defun yas/popup-isearch-prompt (prompt choices &optional display-fn)
-  (when (featurep 'popup)
-    (popup-menu*
-     (mapcar
-      (lambda (choice)
-        (popup-make-item
-         (or (and display-fn (funcall display-fn choice))
-             choice)
-         :value choice))
-      choices)
-     :prompt prompt
-     ;; start isearch mode immediately
-     :isearch t
-     )))
+;; yas
+;; (defun yas/popup-isearch-prompt (prompt choices &optional display-fn)
+;;   (when (featurep 'popup)
+;;     (popup-menu*
+;;      (mapcar
+;;       (lambda (choice)
+;;         (popup-make-item
+;;          (or (and display-fn (funcall display-fn choice))
+;;              choice)
+;;          :value choice))
+;;       choices)
+;;      :prompt prompt
+;;      ;; start isearch mode immediately
+;;      :isearch t
+;;      )))
 
-(setq yas/prompt-functions '(yas/popup-isearch-prompt yas/no-prompt))
-
-;; auto-complete
-(add-to-list 'load-path "~/.emacs.d/3rd/ac")
-(require 'auto-complete-config)
-(add-to-list 'ac-dictionary-directories (expand-file-name "~/.emacs.d/ac-dict"))
-(setq ac-comphist-file (expand-file-name "~/.emacs.d/ac-comphist.dat"))
-(ac-config-default)
-(setq ac-auto-start nil)
-(setq ac-ignore-case nil)
-(ac-set-trigger-key "TAB")
+;; (setq yas/prompt-functions '(yas/popup-isearch-prompt yas/no-prompt))
 
 ;; tabbar
 (require 'tabbar)
@@ -122,11 +119,8 @@ Emacs buffer are those starting with “*”."
     ((string-equal "*" (substring (buffer-name) 0 1)) "Emacs Buffer")
     ((eq major-mode 'c-mode) "c")
     ((eq major-mode 'c++-mode) "c++")
-	((eq major-mode 'org-mode) "org")
 	((eq major-mode 'makefile-mode) "makefile")
     ((eq major-mode 'python-mode) "python")
-    ((eq major-mode 'ruby-mode) "ruby")
-    ((eq major-mode 'haskell-mode) "haskell")
     (t "User Buffer"))))
 
 ;; rename dup buffer
@@ -152,6 +146,11 @@ Emacs buffer are those starting with “*”."
 (require 'ido)
 (ido-mode t)
 
+;; function-args
+(add-to-list 'load-path "~/.emacs.d/3rd/function-args")
+(require 'function-args)
+(fa-config-default)
+
 ;; encode
 ;; UTF-8 settings 
 (set-language-environment 'utf-8)
@@ -164,11 +163,6 @@ Emacs buffer are those starting with “*”."
 (setq default-process-coding-system
 	  '(utf-8 . utf-8))
 (setq default-buffer-file-coding-system 'utf-8)
-
-;; function-args
-(add-to-list 'load-path "~/.emacs.d/3rd/function-args")
-(require 'function-args)
-(fa-config-default)
 
 ;; custom-set-variable
 (custom-set-variables
@@ -193,14 +187,6 @@ Emacs buffer are those starting with “*”."
  '(rfcview-headlink-face ((t (:foreground "blue"))))
  '(rfcview-headname-face ((t (:underline (:color "blue" :style wave) :weight bold)))))
 
-;;Quick key
-(global-set-key (kbd "C-q") 'set-mark-command)
-(global-set-key (kbd "C-t") 'copy-region-as-kill)
-(global-set-key (kbd "C-w") 'kill-region)
-(global-set-key (kbd "C-c d s") 'desktop-save-mode)
-(global-set-key (kbd "M-/")   'hippie-expand)
-(global-set-key (kbd "M-p")  'fa-show)
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;                               MODE                                         ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -212,7 +198,6 @@ Emacs buffer are those starting with “*”."
 			 (setq c-basic-offset 4)
 			 (setq indent-tabs-mode nil)
 			 (linum-mode t)
-			 (fci-mode t)
 			 (abbrev-mode -1)))
 
 (add-hook 'c++-mode-hook
@@ -221,7 +206,6 @@ Emacs buffer are those starting with “*”."
 			 (setq c-basic-offset 4)
 			 (setq indent-tabs-mode nil)
 			 (linum-mode t)
-			 (fci-mode t)
 			 (abbrev-mode -1)))
 
 ;; makefile mode
@@ -239,7 +223,34 @@ Emacs buffer are those starting with “*”."
 ;; python-mode
 (add-hook 'python-mode-hook
 		  '(lambda()
-			 (linum-mode t)
-			 (fci-mode t)))
+			 (linum-mode t)))
+
+;; company-mode
+(add-hook 'after-init-hook 'global-company-mode)
+(custom-set-faces
+ '(company-preview
+   ((t (:foreground "darkgray" :underline t))))
+ '(company-preview-common
+   ((t (:inherit company-preview))))
+ '(company-tooltip
+   ((t (:background "lightgray" :foreground "black"))))
+ '(company-tooltip-selection
+   ((t (:background "steelblue" :foreground "white"))))
+ '(company-tooltip-common
+   ((((type x)) (:inherit company-tooltip :weight bold))
+    (t (:inherit company-tooltip))))
+ '(company-tooltip-common-selection
+   ((((type x)) (:inherit company-tooltip-selection :weight bold))
+    (t (:inherit company-tooltip-selection)))))
+(setq company-idle-delay 0)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;                            QUICK                                           ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;Quick key
+(global-set-key (kbd "C-q") 'set-mark-command)
+(global-set-key (kbd "M-w") 'copy-region-as-kill)
+(global-set-key (kbd "C-w") 'kill-region)
+(global-set-key (kbd "C-c d s") 'desktop-save)
 
 (desktop-read)

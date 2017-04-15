@@ -1,9 +1,9 @@
 escape ^]^]
 vbell off
 startup_message off
-altscreen on
+altscreen off
 shelltitle "$|bash"
 termcapinfo xterm* ti@:te@
 hardstatus on
 hardstatus alwayslastline
-hardstatus string '%{= kG}[ %{G}%Y/%m/%d %{g}][%= %{=kw}%?%-Lw%?%{r}<%{W}%n %t%?(%u)%?%{r}>%{w}%?%+Lw%?%?%= %{g}][ %H %{g}][%{kB} %{w}%c:%s %{g}]'
+hardstatus string '%{= kG}[ %{G}%Y/%m/%d %{g}][%= %{=kw}%?%-Lw%?%{r}<%{W}%n %t%?(%u)%?%{r}>%{w}%?%+Lw%?%?%= %{g}][ %H %{g}][%{kB} %{w}%c %{g}]'
