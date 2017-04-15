@@ -3,6 +3,7 @@
 ;; Copyright (C) 2013, 2014 kvmaker                                           ;;
 ;; Author:   <kvmaker@gmail.com>                                              ;;
 ;; Created:  2015/05/23                                                       ;;
+;; Update:   2017/04/15 remove uncessary part.                                ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;                            PKG                                             ;;
@@ -133,12 +134,6 @@ Emacs buffer are those starting with “*”."
     ((eq major-mode 'haskell-mode) "haskell")
     (t "User Buffer"))))
 
-;; slime
-(add-to-list 'load-path "~/.emacs.d/3rd/slime")
-(setq inferior-lisp-program "/usr/bin/sbcl")
-(require 'slime-autoloads)
-(slime-setup '(slime-fancy))
-
 ;; rename dup buffer
 (require 'uniquify)
 (setq uniquify-buffer-name-style 'forward)
@@ -175,28 +170,6 @@ Emacs buffer are those starting with “*”."
 	  '(utf-8 . utf-8))
 (setq default-buffer-file-coding-system 'utf-8)
 
-;; url proxy
-(setq url-proxy-services
-	  '(("no_proxy" . "^\\(localhost\\|10.*\\)")
-		("http" . "proxy.huawei.com:8080")
-		("https" . "proxy.huawei.com:8080")))
-
-(setq url-http-proxy-basic-auth-storage
-	  (list (list "proxy.huawei.com:8080"
-				  (cons "Input your LDAP UID !"
-						(base64-encode-string "y00186361:cavendish#2014q3")))))
-
-;; youdao translate
-(add-to-list 'load-path "~/.emacs.d/my/youdao")
-(require 'youdao)
-(setf keyfrom "JustDoDDD")
-(setf key     "486401619")
-(global-set-key (kbd "C-c t t") 'translate)
-
-;; yaml
-(require 'yaml-mode)
-(add-to-list 'auto-mode-alist '("\\.yml$" . yaml-mode))
-
 ;; function-args
 (add-to-list 'load-path "~/.emacs.d/3rd/function-args")
 (require 'function-args)
@@ -208,22 +181,6 @@ Emacs buffer are those starting with “*”."
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(org-agenda-files (quote ("~/work/org/test.org")))
- '(org-beamer-frame-default-options "[allowframebreaks=0.8]")
- '(org-completion-use-ido t)
- '(org-confirm-babel-evaluate nil)
- '(org-ditaa-jar-path "~/.emacs.d/3rd/ditaa/ditaa0_9.jar")
- '(org-export-html-inline-image-extensions (quote ("png" "jpeg" "jpg" "gif" "svg" "bmp")))
- '(org-export-html-link-home "index.html")
- '(org-export-html-postamble t)
- '(org-export-html-postamble-format (quote (("en" "<p class=\"creator\">Created by %c</p>
-                                              <p author=\"author\">Copyright © 2012 - 2014 <a href=\"mailto:kvmaker@gmail.com\">kvmaker</a></p>"))))
- '(org-export-html-table-tag "<table align=\"center\" border=\"2\" cellspacing=\"0\" cellpadding=\"6\" rules=\"groups\" frame=\"hsides\">")
- '(org-export-latex-inline-image-extensions (quote ("pdf" "jpeg" "jpg" "png" "ps" "bmp" "eps")))
- '(org-export-latex-listings (quote listings))
- '(org-latex-to-pdf-process (quote ("xelatex -interaction nonstopmode %f" "xelatex -interaction nonstopmode %f")))
- '(org-log-done t)
- '(org-src-fontify-natively t)
  '(semantic-c-dependency-system-include-path (quote ("/usr/include" "/usr/include/c++/4.6.3" ".")))
  '(session-use-package t nil (session))
  '(tabbar-mode t nil (tabbar))
@@ -279,208 +236,11 @@ Emacs buffer are those starting with “*”."
 			 (semantic-idle-summary-mode)
 			 (abbrev-mode -1)))
 
-;; javascript mode
-(add-to-list 'auto-mode-alist '("\\.json\\'" . javascript-mode))
-(add-hook 'javascript-mode
-		  '(lambda ()
-			 (setq indent-tabs-mode nil)))
-
 ;; makefile mode
 (add-to-list 'auto-mode-alist '("\\.hsan\\'" . makefile-mode))
 (add-hook 'makefile-mode
 		  '(lambda ()
 			 (setq indent-tabs-mode nil)))
-
-;; haskell-mode
-(add-to-list 'load-path "~/.emacs.d/3rd/haskell-mode/")
-(add-to-list 'Info-default-directory-list "~/.emacs.d/3rd/haskell-mode/")
-(require 'haskell-mode-autoloads)
-(add-hook 'haskell-mode-hook 
-		  '(lambda ()
-			 (turn-on-haskell-doc-mode)
-			 (turn-on-haskell-indent)
-			 (turn-on-haskell-simple-indent)))
-;; lisp-mode
-(add-hook 'lisp-mode-hook
-		  '(lambda ()
-			 (setq indent-tabs-mode nil)))
-(add-hook 'emacs-lisp-mode-hook
-		  '(lambda ()
-			 (setq indent-tabs-mode nil)))
-
-;; org-blog
-(require 'htmlize)
-(require 'org-publish)
-(setq org-src-fontify-natively t)
-(setq org-publish-project-alist
-      '(
-        ("blog-notes"
-         :base-directory "~/org/blog/"
-         :base-extension "org"
-         :publishing-directory "~/org/kvmaker.github.io/"
-         :recursive t
-         :publishing-function org-publish-org-to-html
-         :headline-levels 4
-         :section-numbers t
-         :auto-sitemap t
-         :sitemap-filename "index.org"
-         :table-of-contents t
-         :sitemap-title "kvmaker's blog"
-         :author "kvmaker"
-         :email "kvmaker@gmail.com"
-;         :style "<link rel=\"stylesheet\" type=\"text/css\" href=\"css/org-manual.css\"/>"
-         :style "<link rel=\"stylesheet\" type=\"text/css\" href=\"css/solarized-light.css\"/>"
-         )
-        ("blog-static"
-         :base-directory "~/org/blog/"
-         :base-extension "css\\|js\\|png\\|bmp\\|jpg\\|gif\\|pdf\\|mp3\\|ogg\\|swf"
-         :publishing-directory "~/org/kvmaker.github.io/"
-         :recursive t
-         :publishing-function org-publish-attachment
-         )
-        ("blog" :components ("blog-notes" "blog-static"))
-        ;;
-        ))
-
-;; org-mode
-(require 'org-install)
-(require 'org-latex)
-(global-set-key (kbd "C-TAB") 'org-table-previous-field)
-(add-hook 'org-mode-hook
-		  '(lambda ()
-			 (fci-mode t)
-			 (linum-mode t)))
-(define-key global-map "\C-cl" 'org-store-link)
-(define-key global-map "\C-ca" 'org-agenda)
-(setq org-log-done t)
-(put 'set-goal-column 'disabled nil)
-(setq org-ditaa-jar-path "~/.emacs.d/3rd/ditaa/ditaa0_9.jar")
-(setq org-completion-use-ido t)
-(org-babel-do-load-languages
- 'org-babel-load-languages
- '((R . t)										   
-   (emacs-lisp . t)
-   (matlab . t)
-   (C . t)
-   (perl . t)
-   (sh . t)
-   (ditaa . t)
-   (python . t)
-   (haskell . t)
-   (dot . t)
-   (latex . t)
-   (js . t)
-   (ruby . t)
-   (plantuml . t)
-   ))
-
-(setq org-plantuml-jar-path
-      (expand-file-name "~/.emacs.d/3rd/plantuml.jar"))
-
-(setq org-latex-to-pdf-process
-	  '("xelatex -interaction nonstopmode %f"
-		"xelatex -interaction nonstopmode %f"))
-(setq org-confirm-babel-evaluate nil)
-(add-hook 'org-mode-hook
-          (lambda ()
-            (if (member "REFTEX" org-todo-keywords-1)
-                (org-mode-article-modes))))
-(unless (boundp 'org-export-latex-classes)
-  (setq org-export-latex-classes nil))
-(add-to-list 'org-export-latex-classes
-             '("cn-article"
-			   "\\documentclass[11pt]{article}
-\\usepackage[utf8]{inputenc}
-\\usepackage[T1]{fontenc}
-\\usepackage{fixltx2e}
-\\usepackage{graphicx}
-\\usepackage{longtable}
-\\usepackage{float}
-\\usepackage{listings}
-\\usepackage{courier}
-\\usepackage{wrapfig}
-\\usepackage{soul}
-\\usepackage{textcomp}
-\\usepackage{marvosym}
-\\usepackage{wasysym}
-\\usepackage{latexsym}
-\\usepackage{amssymb}
-\\usepackage{hyperref}
-\\usepackage{fancyvrb}
-\\usepackage{xcolor}
-\\tolerance=1000
-\\usepackage{tikz}
-\\usepackage{xeCJK}
-\\setmainfont{Times New Roman}
-\\setCJKmainfont{SimSun}
-\\setCJKsansfont{SimHei}
-\\setCJKmonofont{FangSong}
-\\tolerance=1000
-\\renewcommand{\\figurename}{图}
-[NO-DEFAULT-PACKAGES]
-[NO-PACKAGES]"
-			  ("\\section{%s}" . "\\section*{%s}")
-			  ("\\subsection{%s}" . "\\subsection*{%s}")
-			  ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
-			  ("\\paragraph{%s}" . "\\paragraph*{%s}")
-			  ("\\subparagraph{%s}" . "\\subparagraph*{%s}")))
-
-(add-to-list 'org-export-latex-classes
-			 '("cn-beamer"
-			   "\\documentclass{beamer}
-\\usecolortheme[named=FireBrick]{structure}
-\\setbeamercovered{transparent}
-\\setbeamertemplate{caption}[numbered]
-\\setbeamertemplate{blocks}[rounded][shadow=true]
-\\setbeamertemplate{frametitle continuation}[from second][\\insertcontinuationcount]
-\\usetheme{Darmstadt}
-\\usepackage{tikz}
-\\usepackage{xeCJK}
-\\usepackage{amsmath}
-\\setmainfont{Times New Roman}
-\\setCJKmainfont{SimSun}
-\\setCJKsansfont{SimHei}
-\\setCJKmonofont{FangSong}
-\\usepackage{verbatim}
-\\institute{HUAWEI}
-\\graphicspath{{figures/}}
-\\definecolor{lstbgcolor}{rgb}{0.9,0.9,0.9}
-\\usepackage{listings}
-\\usepackage{fancyvrb}
-\\usepackage{xcolor}
-\\renewcommand{\\figurename}{图}
-[NO-DEFAULT-PACKAGES]
-[NO-PACKAGES]
-[EXTRA]"
-              org-beamer-sectioning))
-
-(setq org-export-latex-listings 'listings)
-(setq org-export-latex-listings-options
-	  '(
-		("frame"           "single")
-		("frameround"      "ffff")
-		("backgroundcolor" "\\color{yellow!20}")
-		("basicstyle"      "\\footnotesize\\ttfamily")
-		("breaklines"      "true")
-;;		("keywordstyle"    "\\bfseries\\color{green!40!black}")
-;;		("commentstyle"    "\\itshape\\color{purple!40!black}")
-;;		("identifierstyle" "\\color{blue}")
-		("stringstyle"     "\\color{orange}")
-		))
-
-;; scala-mode
-(add-to-list 'load-path "~/.emacs.d/3rd/scala/")
-(require 'scala-mode-auto)
-
-;; Lisp-mode
-(add-hook 'lisp-mode-hook 
-		  '(lambda()
-			 (linum-mode t)
-			 (fci-mode t)))
-(add-hook 'emacs-lisp-mode-hook 
-		  '(lambda()
-			 (linum-mode t)
-			 (fci-mode t)))
 
 ;; rfc-mode
 (setq auto-mode-alist
@@ -493,70 +253,5 @@ Emacs buffer are those starting with “*”."
 		  '(lambda()
 			 (linum-mode t)
 			 (fci-mode t)))
-;; puppet-mode
-(autoload 'puppet-mode "puppet-mode" "Major mode for editing puppet manifests")
-(add-to-list 'auto-mode-alist '("\\.pp$" . puppet-mode))
-
-;; ruby-mode
-(add-hook 'ruby-mode-hook
-		  '(lambda()
-		     (linum-mode t)
-		     (fci-mode t)))
-
-;; yaml-mode
-(add-hook 'yaml-mode-hook
-      '(lambda ()
-         (define-key yaml-mode-map "\C-m" 'newline-and-indent)))
-
-;; graphviz-dot mode
-(load-file "~/.emacs.d/3rd/graphviz-dot-mode.el")
-
-;; yang-mode
-(autoload 'yang-mode "yang-mode" "Major mode for editing YANG modules." t)
-(add-to-list 'auto-mode-alist '("\\.yang$" . yang-mode))
-
-(defun show-onelevel ()
-  "show entry and children in outline mode"
-  (interactive)
-  (show-entry)
-  (show-children))
-
-(defun my-outline-bindings ()
-  "sets shortcut bindings for outline minor mode"
-  (interactive)
-  (local-set-key [?\C-,] 'hide-body)
-  (local-set-key [?\C-.] 'show-all)
-  (local-set-key [C-up] 'outline-previous-visible-heading)
-  (local-set-key [C-down] 'outline-next-visible-heading)
-  (local-set-key [C-left] 'hide-subtree)
-  (local-set-key [C-right] 'show-onelevel)
-  (local-set-key [M-up] 'outline-backward-same-level)
-  (local-set-key [M-down] 'outline-forward-same-level)
-  (local-set-key [M-left] 'hide-subtree)
-  (local-set-key [M-right] 'show-subtree))
-
-(add-hook
- 'outline-minor-mode-hook
- 'my-outline-bindings) 
-
-(defconst sort-of-yang-identifier-regexp "[-a-zA-Z0-9_\\.:]*")
-
-(add-hook
- 'yang-mode-hook
- '(lambda ()
-    (linum-mode t)
-    (fci-mode t)
-    (outline-minor-mode)
-    (setq outline-regexp
-          (concat "^ *" sort-of-yang-identifier-regexp " *" 
-                  sort-of-yang-identifier-regexp
-                  " *{"))))
 
 (desktop-read)
-
-;; plantuml-mode
-;;(require 'plantuml-mode)
-(add-to-list 'auto-mode-alist '("\\.uml\\'" . plantuml-mode))
-
-;; thrift-mode
-(require 'thrift-mode)
