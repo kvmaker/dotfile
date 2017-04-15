@@ -20,6 +20,7 @@
 
 ;; misc config
 (setq make-backup-files nil)
+(setq auto-save-default nil)
 (global-linum-mode t)
 (setq linum-format "%4d ")
 (show-paren-mode 1)
@@ -28,7 +29,6 @@
 (setq user-full-name "kvmaker")
 (setq user-mail-address "kvmaker@gmail.com")
 (setq default-major-mode 'text-mode)
-(add-hook 'text-mode-hook 'turn-on-auto-fill)
 (setq inhibit-startup-message t)
 (tool-bar-mode -1)
 (menu-bar-mode -1)
@@ -37,51 +37,9 @@
 (fset 'yes-or-no-p 'y-or-n-p)
 (setq resize-mini-windows t)
 (setq suggest-key-bindings t)
-(put 'dired-find-alternate-file 'disabled nil)
 
 ;; cscope 
 (require 'xcscope)
-
-;; fill-column
-;; (require 'fill-column-indicator)
-;; (setq-default fill-column 100)
-;; (add-hook 'after-change-major-mode-hook 'fci-mode)
-
-;; yasnapt
-;; (add-to-list 'load-path "~/.emacs.d/3rd/yasnippet")
-;; (require 'yasnippet)
-;; (setq yas-snippet-dirs '("~/.emacs.d/3rd/yasnippet/yasmate"
-;; 						 "~/.emacs.d/my/yas"))
-;; (defalias 'yas/current-snippet-table 'yas--get-snippet-tables)
-;; (yas/global-mode 1)
-;; (yas/minor-mode-on)
-
-;; popup for yas
-;; (add-to-list 'load-path "~/.emacs.d/3rd/ac")
-;; (require 'popup)
-;; (define-key popup-menu-keymap (kbd "M-n") 'popup-next)
-;; (define-key popup-menu-keymap (kbd "TAB") 'popup-next)
-;; (define-key popup-menu-keymap (kbd "<tab>") 'popup-next)
-;; (define-key popup-menu-keymap (kbd "<backtab>") 'popup-previous)
-;; (define-key popup-menu-keymap (kbd "M-p") 'popup-previous)
-
-;; yas
-;; (defun yas/popup-isearch-prompt (prompt choices &optional display-fn)
-;;   (when (featurep 'popup)
-;;     (popup-menu*
-;;      (mapcar
-;;       (lambda (choice)
-;;         (popup-make-item
-;;          (or (and display-fn (funcall display-fn choice))
-;;              choice)
-;;          :value choice))
-;;       choices)
-;;      :prompt prompt
-;;      ;; start isearch mode immediately
-;;      :isearch t
-;;      )))
-
-;; (setq yas/prompt-functions '(yas/popup-isearch-prompt yas/no-prompt))
 
 ;; tabbar
 (require 'tabbar)
@@ -140,16 +98,10 @@ Emacs buffer are those starting with “*”."
 
 ;; ibuffer
 (require 'ibuffer)
-(global-set-key (kbd "C-x C-b") 'ibuffer)
 
 ;; ido
 (require 'ido)
 (ido-mode t)
-
-;; function-args
-(add-to-list 'load-path "~/.emacs.d/3rd/function-args")
-(require 'function-args)
-(fa-config-default)
 
 ;; encode
 ;; UTF-8 settings 
@@ -252,5 +204,7 @@ Emacs buffer are those starting with “*”."
 (global-set-key (kbd "M-w") 'copy-region-as-kill)
 (global-set-key (kbd "C-w") 'kill-region)
 (global-set-key (kbd "C-c d s") 'desktop-save)
+(global-set-key (kbd "C-/") 'company-complete-common)
+(global-set-key (kbd "C-x C-b") 'ibuffer)
 
 (desktop-read)

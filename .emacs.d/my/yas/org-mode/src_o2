@@ -1,7 +1,0 @@
-# -*- mode: snippet -*-
-# name: src_o2
-# key: src_o2
-# --
-#+begin_src ${1:language} :results value raw code :export both
-$0
-#+end_src
