@@ -125,6 +125,7 @@ function gitdiff ()
 # use xterm in screen
 export TERM="xterm"
 export CLICOLOR=1
+export PATH=$PATH:~/bin/
 
 alias go-gz="ssh m_maxyu@183.60.82.9 -p 36000"
 alias go-sz="ssh maxyu@sng.mnet2.com -p 36000"
@@ -133,3 +134,6 @@ function scp-gz ()
 {
 	scp -P 36000 $1 m_maxyu@183.60.82.9:./
 }
+
+alias emacs="/Applications/Emacs.app/Contents/MacOS/Emacs -nw"
+

@@ -9,14 +9,23 @@
 ;;                            PKG                                             ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; load path
+
+;; Added by Package.el.  This must come before configurations of
+;; installed packages.  Don't delete this line.  If you don't want it,
+;; just comment it out by adding a semicolon to the start of the line.
+;; You may delete these explanatory comments.
+(setq package-archives '(("gnu"   . "http://mirrors.tuna.tsinghua.edu.cn/elpa/gnu/")
+						 ("melpa" . "http://mirrors.tuna.tsinghua.edu.cn/elpa/melpa/")))
+(package-initialize)
+
 (add-to-list 'load-path "~/.emacs.d/my")
 (add-to-list 'load-path "~/.emacs.d/3rd")
 
 ;; proxy config
-(setq url-proxy-services
-	  '(("no_proxy" . "^\\(localhost\\|10.*\\)")
-		("http" . "dev-proxy.oa.com:8080")
-		("https" . "dev-proxy.oa.com:8080")))
+;; (setq url-proxy-services
+;; 	  '(("no_proxy" . "^\\(localhost\\|10.*\\)")
+;; 		("http" . "dev-proxy.oa.com:8080")
+;; 		("https" . "dev-proxy.oa.com:8080")))
 
 ;; misc config
 (setq make-backup-files nil)
@@ -122,6 +131,8 @@ Emacs buffer are those starting with “*”."
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(ecb-options-version "2.50")
+ '(package-selected-packages (quote (ecb c-eldoc company-math ggtags company)))
  '(session-use-package t nil (session))
  '(tabbar-mode t nil (tabbar))
  '(tabbar-mwheel-mode t nil (tabbar))
@@ -135,6 +146,12 @@ Emacs buffer are those starting with “*”."
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(company-preview ((t (:foreground "darkgray" :underline t))))
+ '(company-preview-common ((t (:inherit company-preview))))
+ '(company-tooltip ((t (:background "lightgray" :foreground "black"))))
+ '(company-tooltip-common ((((type x)) (:inherit company-tooltip :weight bold)) (t (:inherit company-tooltip))))
+ '(company-tooltip-common-selection ((((type x)) (:inherit company-tooltip-selection :weight bold)) (t (:inherit company-tooltip-selection))))
+ '(company-tooltip-selection ((t (:background "steelblue" :foreground "white"))))
  '(custom-comment ((t (:background "gray85" :slant normal))))
  '(rfcview-headlink-face ((t (:foreground "blue"))))
  '(rfcview-headname-face ((t (:underline (:color "blue" :style wave) :weight bold)))))
@@ -179,22 +196,31 @@ Emacs buffer are those starting with “*”."
 
 ;; company-mode
 (add-hook 'after-init-hook 'global-company-mode)
-(custom-set-faces
- '(company-preview
-   ((t (:foreground "darkgray" :underline t))))
- '(company-preview-common
-   ((t (:inherit company-preview))))
- '(company-tooltip
-   ((t (:background "lightgray" :foreground "black"))))
- '(company-tooltip-selection
-   ((t (:background "steelblue" :foreground "white"))))
- '(company-tooltip-common
-   ((((type x)) (:inherit company-tooltip :weight bold))
-    (t (:inherit company-tooltip))))
- '(company-tooltip-common-selection
-   ((((type x)) (:inherit company-tooltip-selection :weight bold))
-    (t (:inherit company-tooltip-selection)))))
 (setq company-idle-delay 0)
+
+;; add in your commonly used packages/include directories here, for
+;; example, SDL or OpenGL. this shouldn't slow down cpp, even if
+;; you've got a lot of them
+(setq c-eldoc-includes "-I/usr/include -I./ -I../ ")
+(load "c-eldoc")
+(add-hook 'c-mode-hook 'c-turn-on-eldoc-mode)
+
+;; ECB
+(require 'ecb)
+(setq ecb-auto-activate t
+	  ecb-tip-of-the-day nil)
+;; (ecb-layout-define "my-cscope-layout" left nil
+;;  				   (ecb-set-methods-buffer)
+;;  				   (ecb-split-ver 0.5 t)
+;;  				   (other-window 1)
+;;  				   (ecb-set-history-buffer)
+;;  				   (ecb-split-ver 0.25 t)
+;;  				   (other-window 1)
+;;  				   (ecb-set-cscope-buffer))
+;; (defecb-window-dedicator-to-ecb-buffer ecb-set-cscope-buffer " *ECB cscope-buf*"
+;;   (switch-to-buffer "*cscope*"))
+;; (setq ecb-layout-name "my-cscope-layout")
+;; (setq ecb-history-make-buckets 'never)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;                            QUICK                                           ;;
@@ -204,7 +230,8 @@ Emacs buffer are those starting with “*”."
 (global-set-key (kbd "M-w") 'copy-region-as-kill)
 (global-set-key (kbd "C-w") 'kill-region)
 (global-set-key (kbd "C-c d s") 'desktop-save)
-(global-set-key (kbd "C-/") 'company-complete-common)
+(global-set-key (kbd "M-/") 'company-complete-common)
 (global-set-key (kbd "C-x C-b") 'ibuffer)
+(global-set-key (kbd "C-/") 'undo)
 
 (desktop-read)
