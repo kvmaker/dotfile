@@ -42,7 +42,7 @@
 (tool-bar-mode -1)
 (menu-bar-mode -1)
 (scroll-bar-mode -1)
-(icomplete-mode 99)
+(icomplete-mode 5)
 (fset 'yes-or-no-p 'y-or-n-p)
 (setq resize-mini-windows t)
 (setq suggest-key-bindings t)
@@ -132,7 +132,9 @@ Emacs buffer are those starting with “*”."
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(ecb-options-version "2.50")
- '(package-selected-packages (quote (ecb c-eldoc company-math ggtags company)))
+ '(package-selected-packages
+   (quote
+	(helm-gtags helm-cscope helm ecb c-eldoc company-math ggtags company)))
  '(session-use-package t nil (session))
  '(tabbar-mode t nil (tabbar))
  '(tabbar-mwheel-mode t nil (tabbar))
@@ -165,7 +167,7 @@ Emacs buffer are those starting with “*”."
 		  '(lambda()
 			 (c-set-style "k&r")
 			 (setq c-basic-offset 4)
-			 (setq indent-tabs-mode nil)
+;;			 (setq indent-tabs-mode nil)
 			 (linum-mode t)
 			 (abbrev-mode -1)))
 
@@ -173,7 +175,7 @@ Emacs buffer are those starting with “*”."
 		  '(lambda()
 			 (c-set-style "k&r")
 			 (setq c-basic-offset 4)
-			 (setq indent-tabs-mode nil)
+;;			 (setq indent-tabs-mode nil)
 			 (linum-mode t)
 			 (abbrev-mode -1)))
 
@@ -205,22 +207,40 @@ Emacs buffer are those starting with “*”."
 (load "c-eldoc")
 (add-hook 'c-mode-hook 'c-turn-on-eldoc-mode)
 
-;; ECB
-(require 'ecb)
-(setq ecb-auto-activate t
-	  ecb-tip-of-the-day nil)
-;; (ecb-layout-define "my-cscope-layout" left nil
-;;  				   (ecb-set-methods-buffer)
-;;  				   (ecb-split-ver 0.5 t)
-;;  				   (other-window 1)
-;;  				   (ecb-set-history-buffer)
-;;  				   (ecb-split-ver 0.25 t)
-;;  				   (other-window 1)
-;;  				   (ecb-set-cscope-buffer))
-;; (defecb-window-dedicator-to-ecb-buffer ecb-set-cscope-buffer " *ECB cscope-buf*"
-;;   (switch-to-buffer "*cscope*"))
-;; (setq ecb-layout-name "my-cscope-layout")
-;; (setq ecb-history-make-buckets 'never)
+;; helm
+(require 'helm-config)
+
+;; helm-gtags
+;; Enable helm-gtags-mode
+(add-hook 'c-mode-hook 'helm-gtags-mode)
+(add-hook 'c++-mode-hook 'helm-gtags-mode)
+(add-hook 'asm-mode-hook 'helm-gtags-mode)
+
+;; Set key bindings
+(eval-after-load "helm-gtags"
+  '(progn
+	 (define-key helm-gtags-mode-map (kbd "M-t") 'helm-gtags-find-tag)
+	 (define-key helm-gtags-mode-map (kbd "M-r") 'helm-gtags-find-rtag)
+	 (define-key helm-gtags-mode-map (kbd "M-s") 'helm-gtags-find-symbol)
+	 (define-key helm-gtags-mode-map (kbd "M-g M-p") 'helm-gtags-parse-file)
+	 (define-key helm-gtags-mode-map (kbd "C-c <") 'helm-gtags-previous-history)
+	 (define-key helm-gtags-mode-map (kbd "C-c >") 'helm-gtags-next-history)
+	 (define-key helm-gtags-mode-map (kbd "M-,") 'helm-gtags-pop-stack)))
+;; Enable helm-gtags-mode
+(add-hook 'c-mode-hook 'helm-gtags-mode)
+(add-hook 'c++-mode-hook 'helm-gtags-mode)
+(add-hook 'asm-mode-hook 'helm-gtags-mode)
+
+;; Set key bindings
+(eval-after-load "helm-gtags"
+  '(progn
+	 (define-key helm-gtags-mode-map (kbd "M-t") 'helm-gtags-find-tag)
+	 (define-key helm-gtags-mode-map (kbd "M-r") 'helm-gtags-find-rtag)
+	 (define-key helm-gtags-mode-map (kbd "M-s") 'helm-gtags-find-symbol)
+	 (define-key helm-gtags-mode-map (kbd "M-g M-p") 'helm-gtags-parse-file)
+	 (define-key helm-gtags-mode-map (kbd "C-c <") 'helm-gtags-previous-history)
+	 (define-key helm-gtags-mode-map (kbd "C-c >") 'helm-gtags-next-history)
+	 (define-key helm-gtags-mode-map (kbd "M-,") 'helm-gtags-pop-stack)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;                            QUICK                                           ;;
@@ -232,6 +252,6 @@ Emacs buffer are those starting with “*”."
 (global-set-key (kbd "C-c d s") 'desktop-save)
 (global-set-key (kbd "M-/") 'company-complete-common)
 (global-set-key (kbd "C-x C-b") 'ibuffer)
-(global-set-key (kbd "C-/") 'undo)
+(global-set-key (kbd "C-z") 'undo)
 
 (desktop-read)
