@@ -21,11 +21,11 @@
 (add-to-list 'load-path "~/.emacs.d/my")
 (add-to-list 'load-path "~/.emacs.d/3rd")
 
-;; proxy config
-;; (setq url-proxy-services
-;; 	  '(("no_proxy" . "^\\(localhost\\|10.*\\)")
-;; 		("http" . "dev-proxy.oa.com:8080")
-;; 		("https" . "dev-proxy.oa.com:8080")))
+;;proxy config
+(setq url-proxy-services
+ 	  '(("no_proxy" . "^\\(localhost\\|10.*\\)")
+ 		("http" . "dev-proxy.oa.com:8080")
+ 		("https" . "dev-proxy.oa.com:8080")))
 
 ;; misc config
 (setq make-backup-files nil)
@@ -33,19 +33,19 @@
 (global-linum-mode t)
 (setq linum-format "%4d ")
 (show-paren-mode 1)
-(setq show-paren-delay 1)
 (setq tab-width 4)
 (setq user-full-name "kvmaker")
 (setq user-mail-address "kvmaker@gmail.com")
 (setq default-major-mode 'text-mode)
 (setq inhibit-startup-message t)
-(tool-bar-mode -1)
+;;(tool-bar-mode -1)
 (menu-bar-mode -1)
-(scroll-bar-mode -1)
+;;(scroll-bar-mode -1)
 (icomplete-mode 5)
 (fset 'yes-or-no-p 'y-or-n-p)
 (setq resize-mini-windows t)
 (setq suggest-key-bindings t)
+(setq truncate-partial-width-windows nil)
 
 ;; cscope 
 (require 'xcscope)
@@ -137,7 +137,7 @@ Emacs buffer are those starting with “*”."
 	(helm-gtags helm-cscope helm ecb c-eldoc company-math ggtags company)))
  '(session-use-package t nil (session))
  '(tabbar-mode t nil (tabbar))
- '(tabbar-mwheel-mode t nil (tabbar))
+;; '(tabbar-mwheel-mode t nil (tabbar))
  '(tabbar-separator (quote (2.0)))
  '(uniquify-buffer-name-style (quote forward) nil (uniquify))
  '(url-cookie-file "/home/yubo/.emacs.d/url/cookies")
@@ -167,7 +167,7 @@ Emacs buffer are those starting with “*”."
 		  '(lambda()
 			 (c-set-style "k&r")
 			 (setq c-basic-offset 4)
-;;			 (setq indent-tabs-mode nil)
+			 (which-function-mode t)
 			 (linum-mode t)
 			 (abbrev-mode -1)))
 
@@ -175,7 +175,7 @@ Emacs buffer are those starting with “*”."
 		  '(lambda()
 			 (c-set-style "k&r")
 			 (setq c-basic-offset 4)
-;;			 (setq indent-tabs-mode nil)
+			 (which-function-mode t)
 			 (linum-mode t)
 			 (abbrev-mode -1)))
 
@@ -203,12 +203,22 @@ Emacs buffer are those starting with “*”."
 ;; add in your commonly used packages/include directories here, for
 ;; example, SDL or OpenGL. this shouldn't slow down cpp, even if
 ;; you've got a lot of them
-(setq c-eldoc-includes "-I/usr/include -I./ -I../ ")
+(setq c-eldoc-includes "-I/usr/include -I/home/maxyu/linux-2.6.32-358.vpcgw/include -I./ -I../ ")
 (load "c-eldoc")
 (add-hook 'c-mode-hook 'c-turn-on-eldoc-mode)
+(add-hook 'c++-mode-hook 'c-turn-on-eldoc-mode)
+(setq c-eldoc-cpp-command "/usr/bin/clang")
+
+;; gtags
+(setenv "GTAGSLIBPATH" (concat "/usr/include"
+							   ":"
+							   "/home/maxyu/linux-2.6.32-358.vpcgw"))
 
 ;; helm
 (require 'helm-config)
+(setq helm-gtags-display-style 'detail)
+(setq helm-gtags-auto-update t)
+(setq helm-gtags-preselect t)
 
 ;; helm-gtags
 ;; Enable helm-gtags-mode
@@ -222,25 +232,12 @@ Emacs buffer are those starting with “*”."
 	 (define-key helm-gtags-mode-map (kbd "M-t") 'helm-gtags-find-tag)
 	 (define-key helm-gtags-mode-map (kbd "M-r") 'helm-gtags-find-rtag)
 	 (define-key helm-gtags-mode-map (kbd "M-s") 'helm-gtags-find-symbol)
+	 (define-key helm-gtags-mode-map (kbd "M-.") 'helm-gtags-dwim)
 	 (define-key helm-gtags-mode-map (kbd "M-g M-p") 'helm-gtags-parse-file)
 	 (define-key helm-gtags-mode-map (kbd "C-c <") 'helm-gtags-previous-history)
 	 (define-key helm-gtags-mode-map (kbd "C-c >") 'helm-gtags-next-history)
-	 (define-key helm-gtags-mode-map (kbd "M-,") 'helm-gtags-pop-stack)))
-;; Enable helm-gtags-mode
-(add-hook 'c-mode-hook 'helm-gtags-mode)
-(add-hook 'c++-mode-hook 'helm-gtags-mode)
-(add-hook 'asm-mode-hook 'helm-gtags-mode)
-
-;; Set key bindings
-(eval-after-load "helm-gtags"
-  '(progn
-	 (define-key helm-gtags-mode-map (kbd "M-t") 'helm-gtags-find-tag)
-	 (define-key helm-gtags-mode-map (kbd "M-r") 'helm-gtags-find-rtag)
-	 (define-key helm-gtags-mode-map (kbd "M-s") 'helm-gtags-find-symbol)
-	 (define-key helm-gtags-mode-map (kbd "M-g M-p") 'helm-gtags-parse-file)
-	 (define-key helm-gtags-mode-map (kbd "C-c <") 'helm-gtags-previous-history)
-	 (define-key helm-gtags-mode-map (kbd "C-c >") 'helm-gtags-next-history)
-	 (define-key helm-gtags-mode-map (kbd "M-,") 'helm-gtags-pop-stack)))
+	 (define-key helm-gtags-mode-map (kbd "M-,") 'helm-gtags-pop-stack)
+	 (define-key helm-gtags-mode-map (kbd "M-h") 'helm-semantic-or-imenu)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;                            QUICK                                           ;;
