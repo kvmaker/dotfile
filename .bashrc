@@ -135,5 +135,4 @@ function scp-gz ()
 	scp -P 36000 $1 m_maxyu@183.60.82.9:./
 }
 
-alias emacs="/Applications/Emacs.app/Contents/MacOS/Emacs -nw"
-
+alias emacs="emacs-25.1 -nw"

@@ -134,10 +134,9 @@ Emacs buffer are those starting with “*”."
  '(ecb-options-version "2.50")
  '(package-selected-packages
    (quote
-	(helm-gtags helm-cscope helm ecb c-eldoc company-math ggtags company)))
+	(flycheck-irony flycheck irony-eldoc company-irony-c-headers company-irony irony helm-gtags helm-cscope helm ecb c-eldoc company-math ggtags company)))
  '(session-use-package t nil (session))
  '(tabbar-mode t nil (tabbar))
-;; '(tabbar-mwheel-mode t nil (tabbar))
  '(tabbar-separator (quote (2.0)))
  '(uniquify-buffer-name-style (quote forward) nil (uniquify))
  '(url-cookie-file "/home/yubo/.emacs.d/url/cookies")
@@ -225,6 +224,21 @@ Emacs buffer are those starting with “*”."
 (add-hook 'c-mode-hook 'helm-gtags-mode)
 (add-hook 'c++-mode-hook 'helm-gtags-mode)
 (add-hook 'asm-mode-hook 'helm-gtags-mode)
+
+;; irony
+(add-hook 'c++-mode-hook 'irony-mode)
+(add-hook 'c-mode-hook 'irony-mode)
+(add-hook 'objc-mode-hook 'irony-mode)
+
+;; replace the `completion-at-point' and `complete-symbol' bindings in
+;; irony-mode's buffers by irony-mode's function
+(defun my-irony-mode-hook ()
+  (define-key irony-mode-map [remap completion-at-point]
+	'irony-completion-at-point-async)
+  (define-key irony-mode-map [remap complete-symbol]
+	'irony-completion-at-point-async))
+(add-hook 'irony-mode-hook 'my-irony-mode-hook)
+(add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options)
 
 ;; Set key bindings
 (eval-after-load "helm-gtags"
